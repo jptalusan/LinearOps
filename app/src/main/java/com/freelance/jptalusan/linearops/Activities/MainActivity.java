@@ -1,4 +1,4 @@
-package com.freelance.jptalusan.linearops;
+package com.freelance.jptalusan.linearops.Activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

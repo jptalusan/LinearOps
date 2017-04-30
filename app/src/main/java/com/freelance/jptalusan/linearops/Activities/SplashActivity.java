@@ -1,4 +1,4 @@
-package com.freelance.jptalusan.linearops;
+package com.freelance.jptalusan.linearops.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;

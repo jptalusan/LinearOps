@@ -1,4 +1,4 @@
-package com.freelance.jptalusan.linearops;
+package com.freelance.jptalusan.linearops.Views;
 
 import android.annotation.TargetApi;
 import android.content.Context;

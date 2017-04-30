@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.freelance.jptalusan.linearops.LinearEqualityActivity">
+    tools:context="com.freelance.jptalusan.linearops.Activities.LinearEqualityActivity">
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -39,12 +41,15 @@
 
     </FrameLayout>
 
-    <RelativeLayout
+    <com.freelance.jptalusan.linearops.Views.CustomGridLayout
+        android:id="@+id/rightSideGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_light"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -52,13 +57,12 @@
         app:layout_constraintLeft_toLeftOf="@+id/guideline2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        app:layout_constraintVertical_bias="1.0">
 
-    </RelativeLayout>
+    </com.freelance.jptalusan.linearops.Views.CustomGridLayout>
 
-    <RelativeLayout
+    <com.freelance.jptalusan.linearops.Views.CustomGridLayout
+        android:id="@+id/leftSideGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -75,6 +79,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-    </RelativeLayout>
+    </com.freelance.jptalusan.linearops.Views.CustomGridLayout>
 
 </android.support.constraint.ConstraintLayout>
+</layout>

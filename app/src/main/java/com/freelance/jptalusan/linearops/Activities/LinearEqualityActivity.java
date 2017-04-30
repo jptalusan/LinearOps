@@ -20,14 +20,15 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.leftSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.leftSideGrid.getViewDimensions();
+//                binding.leftSideGrid.getViewDimensions();
+
+                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
             }
         });
 
-        binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-        binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-        binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-        binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
 
         binding.rightSideGrid.setRows(5);
         binding.rightSideGrid.setCols(5);
@@ -35,7 +36,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.rightSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.rightSideGrid.getViewDimensions();
+//                binding.rightSideGrid.getViewDimensions();
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);

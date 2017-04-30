@@ -81,7 +81,7 @@ public class CustomGridLayout extends RelativeLayout {
                 Log.d(TAG, "dimensions:" + dimensions.toString());
                 Log.d(TAG, "scaled:" + scaledDimensons.toString());
 
-                populateLayoutWithImages();
+//                populateLayoutWithImages();
             }
         });
     }

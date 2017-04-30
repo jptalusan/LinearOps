@@ -20,8 +20,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.leftSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                binding.leftSideGrid.getViewDimensions();
-
                 binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
                 binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
                 binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
@@ -36,12 +34,20 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.rightSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                binding.rightSideGrid.getViewDimensions();
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                 binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+            }
+        });
+
+        binding.seekbar.setResourceId(R.mipmap.ic_launcher);
+        binding.seekbar.setSeekBarMax(20);
+        binding.seekbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                binding.seekbar.addNumbers();
             }
         });
     }

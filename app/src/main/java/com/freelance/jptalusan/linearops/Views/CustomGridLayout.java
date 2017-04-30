@@ -53,6 +53,8 @@ public class CustomGridLayout extends RelativeLayout {
 
     public void setRows(int rows) {
         this.rows = rows;
+        invalidate();
+        requestLayout();
     }
 
     public int getCols() {
@@ -61,13 +63,15 @@ public class CustomGridLayout extends RelativeLayout {
 
     public void setCols(int cols) {
         this.cols = cols;
+        invalidate();
+        requestLayout();
     }
 
     private void init() {
         getViewDimensions();
     }
 
-    public void getViewDimensions() {
+    private void getViewDimensions() {
         customGridLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -80,8 +84,6 @@ public class CustomGridLayout extends RelativeLayout {
 
                 Log.d(TAG, "dimensions:" + dimensions.toString());
                 Log.d(TAG, "scaled:" + scaledDimensons.toString());
-
-//                populateLayoutWithImages();
             }
         });
     }
@@ -111,12 +113,6 @@ public class CustomGridLayout extends RelativeLayout {
         imageView.setLayoutParams(generateParams());
         Log.d(TAG, "imageView: " + imageView.getWidth() + "," + imageView.getHeight());
         addView(imageView);
-    }
-
-    private void populateLayoutWithImages() {
-        for (int i = 0; i < 5; ++i) {
-            addScaledImage(R.mipmap.ic_launcher);
-        }
     }
 
     public void reset() {

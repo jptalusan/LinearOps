@@ -107,12 +107,17 @@ public class CustomGridLayout extends RelativeLayout {
         return params;
     }
 
-    public void addScaledImage(int imageResource) {
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(imageResource);
-        imageView.setLayoutParams(generateParams());
-        Log.d(TAG, "imageView: " + imageView.getWidth() + "," + imageView.getHeight());
-        addView(imageView);
+    public boolean addScaledImage(int imageResource) {
+        if (getChildCount() < rows * cols) {
+            ImageView imageView = new ImageView(context);
+            imageView.setImageResource(imageResource);
+            imageView.setLayoutParams(generateParams());
+            Log.d(TAG, "imageView: " + imageView.getWidth() + "," + imageView.getHeight());
+            addView(imageView);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void reset() {

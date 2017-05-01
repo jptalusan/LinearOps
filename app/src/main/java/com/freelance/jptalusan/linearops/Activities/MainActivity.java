@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
         binding.linearInequality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(MainActivity.this, LinearEqualityActivityWithButtons.class);
+                startActivity(i);
             }
         });
     }

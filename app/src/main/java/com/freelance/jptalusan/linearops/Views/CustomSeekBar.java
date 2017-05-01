@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
@@ -79,6 +80,19 @@ public class CustomSeekBar extends ConstraintLayout {
                     listener.onSeekBarValueChanged(value);
             }
         });
+
+        //TODO: Ask if the behavior is similar to this or to real time display (above)
+        multislider.setOnTrackingChangeListener(new MultiSlider.OnTrackingChangeListener() {
+            @Override
+            public void onStartTrackingTouch(MultiSlider multiSlider, MultiSlider.Thumb thumb, int value) {
+                Log.d(TAG, "start: " + value);
+            }
+
+            @Override
+            public void onStopTrackingTouch(MultiSlider multiSlider, MultiSlider.Thumb thumb, int value) {
+
+            }
+        });
     }
 
     private void getViewDimensions() {
@@ -136,6 +150,7 @@ public class CustomSeekBar extends ConstraintLayout {
     //TODO: Why is this always being called repeatedly
     //TODO: Any way to extend the drawing of views to outside the layout? (even with clipping)
     public void addNumbers() {
+        Log.d(TAG, "addNumbers()");
         for (int i = multislider.getMin(); i <= multislider.getMax(); ++i) {
             if (i != 0) {
                 AutoResizeTextView tv = new AutoResizeTextView(getContext());
@@ -182,4 +197,25 @@ public class CustomSeekBar extends ConstraintLayout {
     public void reset() {
         multislider.getThumb(0).setValue(0);
     }
+
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        // Try for a width based on our minimum
+//        int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth();
+//        int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
+//
+//        // Whatever the width ends up being, ask for a height that would let the pie
+//        // get as big as it can
+//        int minh = MeasureSpec.getSize(w) + getPaddingBottom() + getPaddingTop();
+//        int h = resolveSizeAndState(MeasureSpec.getSize(w), heightMeasureSpec, 0);
+//
+//        Log.d(TAG, "onMeasure() width, height: " + w + "," + h);
+//        setMeasuredDimension(w, h);
+//    }
+//
+//    @Override
+//    protected void onDraw(Canvas canvas) {
+//        super.onDraw(canvas);
+//        Log.d(TAG, "onDraw()");
+//    }
 }

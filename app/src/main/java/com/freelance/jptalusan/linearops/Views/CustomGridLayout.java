@@ -93,7 +93,7 @@ public class CustomGridLayout extends RelativeLayout {
                 (int) scaledDimensons.width,
                 (int) scaledDimensons.height);
 
-        Log.d(TAG, "generateParams:" + scaledDimensons.toString());
+//        Log.d(TAG, "generateParams:" + scaledDimensons.toString());
         int rowFactor = getChildCount() / cols;
         int colFactor = getChildCount() % cols;
 
@@ -106,15 +106,17 @@ public class CustomGridLayout extends RelativeLayout {
         return params;
     }
 
+    //TODO: too much work since the slider is triggering the listener multiple times
     public boolean addScaledImage(int imageResource) {
         if (getChildCount() < rows * cols) {
             ImageView imageView = new ImageView(context);
             imageView.setImageResource(imageResource);
             imageView.setLayoutParams(generateParams());
-            Log.d(TAG, "imageView: " + imageView.getWidth() + "," + imageView.getHeight());
+//            Log.d(TAG, "imageView: " + imageView.getLayoutParams().width + "," + imageView.getLayoutParams().height);
             addView(imageView);
             return true;
         } else {
+            Log.d(TAG, "layout is full.");
             return false;
         }
     }

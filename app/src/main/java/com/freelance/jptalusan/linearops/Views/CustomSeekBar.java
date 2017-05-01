@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -136,7 +136,8 @@ public class CustomSeekBar extends ConstraintLayout {
         for (int i = multislider.getMin(); i <= multislider.getMax(); ++i) {
             AutoResizeTextView tv = new AutoResizeTextView(getContext());
             tv.setText(Integer.toString(i));
-            tv.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            tv.setMinTextSize((float) iconDimension.height * 0.8f);
+            tv.setGravity(Gravity.RIGHT);
             tv.setLayoutParams(generateParams(i));
             numbers.addView(tv);
         }

@@ -1,4 +1,4 @@
-package com.freelance.jptalusan.linearops.Utilities;
+package com.freelance.jptalusan.linearops.Views;
 
 public class Dimensions {
     public double height;

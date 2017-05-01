@@ -60,6 +60,7 @@
             app:scaleMin="0"
             app:scaleStep="1"
             app:thumbNumber="1"
+            app:drawThumbsApart="false"
             android:layout_gravity="top"
             android:paddingLeft="0dp"
             android:paddingStart="0dp"

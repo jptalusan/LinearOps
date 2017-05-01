@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.freelance.jptalusan.linearops.R;
-import com.freelance.jptalusan.linearops.Utilities.Dimensions;
 
 import io.apptik.widget.MultiSlider;
 
@@ -20,7 +19,7 @@ import io.apptik.widget.MultiSlider;
 //TODO: Expose listener for seekbar value when changed so user just needs to use that instead
 public class CustomSeekBar extends ConstraintLayout {
     private RelativeLayout icons, numbers;
-    private MultiSlider multislider;
+    public MultiSlider multislider;
     private static String TAG = "CustomSeekBar";
     private MultiSlider.Thumb correctAnswerThumb;
     private MultiSlider.Thumb dummyThumb;
@@ -50,6 +49,8 @@ public class CustomSeekBar extends ConstraintLayout {
         multislider = (MultiSlider) findViewById(R.id.multislider);
 
         getViewDimensions();
+
+//        reset();
 
         this.listener = null;
     }
@@ -132,14 +133,19 @@ public class CustomSeekBar extends ConstraintLayout {
         return params;
     }
 
+    //TODO: Why is this always being called repeatedly
+    //TODO: Any way to extend the drawing of views to outside the layout? (even with clipping)
     public void addNumbers() {
         for (int i = multislider.getMin(); i <= multislider.getMax(); ++i) {
-            AutoResizeTextView tv = new AutoResizeTextView(getContext());
-            tv.setText(Integer.toString(i));
-            tv.setMinTextSize((float) iconDimension.height * 0.8f);
-            tv.setGravity(Gravity.RIGHT);
-            tv.setLayoutParams(generateParams(i));
-            numbers.addView(tv);
+            if (i != 0) {
+                AutoResizeTextView tv = new AutoResizeTextView(getContext());
+                tv.setText(Integer.toString(i));
+                tv.setMinTextSize((float) iconDimension.height * 0.8f);
+                //TODO: check if gravity.right is better (though not according to android)
+                tv.setGravity(Gravity.END);
+                tv.setLayoutParams(generateParams(i));
+                numbers.addView(tv);
+            }
         }
     }
 
@@ -171,5 +177,9 @@ public class CustomSeekBar extends ConstraintLayout {
     // Assign the listener implementing events interface that will receive the events
     public void setSeekBarChangeValueListener(SeekbarChangeValueListener listener) {
         this.listener = listener;
+    }
+
+    public void reset() {
+        multislider.getThumb(0).setValue(0);
     }
 }

@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.freelance.jptalusan.linearops.R;
-import com.freelance.jptalusan.linearops.Utilities.Dimensions;
 
 /**
  * Created by JPTalusan on 30/04/2017.

@@ -15,8 +15,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ActivityLinearEqualityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_equality);
-        binding.leftSideGrid.setRows(5);
-        binding.leftSideGrid.setCols(5);
+        binding.leftSideGrid.setRows(3);
+        binding.leftSideGrid.setCols(2);
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -61,13 +61,18 @@ public class LinearEqualityActivity extends AppCompatActivity {
                     for (int i = 0; i < val; ++i) {
                         binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
                     }
-                } else {
+                } else if (val < 0){
                     binding.leftSideGrid.removeAllViews();
                     for (int i = val; i < 0; ++i) {
                         binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
                     }
+                } else {
+                    binding.leftSideGrid.removeAllViews();
+                    binding.rightSideGrid.removeAllViews();
                 }
             }
         });
+
+        binding.seekbar.reset();
     }
 }

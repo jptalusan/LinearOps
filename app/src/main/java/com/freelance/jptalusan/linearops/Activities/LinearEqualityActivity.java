@@ -25,10 +25,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.leftSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
-                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+//                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+//                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+//                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+//                binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
             }
         });
 
@@ -39,37 +39,19 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 binding.rightSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
-                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
-                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
-                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
-                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+//                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+//                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+//                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+//                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+//                binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
             }
         });
 
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         List<String> points = new ArrayList<>();
-        points.add("-10");
-        points.add("-9");
-        points.add("-8");
-        points.add("-7");
-        points.add("-6");
-        points.add("-5");
-        points.add("-4");
-        points.add("-3");
-        points.add("-2");
-        points.add("-1");
-        points.add("0");
-        points.add("1");
-        points.add("2");
-        points.add("3");
-        points.add("4");
-        points.add("5");
-        points.add("6");
-        points.add("7");
-        points.add("8");
-        points.add("9");
-        points.add("10");
+        for (int i = -10; i <= 10; ++i) {
+            points.add(Integer.toString(i));
+        }
 
         binding.seekbar.setSeekBarMax(21);
         binding.seekbar.setComboSeekBarAdapter(points);
@@ -78,20 +60,22 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
-                Log.d(TAG, "val: " + val);
+//                Log.d(TAG, "val: " + val);
                 if (val > 0) {
-                    binding.rightSideGrid.removeAllViews();
+                    binding.rightSideGrid.reset();
                     for (int i = 0; i < val; ++i) {
-                        binding.rightSideGrid.addScaledImage(R.mipmap.ic_launcher);
+                        binding.rightSideGrid.addScaledImage(R.drawable.white_box);
+                        Log.d(TAG, binding.rightSideGrid.toString());
                     }
                 } else if (val < 0){
-                    binding.leftSideGrid.removeAllViews();
+                    binding.leftSideGrid.reset();
                     for (int i = val; i < 0; ++i) {
-                        binding.leftSideGrid.addScaledImage(R.mipmap.ic_launcher_round);
+                        binding.leftSideGrid.addScaledImage(R.drawable.black_box);
+                        Log.d(TAG, binding.leftSideGrid.toString());
                     }
                 } else {
-                    binding.leftSideGrid.removeAllViews();
-                    binding.rightSideGrid.removeAllViews();
+                    binding.leftSideGrid.reset();
+                    binding.rightSideGrid.reset();
                 }
             }
         });

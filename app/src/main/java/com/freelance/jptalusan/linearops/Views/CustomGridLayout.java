@@ -16,8 +16,8 @@ import com.freelance.jptalusan.linearops.R;
 
 public class CustomGridLayout extends RelativeLayout {
     private static String TAG = "CustomGridLayout";
-    private int rows = 0;
-    private int cols = 0;
+    protected int rows = 0;
+    protected int cols = 0;
     private CustomGridLayout customGridLayout = this;
     private Dimensions dimensions = new Dimensions();
     private Dimensions scaledDimensons = new Dimensions();
@@ -93,7 +93,6 @@ public class CustomGridLayout extends RelativeLayout {
                 (int) scaledDimensons.width,
                 (int) scaledDimensons.height);
 
-//        Log.d(TAG, "generateParams:" + scaledDimensons.toString());
         int rowFactor = getChildCount() / cols;
         int colFactor = getChildCount() % cols;
 
@@ -112,7 +111,6 @@ public class CustomGridLayout extends RelativeLayout {
             ImageView imageView = new ImageView(context);
             imageView.setImageResource(imageResource);
             imageView.setLayoutParams(generateParams());
-//            Log.d(TAG, "imageView: " + imageView.getLayoutParams().width + "," + imageView.getLayoutParams().height);
             addView(imageView);
             return true;
         } else {
@@ -122,6 +120,7 @@ public class CustomGridLayout extends RelativeLayout {
     }
 
     public void reset() {
+        removeAllViews();
     }
 
 }

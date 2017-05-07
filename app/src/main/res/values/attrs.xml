@@ -12,4 +12,7 @@
         <attr name="dotRadius" format="dimension" />
         <attr name="thumbRadius" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="LinearOpsImageView">
+        <attr name="type" format="string" />
+    </declare-styleable>
 </resources>

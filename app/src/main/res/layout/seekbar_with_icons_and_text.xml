@@ -52,7 +52,7 @@
             android:paddingEnd="0dp"
             android:clipToPadding="false"/>
 
-        <io.apptik.widget.MultiSlider
+        <com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar
             android:id="@+id/multislider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -62,14 +62,16 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:scaleMax="10"
-            app:scaleMin="0"
-            app:scaleStep="1"
-            app:thumbNumber="1"
-            app:drawThumbsApart="false"
             android:layout_gravity="top"
             android:paddingStart="0dp"
-            android:paddingEnd="0dp"/>
+            android:paddingEnd="0dp"
+            app:paddingEnd="10dp"
+            app:paddingStart="10dp"
+            app:color="@color/colorPrimaryDark"
+            app:textSize="10sp"
+            app:dotRadius="3sp"
+            app:thumbRadius="8sp"
+            app:textBottomPadding="0dp"/>
     </FrameLayout>
 
     <android.support.constraint.Guideline

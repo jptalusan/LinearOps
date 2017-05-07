@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewTreeObserver;
 
 import com.freelance.jptalusan.linearops.R;
-import com.freelance.jptalusan.linearops.Views.CustomSeekBar;
+import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
 
 public class LinearEqualityActivity extends AppCompatActivity {
@@ -61,7 +61,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
             }
         });
 
-        binding.seekbar.setSeekBarChangeValueListener(new CustomSeekBar.SeekbarChangeValueListener() {
+        binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
                 if (val > 0) {

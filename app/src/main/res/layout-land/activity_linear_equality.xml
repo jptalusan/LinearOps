@@ -26,7 +26,7 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="296dp" />
 
-    <com.freelance.jptalusan.linearops.Views.CustomSeekBar
+    <com.freelance.jptalusan.linearops.Views.SeekBarLayout
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -40,7 +40,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline">
 
-    </com.freelance.jptalusan.linearops.Views.CustomSeekBar>
+    </com.freelance.jptalusan.linearops.Views.SeekBarLayout>
 
     <com.freelance.jptalusan.linearops.Views.CustomGridLayout
         android:id="@+id/rightSideGrid"

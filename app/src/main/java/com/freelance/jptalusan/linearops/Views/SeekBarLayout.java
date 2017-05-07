@@ -11,31 +11,31 @@ import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.freelance.jptalusan.linearops.R;
+import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 
-import io.apptik.widget.MultiSlider;
+import static android.R.attr.value;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
 //TODO: Expose listener for seekbar value when changed so user just needs to use that instead
-public class CustomSeekBar extends ConstraintLayout {
+public class SeekBarLayout extends ConstraintLayout {
     private RelativeLayout icons, numbers;
-    public MultiSlider multislider;
+    public ComboSeekBar comboSeekBar;
     private static String TAG = "CustomSeekBar";
-    private MultiSlider.Thumb correctAnswerThumb;
-    private MultiSlider.Thumb dummyThumb;
     private int resourceId = R.mipmap.ic_launcher;
     private int tempInt = 0;
     private Dimensions dimensions = new Dimensions();
     private Dimensions iconDimension = new Dimensions();
     private double center = 0;
 
-    public CustomSeekBar(@NonNull Context context) {
+    public SeekBarLayout(@NonNull Context context) {
         super(context);
         initializeViews(context);
     }
 
-    public CustomSeekBar(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SeekBarLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initializeViews(context);
     }
@@ -47,7 +47,7 @@ public class CustomSeekBar extends ConstraintLayout {
 
         icons = (RelativeLayout)findViewById(R.id.icons);
         numbers = (RelativeLayout)findViewById(R.id.numbers);
-        multislider = (MultiSlider) findViewById(R.id.multislider);
+        comboSeekBar = (ComboSeekBar) findViewById(R.id.multislider);
 
         getViewDimensions();
 
@@ -64,32 +64,22 @@ public class CustomSeekBar extends ConstraintLayout {
         // built-in images so you don't need to add images, but in
         // a real application your images should be in the
         // application package so they are always available.
-        correctAnswerThumb = multislider.new Thumb();
-        dummyThumb = multislider.new Thumb();
-        dummyThumb.setEnabled(false);
-        dummyThumb.setInvisibleThumb(true);
-        multislider.addThumb(dummyThumb);
-        multislider.getThumb(0).setRange(null);
-        multislider.getThumb(1).setRange(null);
 
-        multislider.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
+        comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 addIcons(value);
                 if (listener != null)
                     listener.onSeekBarValueChanged(value);
             }
-        });
 
-        //TODO: Ask if the behavior is similar to this or to real time display (above)
-        multislider.setOnTrackingChangeListener(new MultiSlider.OnTrackingChangeListener() {
             @Override
-            public void onStartTrackingTouch(MultiSlider multiSlider, MultiSlider.Thumb thumb, int value) {
-                Log.d(TAG, "start: " + value);
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
             }
 
             @Override
-            public void onStopTrackingTouch(MultiSlider multiSlider, MultiSlider.Thumb thumb, int value) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
@@ -103,7 +93,7 @@ public class CustomSeekBar extends ConstraintLayout {
                 dimensions.width  = icons.getMeasuredWidth();
                 dimensions.height = icons.getMeasuredHeight();
 
-                iconDimension.width  = dimensions.width / (multislider.getMax() * 2);
+                iconDimension.width  = dimensions.width / (comboSeekBar.getMax() * 2);
                 iconDimension.height = dimensions.height;
 
                 center = dimensions.width / 2;
@@ -151,7 +141,8 @@ public class CustomSeekBar extends ConstraintLayout {
     //TODO: Any way to extend the drawing of views to outside the layout? (even with clipping)
     public void addNumbers() {
         Log.d(TAG, "addNumbers()");
-        for (int i = multislider.getMin(); i <= multislider.getMax(); ++i) {
+        for (int i = 0; i <= comboSeekBar.getMax(); ++i) {
+            //TODO: since i can be 0, change this
             if (i != 0) {
                 AutoResizeTextView tv = new AutoResizeTextView(getContext());
                 tv.setText(Integer.toString(i));
@@ -169,13 +160,7 @@ public class CustomSeekBar extends ConstraintLayout {
     }
 
     public void setSeekBarMax(int val) {
-        multislider.setMax(val, true, true);
-        invalidate();
-        requestLayout();
-    }
-
-    public void setSeekBarMin(int val) {
-        multislider.setMin(val, true, true);
+        comboSeekBar.setMax(val);
         invalidate();
         requestLayout();
     }
@@ -195,27 +180,6 @@ public class CustomSeekBar extends ConstraintLayout {
     }
 
     public void reset() {
-        multislider.getThumb(0).setValue(0);
+        comboSeekBar.setProgress(comboSeekBar.getMax() / 2);
     }
-
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        // Try for a width based on our minimum
-//        int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth();
-//        int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
-//
-//        // Whatever the width ends up being, ask for a height that would let the pie
-//        // get as big as it can
-//        int minh = MeasureSpec.getSize(w) + getPaddingBottom() + getPaddingTop();
-//        int h = resolveSizeAndState(MeasureSpec.getSize(w), heightMeasureSpec, 0);
-//
-//        Log.d(TAG, "onMeasure() width, height: " + w + "," + h);
-//        setMeasuredDimension(w, h);
-//    }
-//
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
-//        Log.d(TAG, "onDraw()");
-//    }
 }

@@ -61,7 +61,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.44" />
 
-    <com.freelance.jptalusan.linearops.Views.CustomSeekBar
+    <com.freelance.jptalusan.linearops.Views.SeekBarLayout
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -79,7 +79,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
 
-    </com.freelance.jptalusan.linearops.Views.CustomSeekBar>
+    </com.freelance.jptalusan.linearops.Views.SeekBarLayout>
 
     <com.freelance.jptalusan.linearops.Views.CustomGridLayout
         android:id="@+id/rightSideGrid"

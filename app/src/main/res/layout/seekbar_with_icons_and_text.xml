@@ -68,10 +68,9 @@
             app:paddingEnd="10dp"
             app:paddingStart="10dp"
             app:color="@color/colorPrimaryDark"
-            app:textSize="10sp"
+            app:textSize="12sp"
             app:dotRadius="3sp"
-            app:thumbRadius="8sp"
-            app:textBottomPadding="0dp"/>
+            app:thumbRadius="8sp" />
     </FrameLayout>
 
     <android.support.constraint.Guideline

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -16,12 +15,12 @@ import android.widget.SeekBar;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 
-import static android.R.attr.value;
+import java.util.List;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
 //TODO: Expose listener for seekbar value when changed so user just needs to use that instead
 public class SeekBarLayout extends ConstraintLayout {
-    private RelativeLayout icons, numbers;
+    private RelativeLayout icons;
     public ComboSeekBar comboSeekBar;
     private static String TAG = "CustomSeekBar";
     private int resourceId = R.mipmap.ic_launcher;
@@ -46,13 +45,9 @@ public class SeekBarLayout extends ConstraintLayout {
         inflater.inflate(R.layout.seekbar_with_icons_and_text, this);
 
         icons = (RelativeLayout)findViewById(R.id.icons);
-        numbers = (RelativeLayout)findViewById(R.id.numbers);
         comboSeekBar = (ComboSeekBar) findViewById(R.id.multislider);
 
         getViewDimensions();
-
-//        reset();
-
         this.listener = null;
     }
 
@@ -60,17 +55,15 @@ public class SeekBarLayout extends ConstraintLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        // Sets the images for the previous and next buttons. Uses
-        // built-in images so you don't need to add images, but in
-        // a real application your images should be in the
-        // application package so they are always available.
-
         comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                addIcons(value);
+                if (i == comboSeekBar.getMax()) {
+                    i = comboSeekBar.getMax() - 1;
+                }
+                addIcons(i - (comboSeekBar.getMax() - 1) / 2);
                 if (listener != null)
-                    listener.onSeekBarValueChanged(value);
+                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax() - 1) / 2);
             }
 
             @Override
@@ -93,7 +86,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 dimensions.width  = icons.getMeasuredWidth();
                 dimensions.height = icons.getMeasuredHeight();
 
-                iconDimension.width  = dimensions.width / (comboSeekBar.getMax() * 2);
+                iconDimension.width  = dimensions.width / ((comboSeekBar.getMax() - 1));
                 iconDimension.height = dimensions.height;
 
                 center = dimensions.width / 2;
@@ -103,25 +96,27 @@ public class SeekBarLayout extends ConstraintLayout {
 
     //can extend this to modify what is added.
     private void addIcons(int val) {
-        if (val != tempInt) {
-            tempInt = val;
-            icons.removeAllViews();
-            if (val > 0) {
-                for (int i = 1; i <= val; ++i) {
-                    ImageView iv = new ImageView(getContext());
-                    iv.setImageResource(resourceId);
-                    iv.setLayoutParams(generateParams(i));
-                    icons.addView(iv);
-                }
-            } else if (val < 0) {
-                for (int i = val; i < 0; ++i) {
-                    ImageView iv = new ImageView(getContext());
-                    iv.setImageResource(resourceId);
-                    iv.setLayoutParams(generateParams(i));
-                    icons.addView(iv);
-                }
+        icons.removeAllViews();
+        if (val > 0) {
+            for (int i = 1; i <= val; ++i) {
+                ImageView iv = new ImageView(getContext());
+                iv.setImageResource(resourceId);
+                Log.d(TAG, "params:" + (i));
+                iv.setLayoutParams(generateParams(i));
+                icons.addView(iv);
             }
+        } else if (val < 0) {
+            for (int i = -1; i >= val; --i) {
+                ImageView iv = new ImageView(getContext());
+                iv.setImageResource(resourceId);
+                Log.d(TAG, "params:" + (i));
+                iv.setLayoutParams(generateParams(i));
+                icons.addView(iv);
+            }
+        } else {
+
         }
+
     }
 
     private RelativeLayout.LayoutParams generateParams(int val) {
@@ -132,27 +127,11 @@ public class SeekBarLayout extends ConstraintLayout {
             params.leftMargin = (int)center + params.width / 2 + (params.width * (val - 1));
         } else if (val < 0) {
             params.leftMargin = (int)center + params.width / 2 - (params.width * Math.abs(val - 1));
+        } else {
+            params.leftMargin = (int)center - params.width / 2;
         }
 
         return params;
-    }
-
-    //TODO: Why is this always being called repeatedly
-    //TODO: Any way to extend the drawing of views to outside the layout? (even with clipping)
-    public void addNumbers() {
-        Log.d(TAG, "addNumbers()");
-        for (int i = 0; i <= comboSeekBar.getMax(); ++i) {
-            //TODO: since i can be 0, change this
-            if (i != 0) {
-                AutoResizeTextView tv = new AutoResizeTextView(getContext());
-                tv.setText(Integer.toString(i));
-                tv.setMinTextSize((float) iconDimension.height * 0.8f);
-                //TODO: check if gravity.right is better (though not according to android)
-                tv.setGravity(Gravity.END);
-                tv.setLayoutParams(generateParams(i));
-                numbers.addView(tv);
-            }
-        }
     }
 
     public void setResourceId(int resourceId) {
@@ -161,8 +140,14 @@ public class SeekBarLayout extends ConstraintLayout {
 
     public void setSeekBarMax(int val) {
         comboSeekBar.setMax(val);
-        invalidate();
-        requestLayout();
+    }
+
+    public void setComboSeekBarAdapter(List<String> values) {
+        comboSeekBar.setAdapter(values);
+    }
+
+    public void setComboSeekBarProgress(int value) {
+        comboSeekBar.setProgress(value);
     }
 
     public interface SeekbarChangeValueListener {
@@ -180,6 +165,6 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void reset() {
-        comboSeekBar.setProgress(comboSeekBar.getMax() / 2);
+        comboSeekBar.setProgress((comboSeekBar.getMax() - 1) / 2);
     }
 }

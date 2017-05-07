@@ -3,11 +3,15 @@ package com.freelance.jptalusan.linearops.Activities;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LinearEqualityActivity extends AppCompatActivity {
     private static String TAG = "LinearEqualityActivity";
@@ -44,26 +48,37 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
 
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
-        binding.seekbar.setSeekBarMin(-10);
-        binding.seekbar.setSeekBarMax(10);
-        binding.seekbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                final ViewTreeObserver.OnGlobalLayoutListener listener = this;
-                binding.seekbar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.seekbar.addNumbers();
-                binding.seekbar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.seekbar.getViewTreeObserver().addOnGlobalLayoutListener(listener);
-                    }
-                });
-            }
-        });
+        List<String> points = new ArrayList<>();
+        points.add("-10");
+        points.add("-9");
+        points.add("-8");
+        points.add("-7");
+        points.add("-6");
+        points.add("-5");
+        points.add("-4");
+        points.add("-3");
+        points.add("-2");
+        points.add("-1");
+        points.add("0");
+        points.add("1");
+        points.add("2");
+        points.add("3");
+        points.add("4");
+        points.add("5");
+        points.add("6");
+        points.add("7");
+        points.add("8");
+        points.add("9");
+        points.add("10");
+
+        binding.seekbar.setSeekBarMax(21);
+        binding.seekbar.setComboSeekBarAdapter(points);
+        binding.seekbar.setComboSeekBarProgress(10);
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
+                Log.d(TAG, "val: " + val);
                 if (val > 0) {
                     binding.rightSideGrid.removeAllViews();
                     for (int i = 0; i < val; ++i) {

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import java.util.List;
 public class SeekBarLayout extends ConstraintLayout {
     private RelativeLayout icons;
     public ComboSeekBar comboSeekBar;
-    private static String TAG = "CustomSeekBar";
+    private static String TAG = "SeekBarLayout";
     private int resourceId = R.mipmap.ic_launcher;
     private int tempInt = 0;
     private Dimensions dimensions = new Dimensions();
@@ -101,7 +100,6 @@ public class SeekBarLayout extends ConstraintLayout {
             for (int i = 1; i <= val; ++i) {
                 ImageView iv = new ImageView(getContext());
                 iv.setImageResource(resourceId);
-                Log.d(TAG, "params:" + (i));
                 iv.setLayoutParams(generateParams(i));
                 icons.addView(iv);
             }
@@ -109,7 +107,6 @@ public class SeekBarLayout extends ConstraintLayout {
             for (int i = -1; i >= val; --i) {
                 ImageView iv = new ImageView(getContext());
                 iv.setImageResource(resourceId);
-                Log.d(TAG, "params:" + (i));
                 iv.setLayoutParams(generateParams(i));
                 icons.addView(iv);
             }

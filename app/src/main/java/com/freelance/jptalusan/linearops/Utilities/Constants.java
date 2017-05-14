@@ -1,5 +1,7 @@
 package com.freelance.jptalusan.linearops.Utilities;
 
+import com.freelance.jptalusan.linearops.R;
+
 /**
  * Created by JPTalusan on 01/05/2017.
  */
@@ -29,4 +31,24 @@ public class Constants {
     public static String FIRST_TIME = "FirstTime";
 
     public static final int ANIMATION_DURATION = 1000;
+
+    public static int[] BLACK_BOX_WHITE_CIRLE = {
+            R.drawable.black_box,
+            R.drawable.black_box_pos_one,
+            R.drawable.black_box_pos_two,
+            R.drawable.black_box_pos_three,
+            R.drawable.black_box_pos_four,
+            R.drawable.black_box_pos_five,
+            R.drawable.black_box_pos_six,
+            R.drawable.black_box_pos_seven,
+            R.drawable.black_box_pos_eight,
+            R.drawable.black_box_pos_nine,
+            R.drawable.black_box_pos_ten,
+            R.drawable.black_box_pos_eleven,
+            R.drawable.black_box_pos_twelve,
+            R.drawable.black_box_pos_thirteen,
+            R.drawable.black_box_pos_fourteen,
+            R.drawable.black_box_pos_fifteen,
+            R.drawable.black_box_pos_sixteen
+    };
 }

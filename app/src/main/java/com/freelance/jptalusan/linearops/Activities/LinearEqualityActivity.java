@@ -13,6 +13,7 @@ import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
+import com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
 
@@ -25,6 +26,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
     private int currLevel = 0;
     private Equation eq = new Equation();
     private ActivityLinearEqualityBinding binding;
+    private int correctAnswer = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
+                correctAnswer = val;
                 isAnswerCorrect(val);
                 if (val > 0) {
 //                    binding.rightSideGrid.reset();
@@ -124,6 +127,24 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
 
         binding.seekbar.reset();
+        binding.rightSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
+            @Override
+            public void onAnimationEnd(int val) {
+
+            }
+
+            @Override
+            public void onAnimationStart(int val) {
+                Handler leftSide = new Handler();
+                leftSide.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.leftSideGrid.setDividend(Math.abs(correctAnswer));
+                        binding.leftSideGrid.moveLeftXViews();
+                    }
+                }, 0);
+            }
+        });
     }
 
     //TODO: Add boolean or prevent seekbar from being used.
@@ -139,45 +160,16 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        binding.rightSideGrid.setDividend(Math.abs(temp));
                         binding.rightSideGrid.moveViews(Math.abs(temp), "LEFT");
-                        Handler leftSide = new Handler();
-                        leftSide.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Change 1 to actual number (temp)
-                                binding.leftSideGrid.moveViews(1, "RIGHT");
-                            }
-                        }, 500);
                     }
                 }, 1000 * i);
 
 
             }
             return true;
-//            for (int i = 0, j = 0; i < binding.rightSideGrid.getChildCount(); i*=value, ++j) {
-//            //Exit from right side first
-//                Handler handler1 = new Handler();
-//                handler1.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        binding.rightSideGrid.moveViews(temp, "LEFT");
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                binding.leftSideGrid.moveViews(temp, "RIGHT");
-//                            }
-//                        }, 1000);
-//                    }
-//                }, 2000 * j);
-//            //Appear on left side to coordinates AFTER right side anim duration
-//            }
-
-//            binding.seekbar.setEnabled(false);
-//            return true;
         } else {
             Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
-//            binding.seekbar.setEnabled(false);
             return false;
         }
     }

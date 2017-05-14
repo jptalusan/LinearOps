@@ -1,6 +1,7 @@
 package com.freelance.jptalusan.linearops.Views;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.view.animation.TranslateAnimation;
 
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
+
+import static android.R.attr.value;
 
 /**
  * Created by JPTalusan on 07/05/2017.
@@ -26,7 +29,9 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     public int positive1Count = 0;
     public int negative1Count = 0;
     private int currChild = 0;
+    private int currChildLeft = 0;
     public Dimensions defaultDimensions = new Dimensions();
+    private int dividend = 0;
 
     public LinearOpsGridLayout(Context context) {
         super(context);
@@ -117,25 +122,44 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     }
 
     public void moveViews(int dividend, String direction) {
-        Log.d(TAG, "moveViews");
+//        if (currChild + 1 <= getChildCount()) {
+        Log.d(TAG, "in moveViews: " + direction);
+        Log.d(TAG, "dividend: " + dividend);
+        Log.d(TAG, "currChild: " + currChild);
         for (int i = 0; i < dividend; ++i) {
-            Log.d(TAG, "in moveViews: " + currChild);
             animateView(getChildAt(currChild), 0, direction);
             currChild++;
         }
+//        }
     }
 
+    //TODO: REFACTOR EVERYTHING
+    public void moveLeftXViews() {
+        Log.d(TAG, "moveLeftXViews: " + currChild);
+        if (currChild > getChildCount())
+            return;
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateView(getChildAt(currChild), 200 * currChild, "RIGHT");
+                currChild++;
+            }
+        }, 100);
 
+    }
+
+    public void setDividend(int dividend) {
+        this.dividend = dividend;
+    }
 
     //TODO: check what layout is used so know which side to fly to.
     private void animateView(View child, int delay, final String direction) {
-        Log.d(TAG, "animateView");
-        int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
+        Log.d(TAG, "animateView: " + direction);
         final LinearOpsImageView temp = (LinearOpsImageView) child;
-        Log.d(TAG, "wxh" + width + " x " + height);
+        if (child == null)
+            return;
         LayoutParams params = (LayoutParams) child.getLayoutParams();
-        Log.d(TAG, "left/top" + params.leftMargin + "/" + params.topMargin);
         AnimationSet animSet = new AnimationSet(false);
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.linear_interpolator));
@@ -145,8 +169,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             child.getLocationOnScreen(childLoc);
             int parentLoc[] = {0, 0};
             getLocationInWindow(parentLoc);
-            Log.d(TAG, "child: " + childLoc[0] + "," + childLoc[1]);
-            Log.d(TAG, "parent: " + parentLoc[0] + "," + parentLoc[1]);
             //Translate animation coordinates are based on the current object. 0, 0 is the current position of the object
             TranslateAnimation translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + child.getWidth()), 0, 0);
 
@@ -159,10 +181,12 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         } else {
             //TODO: fix for right
             ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
-            scaleAnimation.setDuration(Constants.ANIMATION_DURATION);
+            scaleAnimation.setDuration(500);
             scaleAnimation.setRepeatCount(1);
             scaleAnimation.setRepeatMode(Animation.REVERSE);
             scaleAnimation.setStartOffset(delay);
+
+            //TODO: add color change
             animSet.addAnimation(scaleAnimation);
             temp.startAnimation(animSet);
         }
@@ -171,7 +195,11 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                if (listener != null) {
+                    Log.d(TAG, "onAnimationStart div, currchild:" + dividend + "," + currChild);
+                    if (currChild % dividend == 0 || dividend % currChild == 0)
+                        listener.onAnimationStart(temp.getId());
+                }
             }
 
             @Override
@@ -179,17 +207,13 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 if (direction == "LEFT") {
                     removeImageViewType(temp.getId());
                     temp.setVisibility(View.GONE);
-//                Handler h = new Handler();
-//                h.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        removeView(temp);
-//                    }
-//                }, 500);
-                    if (listener != null)
+                    if (listener != null) {
                         listener.onAnimationEnd(temp.getId());
+                    }
+
                 } else {
-                    //Change drawable here.
+                    Log.d(TAG, "Dividend: " + dividend);
+                    temp.setImageResource(Constants.BLACK_BOX_WHITE_CIRLE[dividend]);
                 }
             }
 
@@ -206,6 +230,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         // need to pass relevant arguments related to the event triggered
         // or when data has been loaded
         void onAnimationEnd(int val);
+        void onAnimationStart(int val);
+
 //        void onSubAnimationEnded(int val, int type);
     }
 
@@ -213,6 +239,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     // Assign the listener implementing events interface that will receive the events
     public void onLinearOpsGridLayoutListener(LinearOpsGridLayoutListener listener) {
+        Log.d(TAG, "onLinearOpsGridLayoutListener");
         this.listener = listener;
     }
 }

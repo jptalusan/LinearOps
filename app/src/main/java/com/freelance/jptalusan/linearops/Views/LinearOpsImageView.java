@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.freelance.jptalusan.linearops.R;
+
 /**
  * Created by JPTalusan on 07/05/2017.
  */
@@ -37,13 +37,5 @@ public class LinearOpsImageView extends AppCompatImageView {
         } finally {
             a.recycle();
         }
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

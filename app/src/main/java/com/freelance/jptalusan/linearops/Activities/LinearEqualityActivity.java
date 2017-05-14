@@ -3,6 +3,7 @@ package com.freelance.jptalusan.linearops.Activities;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewTreeObserver;
@@ -109,7 +110,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
 //                        binding.rightSideGrid.addScaledImage(R.drawable.white_box);
                         Log.d(TAG, binding.rightSideGrid.toString());
                     }
-                } else if (val < 0){
+                } else if (val < 0) {
 //                    binding.leftSideGrid.reset();
                     for (int i = val; i < 0; ++i) {
 //                        binding.leftSideGrid.addScaledImage(R.drawable.black_box);
@@ -125,14 +126,59 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.reset();
     }
 
+    //TODO: Add boolean or prevent seekbar from being used.
     private boolean isAnswerCorrect(int value) {
         double answer = eq.getX();
         Log.d(TAG, "Answer:Value=" + answer + ":" + value);
+        final int temp = value;
         if (answer == (double) value) {
-            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_LONG).show();
-            binding.leftSideGrid.moveViews(0);
+            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "count/val:" + binding.rightSideGrid.getChildCount() + "/" + Math.abs(temp));
+            for (int i = 0; i < binding.rightSideGrid.getChildCount() / Math.abs(temp); ++i) {
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.rightSideGrid.moveViews(Math.abs(temp), "LEFT");
+                        Handler leftSide = new Handler();
+                        leftSide.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Change 1 to actual number (temp)
+                                binding.leftSideGrid.moveViews(1, "RIGHT");
+                            }
+                        }, 500);
+                    }
+                }, 1000 * i);
+
+
+            }
             return true;
+//            for (int i = 0, j = 0; i < binding.rightSideGrid.getChildCount(); i*=value, ++j) {
+//            //Exit from right side first
+//                Handler handler1 = new Handler();
+//                handler1.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        binding.rightSideGrid.moveViews(temp, "LEFT");
+//                        Handler handler = new Handler();
+//                        handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                binding.leftSideGrid.moveViews(temp, "RIGHT");
+//                            }
+//                        }, 1000);
+//                    }
+//                }, 2000 * j);
+//            //Appear on left side to coordinates AFTER right side anim duration
+//            }
+
+//            binding.seekbar.setEnabled(false);
+//            return true;
+        } else {
+            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+//            binding.seekbar.setEnabled(false);
+            return false;
         }
-        return false;
     }
 }

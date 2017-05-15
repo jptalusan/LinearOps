@@ -111,13 +111,13 @@ public class LinearEqualityActivity extends AppCompatActivity {
 //                    binding.rightSideGrid.reset();
                     for (int i = 0; i < val; ++i) {
 //                        binding.rightSideGrid.addScaledImage(R.drawable.white_box);
-                        Log.d(TAG, binding.rightSideGrid.toString());
+//                        Log.d(TAG, binding.rightSideGrid.toString());
                     }
                 } else if (val < 0) {
 //                    binding.leftSideGrid.reset();
                     for (int i = val; i < 0; ++i) {
 //                        binding.leftSideGrid.addScaledImage(R.drawable.black_box);
-                        Log.d(TAG, binding.leftSideGrid.toString());
+//                        Log.d(TAG, binding.leftSideGrid.toString());
                     }
                 } else {
 //                    binding.leftSideGrid.reset();
@@ -148,28 +148,81 @@ public class LinearEqualityActivity extends AppCompatActivity {
     }
 
     //TODO: Add boolean or prevent seekbar from being used.
-    private boolean isAnswerCorrect(int value) {
+    private boolean isAnswerCorrect(int userAnswer) {
+        if (userAnswer == 0) {
+            return false;
+        }
+
         double answer = eq.getX();
-        Log.d(TAG, "Answer:Value=" + answer + ":" + value);
-        final int temp = value;
-        if (answer == (double) value) {
-            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "count/val:" + binding.rightSideGrid.getChildCount() + "/" + Math.abs(temp));
-            for (int i = 0; i < binding.rightSideGrid.getChildCount() / Math.abs(temp); ++i) {
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.rightSideGrid.setDividend(Math.abs(temp));
-                        binding.rightSideGrid.moveViews(Math.abs(temp), "LEFT");
-                    }
-                }, 1000 * i);
+        Log.d(TAG, "correct/user ans: " + answer + ", " + userAnswer);
+        //LEVEL 1
+        int remainder = eq.getB() % eq.getAx();
+        int wholes = Math.abs(eq.getB() / eq.getAx());
+        Log.d(TAG, "Wholes, remainder: " + wholes + "," + remainder);
 
+        int absAx = Math.abs(eq.getAx());
+        int absB = Math.abs(eq.getB());
+        int absUsrAns = Math.abs(userAnswer);
 
+        //TODO: since using absolute values, must check if user is correct first or not since it will also animate the same way if only the sign is incorrect
+        if (absUsrAns == 1) { //Add condition if answer is correct
+            Log.d(TAG, "A == B");
+            for (int i = 0; i < absAx; ++i) {
+                Log.d(TAG, "move1: \t" + i);
+                Log.d(TAG, "scaleX: \t\t" + i);
             }
+        } else if (wholes >= absAx) {
+            Log.d(TAG, "wholes >= Ax");
+            int currChild = 0;
+            int currChildCount = binding.rightSideGrid.getChildCount();
+            for (int i = 0; i < absAx; ++i) {
+                int counter;
+                if ((currChildCount / absUsrAns) > 0) {
+                    currChildCount -= absUsrAns;
+                    counter = absUsrAns;
+                } else {
+                    counter = binding.rightSideGrid.getChildCount() - absUsrAns;
+                }
+//                for (int j = 0; j < Math.abs(userAnswer); ++j) {
+                for (int j = 0; j < counter ; ++j) {
+                    //moveOneViewToX
+                    Log.d(TAG, "move1: \t" + currChild); //Can go past the number of children, so disregard any
+                    currChild++;
+                }
+                //scaleXView(i, answer, pos);
+                Log.d(TAG, "scaleX: \t\t" + i);
+            }
+        } else {
+            Log.d(TAG, "wholes < Ax");
+            int currChild = 0;
+            int index = 0;
+            for (; index < absB / absUsrAns; ++index) {
+                for (int j = 0; j < Math.abs(userAnswer); ++j) {
+                    //moveOneViewToX
+                    Log.d(TAG, "move1: \t" + currChild);
+                    currChild++;
+                }
+                //scaleXView(i, answer, pos);
+                Log.d(TAG, "scaleX: \t\t" + index);
+            }
+            //ALL REMAINING VIEWS
+            if (binding.rightSideGrid.getChildCount() > currChild) { //replace with total values from layout
+                for (; currChild < binding.rightSideGrid.getChildCount(); ++currChild) {
+                    //moveOneViewToX //all remaining
+                    Log.d(TAG, "move1: \t" + currChild);
+                }
+                //scaleXView(i, answer, pos);
+                Log.d(TAG, "scaleX: \t\t" + (index + 1)); //may not be working correctly
+            }
+        }
+
+        if (answer == (double) userAnswer) {
+            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "correct!");
             return true;
         } else {
             Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "incorrect");
             return false;
         }
     }

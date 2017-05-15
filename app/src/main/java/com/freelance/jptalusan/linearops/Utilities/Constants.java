@@ -51,4 +51,50 @@ public class Constants {
             R.drawable.black_box_pos_fifteen,
             R.drawable.black_box_pos_sixteen
     };
+
+    public static int[] WHITE_BOX_WHITE_CIRLE = {
+            R.drawable.white_box,
+            R.drawable.white_box_pos_one,
+            R.drawable.white_box_pos_two,
+            R.drawable.white_box_pos_three,
+            R.drawable.white_box_pos_four,
+            R.drawable.white_box_pos_five,
+            R.drawable.white_box_pos_six,
+            R.drawable.white_box_pos_seven,
+            R.drawable.white_box_pos_eight,
+            R.drawable.white_box_pos_nine
+    };
+
+    public static int[] BLACK_BOX_BLACK_CIRLE = {
+            R.drawable.black_box,
+            R.drawable.black_box_neg_one,
+            R.drawable.black_box_neg_two,
+            R.drawable.black_box_neg_three,
+            R.drawable.black_box_neg_four,
+            R.drawable.black_box_neg_five,
+            R.drawable.black_box_neg_six,
+            R.drawable.black_box_neg_seven,
+            R.drawable.black_box_neg_eight,
+            R.drawable.black_box_neg_nine
+    };
+
+    public static int[] WHITE_BOX_BLACK_CIRLE = {
+            R.drawable.white_box,
+            R.drawable.white_box_neg_one,
+            R.drawable.white_box_neg_two,
+            R.drawable.white_box_neg_three,
+            R.drawable.white_box_neg_four,
+            R.drawable.white_box_neg_five,
+            R.drawable.white_box_neg_six,
+            R.drawable.white_box_neg_seven,
+            R.drawable.white_box_neg_eight,
+            R.drawable.white_box_neg_nine,
+            R.drawable.white_box_neg_ten,
+            R.drawable.white_box_neg_eleven,
+            R.drawable.white_box_neg_twelve,
+            R.drawable.white_box_neg_thirteen,
+            R.drawable.white_box_neg_fourteen,
+            R.drawable.white_box_neg_fifteen,
+            R.drawable.white_box_neg_sixteen
+    };
 }

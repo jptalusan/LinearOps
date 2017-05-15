@@ -153,6 +153,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
             return false;
         }
 
+        //TODO: add more algo for scale anim
+        String typesInLeft   = binding.leftSideGrid.getTypeContainedIn();
+        String typesInRight  = binding.rightSideGrid.getTypeContainedIn();
+
         double answer = eq.getX();
         Log.d(TAG, "correct/user ans: " + answer + ", " + userAnswer);
         //LEVEL 1
@@ -165,11 +169,13 @@ public class LinearEqualityActivity extends AppCompatActivity {
         int absUsrAns = Math.abs(userAnswer);
 
         //TODO: since using absolute values, must check if user is correct first or not since it will also animate the same way if only the sign is incorrect
+        //TODO: Scale format (child, X container drawable, number of 1 objects, 1 drawable)
+        //TODO: limitation when answer is greater than B
         if (absUsrAns == 1) { //Add condition if answer is correct
             Log.d(TAG, "A == B");
             for (int i = 0; i < absAx; ++i) {
                 Log.d(TAG, "move1: \t" + i);
-                Log.d(TAG, "scaleX: \t\t" + i);
+                Log.d(TAG, "scaleX: \t\t" + i + ", " + typesInLeft + ":1-" + typesInRight); //one circle each
             }
         } else if (wholes >= absAx) {
             Log.d(TAG, "wholes >= Ax");
@@ -190,29 +196,30 @@ public class LinearEqualityActivity extends AppCompatActivity {
                     currChild++;
                 }
                 //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + i);
+                Log.d(TAG, "scaleX: \t\t" + i + ", " + typesInLeft + ":" + counter + "-" +  typesInRight);
             }
         } else {
             Log.d(TAG, "wholes < Ax");
             int currChild = 0;
             int index = 0;
             for (; index < absB / absUsrAns; ++index) {
-                for (int j = 0; j < Math.abs(userAnswer); ++j) {
+                for (int j = 0; j < absUsrAns; ++j) {
                     //moveOneViewToX
                     Log.d(TAG, "move1: \t" + currChild);
                     currChild++;
                 }
                 //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + index);
+                Log.d(TAG, "scaleX: \t\t" + index + ", " + typesInLeft + ":" + absUsrAns + "-" +  typesInRight);
             }
             //ALL REMAINING VIEWS
             if (binding.rightSideGrid.getChildCount() > currChild) { //replace with total values from layout
-                for (; currChild < binding.rightSideGrid.getChildCount(); ++currChild) {
+                int numberOfObjects = 0;
+                for (; currChild < binding.rightSideGrid.getChildCount(); ++currChild, ++numberOfObjects) {
                     //moveOneViewToX //all remaining
                     Log.d(TAG, "move1: \t" + currChild);
                 }
                 //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + (index + 1)); //may not be working correctly
+                Log.d(TAG, "scaleX: \t\t" + (index + 1) + ", " + typesInLeft + ":" + numberOfObjects + "-" +  typesInRight); //may not be working correctly
             }
         }
 

@@ -81,16 +81,16 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     private String removeImageViewType(int imageResource) {
         switch (imageResource) {
-            case R.drawable.white_circle:
+            case R.drawable.white_box:
                 positiveXCount--;
                 return Constants.POSITIVE_X;
-            case R.drawable.black_circle:
+            case R.drawable.black_box:
                 negativeXCount--;
                 return Constants.NEGATIVE_X;
-            case R.drawable.white_box:
+            case R.drawable.white_circle:
                 positive1Count--;
                 return Constants.POSITIVE_1;
-            case R.drawable.black_box:
+            case R.drawable.black_circle:
                 negative1Count--;
                 return Constants.NEGATIVE_1;
             default:
@@ -119,6 +119,19 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 ", positive1Count=" + positive1Count +
                 ", negative1Count=" + negative1Count +
                 '}';
+    }
+
+    public String getTypeContainedIn() {
+        if (positiveXCount > 0)
+            return Constants.POSITIVE_X;
+        if (negativeXCount > 0)
+            return Constants.NEGATIVE_X;
+        if (positive1Count > 0)
+            return Constants.POSITIVE_1;
+        if (negative1Count > 0)
+            return Constants.NEGATIVE_1;
+        else
+            return "";
     }
 
     public void moveViews(int dividend, String direction) {

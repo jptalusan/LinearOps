@@ -105,7 +105,6 @@ public class CustomGridLayout extends RelativeLayout {
         return params;
     }
 
-    //TODO: too much work since the slider is triggering the listener multiple times
     public boolean addScaledImage(int imageResource) {
         if (getChildCount() < rows * cols) {
             ImageView imageView = new ImageView(context);

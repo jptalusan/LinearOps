@@ -17,7 +17,6 @@ import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 import java.util.List;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
-//TODO: Expose listener for seekbar value when changed so user just needs to use that instead
 public class SeekBarLayout extends ConstraintLayout {
     private RelativeLayout icons;
     public ComboSeekBar comboSeekBar;

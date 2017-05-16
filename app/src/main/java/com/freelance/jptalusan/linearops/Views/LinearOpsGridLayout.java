@@ -2,9 +2,11 @@ package com.freelance.jptalusan.linearops.Views;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
@@ -13,8 +15,7 @@ import android.view.animation.TranslateAnimation;
 
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
-
-import static android.R.attr.direction;
+import com.freelance.jptalusan.linearops.Utilities.Utilities;
 
 public class LinearOpsGridLayout extends CustomGridLayout {
     private static String TAG = "LinearOpsGridLayout";
@@ -36,10 +37,12 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     @Override
     public boolean addScaledImage(int imageResource) {
         Log.d(TAG, "LinearOpsGridLayout:addScaledImage");
+        Log.d(TAG, "child/max" + getChildCount() + "/" + (super.rows * super.cols));
         if (getChildCount() < super.rows * super.cols) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
             linearOpsImageView.setImageResource(imageResource);
+            linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
             addView(linearOpsImageView);
 
             setImageViewType(imageResource);
@@ -47,9 +50,13 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             defaultDimensions.height = getChildAt(0).getHeight();
             defaultDimensions.width = getChildAt(0).getWidth();
 
+            Log.d(TAG, "count: " + getChildCount());
+
             return true;
+        } else {
+            Log.d(TAG, "Full");
+            return false;
         }
-        return false;
     }
 
     private String setImageViewType(int imageResource) {
@@ -71,22 +78,44 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    private String removeImageViewType(int imageResource) {
-        switch (imageResource) {
-            case R.drawable.white_box:
+    private void removeImageViewType(String type) {
+        switch (type) {
+            case Constants.POSITIVE_X:
                 positiveXCount--;
-                return Constants.POSITIVE_X;
-            case R.drawable.black_box:
+                if (positiveXCount < 0)
+                    positiveXCount = 0;
+                break;
+            case Constants.NEGATIVE_X:
                 negativeXCount--;
-                return Constants.NEGATIVE_X;
-            case R.drawable.white_circle:
+                if (negativeXCount < 0)
+                    negativeXCount = 0;
+                break;
+            case Constants.POSITIVE_1:
                 positive1Count--;
-                return Constants.POSITIVE_1;
-            case R.drawable.black_circle:
+                if (positive1Count < 0)
+                    positive1Count = 0;
+                break;
+            case Constants.NEGATIVE_1:
                 negative1Count--;
-                return Constants.NEGATIVE_1;
+                if (negative1Count < 0)
+                    negative1Count = 0;
+                break;
             default:
-                return "";
+                break;
+        }
+    }
+
+    public void cancelOutOppositeViewTypes() {
+        if (getChildCount() != 0) {
+            LinearOpsImageView lastAddedViewType = (LinearOpsImageView)getChildAt(getChildCount() - 1);
+            String opposite = Utilities.getOppositeType(lastAddedViewType.getType());
+            for (int i = 0; i < getChildCount(); ++i) {
+                if (((LinearOpsImageView)getChildAt(i)).getType().equals(opposite)) {
+
+                    cancelOutViews(getChildCount() - 1, i);
+                    return;
+                }
+            }
         }
     }
 
@@ -123,6 +152,24 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             return Constants.NEGATIVE_1;
         else
             return "";
+    }
+
+    public boolean isLayoutUniform() {
+        Log.d(TAG, "isLayoutUniform");
+        if (positiveXCount + negativeXCount + positive1Count == 0) {
+            return true;
+        }
+        if (positiveXCount + negativeXCount + negative1Count == 0) {
+            return true;
+        }
+        if (positiveXCount + positive1Count + negative1Count == 0) {
+            return true;
+        }
+        if (negativeXCount + positive1Count + negative1Count == 0) {
+            return true;
+        }
+        return false;
+
     }
 
     public void setOneViewDrawables(String oneViewDrawables) {
@@ -205,7 +252,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                removeImageViewType(temp.getId());
+                removeImageViewType(temp.getType());
                 temp.setVisibility(View.GONE);
                 if (listener != null) {
                     listener.onAnimationEnd(temp.getId());
@@ -219,6 +266,101 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         });
     }
 
+    private void cancelOutViews(int childOne, int childTwo) {
+        Log.d(TAG, "cancelOutViews: " + childOne + "," + childTwo);
+        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(childOne);
+        if (temp == null)
+            return;
+
+        final LinearOpsImageView temp2 = (LinearOpsImageView) getChildAt(childTwo);
+        if (temp2 == null)
+            return;
+
+        AnimationSet animSet = new AnimationSet(false);
+        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
+                android.R.anim.cycle_interpolator));
+        //TODO: fix for right
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(250);
+        alphaAnimation.setRepeatCount(1);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+        alphaAnimation.setStartOffset(0);
+
+
+        animSet.addAnimation(alphaAnimation);
+        temp.startAnimation(animSet);
+        temp2.startAnimation(animSet);
+
+        animSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                removeImageViewType(temp.getType());
+                temp.setVisibility(View.GONE);
+
+                removeImageViewType(temp2.getType());
+                temp2.setVisibility(View.GONE);
+
+                Log.d(TAG, "posX: " + positiveXCount);
+                Log.d(TAG, "negX: " + negativeXCount);
+                Log.d(TAG, "pos1: " + positive1Count);
+                Log.d(TAG, "neg1: " + negative1Count);
+                //TODO: add cancel out listener here;
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        redrawLayout();
+                    }
+                });
+
+                if (listener != null) {
+                    listener.onCancelOutEnd();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void redrawLayout() {
+        removeAllViews();
+        for (int i = 0; i < positiveXCount; ++i) {
+            LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
+            linearOpsImageView.setLayoutParams(super.generateParams());
+            linearOpsImageView.setImageResource(R.drawable.white_box);
+            linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.white_box));
+            addView(linearOpsImageView);
+        }
+        for (int i = 0; i < negativeXCount; ++i) {
+            LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
+            linearOpsImageView.setLayoutParams(super.generateParams());
+            linearOpsImageView.setImageResource(R.drawable.black_box);
+            linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.black_box));
+            addView(linearOpsImageView);
+        }
+        for (int i = 0; i < positive1Count; ++i) {
+            LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
+            linearOpsImageView.setLayoutParams(super.generateParams());
+            linearOpsImageView.setImageResource(R.drawable.white_circle);
+            linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.white_circle));
+            addView(linearOpsImageView);
+        }
+        for (int i = 0; i < negative1Count; ++i) {
+            LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
+            linearOpsImageView.setLayoutParams(super.generateParams());
+            linearOpsImageView.setImageResource(R.drawable.black_circle);
+            linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.black_circle));
+            addView(linearOpsImageView);
+        }
+    }
+
     //TODO: How to use when in another file
     public interface LinearOpsGridLayoutListener {
         // These methods are the different events and
@@ -226,6 +368,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         // or when data has been loaded
         void onAnimationEnd(int val);
         void onAnimationStart(int val);
+        void onCancelOutEnd(); //TODO: add listener too on when image is added
     }
 
     private LinearOpsGridLayoutListener listener;

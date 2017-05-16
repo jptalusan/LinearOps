@@ -7,14 +7,14 @@ import com.freelance.jptalusan.linearops.R;
  */
 
 public class Constants {
-    public static String POSITIVE_X = "Positive_X";
-    public static String NEGATIVE_X = "Negative_X";
+    public static final String POSITIVE_X = "Positive_X";
+    public static final String NEGATIVE_X = "Negative_X";
 
-    public static String POSITIVE_1 = "Positive_1";
-    public static String NEGATIVE_1 = "Negative_1";
+    public static final String POSITIVE_1 = "Positive_1";
+    public static final String NEGATIVE_1 = "Negative_1";
 
-    public static int X_MAX = 20;
-    public static int X_MIN = -20;
+    public static int X_MAX = 15;
+    public static int X_MIN = -15;
 
     public static int ONE_MAX = 9;
     public static int ONE_MIN = -9;

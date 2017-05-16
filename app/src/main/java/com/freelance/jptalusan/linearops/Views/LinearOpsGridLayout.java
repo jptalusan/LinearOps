@@ -14,24 +14,16 @@ import android.view.animation.TranslateAnimation;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 
-import static android.R.attr.value;
+import static android.R.attr.direction;
 
-/**
- * Created by JPTalusan on 07/05/2017.
- */
-
-
-//TODO: Add algo for left overs and stuff
 public class LinearOpsGridLayout extends CustomGridLayout {
     private static String TAG = "LinearOpsGridLayout";
     public int positiveXCount = 0;
     public int negativeXCount = 0;
     public int positive1Count = 0;
     public int negative1Count = 0;
-    private int currChild = 0;
-    private int currChildLeft = 0;
     public Dimensions defaultDimensions = new Dimensions();
-    private int dividend = 0;
+    private int[] drawables;
 
     public LinearOpsGridLayout(Context context) {
         super(context);
@@ -62,16 +54,16 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     private String setImageViewType(int imageResource) {
         switch (imageResource) {
-            case R.drawable.white_circle:
+            case R.drawable.white_box:
                 positiveXCount++;
                 return Constants.POSITIVE_X;
-            case R.drawable.black_circle:
+            case R.drawable.black_box:
                 negativeXCount++;
                 return Constants.NEGATIVE_X;
-            case R.drawable.white_box:
+            case R.drawable.white_circle:
                 positive1Count++;
                 return Constants.POSITIVE_1;
-            case R.drawable.black_box:
+            case R.drawable.black_circle:
                 negative1Count++;
                 return Constants.NEGATIVE_1;
             default:
@@ -98,17 +90,16 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    private void prepareNewImageViews(int count) {
-
-    }
-
     @Override
     public void reset() {
-        super.reset();
+        for (int i = 0; i < getChildCount(); ++i) {
+            getChildAt(i).clearAnimation();;
+        }
         positiveXCount = 0;
         negativeXCount = 0;
         positive1Count = 0;
         negative1Count = 0;
+        super.reset();
     }
 
     @Override
@@ -134,99 +125,90 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             return "";
     }
 
-    public void moveViews(int dividend, String direction) {
-//        if (currChild + 1 <= getChildCount()) {
-        Log.d(TAG, "in moveViews: " + direction);
-        Log.d(TAG, "dividend: " + dividend);
-        Log.d(TAG, "currChild: " + currChild);
-        for (int i = 0; i < dividend; ++i) {
-            animateView(getChildAt(currChild), 0, direction);
-            currChild++;
+    public void setOneViewDrawables(String oneViewDrawables) {
+        String xViewDrawables = getTypeContainedIn();
+
+        if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+            drawables = Constants.WHITE_BOX_WHITE_CIRLE;
+        } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
+            drawables = Constants.WHITE_BOX_BLACK_CIRLE;
+        } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+            drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+        } else {
+            drawables = Constants.BLACK_BOX_BLACK_CIRLE;
         }
-//        }
     }
 
-    //TODO: REFACTOR EVERYTHING
-    public void moveLeftXViews() {
-        Log.d(TAG, "moveLeftXViews: " + currChild);
-        if (currChild > getChildCount())
+    public void animateXView(int child, int delay, final int dividend) {
+        Log.d(TAG, "animateXView");
+        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
+        if (temp == null)
             return;
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animateView(getChildAt(currChild), 200 * currChild, "RIGHT");
-                currChild++;
-            }
-        }, 100);
-
-    }
-
-    public void setDividend(int dividend) {
-        this.dividend = dividend;
-    }
-
-    //TODO: check what layout is used so know which side to fly to.
-    private void animateView(View child, int delay, final String direction) {
-        Log.d(TAG, "animateView: " + direction);
-        final LinearOpsImageView temp = (LinearOpsImageView) child;
-        if (child == null)
-            return;
-        LayoutParams params = (LayoutParams) child.getLayoutParams();
         AnimationSet animSet = new AnimationSet(false);
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
-                android.R.anim.linear_interpolator));
+                android.R.anim.cycle_interpolator));
+        //TODO: fix for right
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
+        scaleAnimation.setDuration(250);
+        scaleAnimation.setRepeatCount(1);
+        scaleAnimation.setRepeatMode(Animation.REVERSE);
+        scaleAnimation.setStartOffset(delay);
 
-        if ("LEFT" == direction) {
-            int childLoc[] = {0, 0};
-            child.getLocationOnScreen(childLoc);
-            int parentLoc[] = {0, 0};
-            getLocationInWindow(parentLoc);
-            //Translate animation coordinates are based on the current object. 0, 0 is the current position of the object
-            TranslateAnimation translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + child.getWidth()), 0, 0);
-
-            translateAnimation.setDuration(Constants.ANIMATION_DURATION);
-            translateAnimation.setRepeatCount(0);
-            translateAnimation.setStartOffset(delay);
-            animSet.addAnimation(translateAnimation);
-            temp.startAnimation(animSet);
-
-        } else {
-            //TODO: fix for right
-            ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
-            scaleAnimation.setDuration(500);
-            scaleAnimation.setRepeatCount(1);
-            scaleAnimation.setRepeatMode(Animation.REVERSE);
-            scaleAnimation.setStartOffset(delay);
-
-            //TODO: add color change
-            animSet.addAnimation(scaleAnimation);
-            temp.startAnimation(animSet);
-        }
-
+        //TODO: add color change
+        animSet.addAnimation(scaleAnimation);
+        temp.startAnimation(animSet);
 
         animSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                if (listener != null) {
-                    Log.d(TAG, "onAnimationStart div, currchild:" + dividend + "," + currChild);
-                    if (currChild % dividend == 0 || dividend % currChild == 0)
-                        listener.onAnimationStart(temp.getId());
-                }
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (direction == "LEFT") {
-                    removeImageViewType(temp.getId());
-                    temp.setVisibility(View.GONE);
-                    if (listener != null) {
-                        listener.onAnimationEnd(temp.getId());
-                    }
+                temp.setImageResource(drawables[dividend]);
+            }
 
-                } else {
-                    Log.d(TAG, "Dividend: " + dividend);
-                    temp.setImageResource(Constants.BLACK_BOX_WHITE_CIRLE[dividend]);
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+    }
+
+    //TODO: check what layout is used so know which side to fly to.
+    public void animateOneView(int child, int delay) {
+        Log.d(TAG, "animateOneView");
+        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
+        if (temp == null)
+            return;
+        LayoutParams params = (LayoutParams) temp.getLayoutParams();
+        AnimationSet animSet = new AnimationSet(false);
+        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
+                android.R.anim.linear_interpolator));
+
+        int childLoc[] = {0, 0};
+        temp.getLocationOnScreen(childLoc);
+        int parentLoc[] = {0, 0};
+        getLocationInWindow(parentLoc);
+        //Translate animation coordinates are based on the curresnt object. 0, 0 is the current position of the object
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + temp.getWidth()), 0, 0);
+
+        translateAnimation.setDuration(Constants.ANIMATION_DURATION);
+        translateAnimation.setRepeatCount(0);
+        translateAnimation.setStartOffset(delay);
+        animSet.addAnimation(translateAnimation);
+        temp.startAnimation(animSet);
+
+        animSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                removeImageViewType(temp.getId());
+                temp.setVisibility(View.GONE);
+                if (listener != null) {
+                    listener.onAnimationEnd(temp.getId());
                 }
             }
 
@@ -244,8 +226,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         // or when data has been loaded
         void onAnimationEnd(int val);
         void onAnimationStart(int val);
-
-//        void onSubAnimationEnded(int val, int type);
     }
 
     private LinearOpsGridLayoutListener listener;

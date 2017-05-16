@@ -13,12 +13,16 @@ import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
+import com.freelance.jptalusan.linearops.Utilities.Utilities;
 import com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.freelance.jptalusan.linearops.Utilities.Utilities.getFactors;
 
 public class LinearEqualityActivity extends AppCompatActivity {
     private static String TAG = "LinearEqualityActivity";
@@ -26,7 +30,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
     private int currLevel = 0;
     private Equation eq = new Equation();
     private ActivityLinearEqualityBinding binding;
-    private int correctAnswer = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +44,57 @@ public class LinearEqualityActivity extends AppCompatActivity {
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         eq = EquationGeneration.generateEqualityEquation(currLevel);
-        final int ax = eq.getAx();
-        final int b  = eq.getB();
-        final int cx = eq.getCx();
-        final int d  = eq.getD();
+        setupLayoutForEquation(eq);
 
-        Log.d(TAG, eq.toString());
+        List<String> points = new ArrayList<>();
+        for (int i = Constants.ONE_MIN; i <= Constants.ONE_MAX; ++i) {
+            points.add(Integer.toString(i));
+        }
 
-        binding.leftSideGrid.setRows(4);
-        binding.leftSideGrid.setCols(5);
+        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
+        binding.seekbar.setComboSeekBarAdapter(points);
+        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
+        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
+
+        binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
+            @Override
+            public void onSeekBarValueChanged(int val) {
+                //Should only be called when layout is in the for ax = b only
+                isAnswerCorrect(val);
+            }
+        });
+
+        binding.seekbar.reset();
+    }
+
+    private void setupGrid(LinearOpsGridLayout l, int number) {
+        ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
+        if (factors.size() == 1) {
+            l.setRows(1);
+            l.setCols(1);
+        } else if (factors.size() % 2 != 0) {
+            l.setRows(factors.get(factors.size() / 2));
+            l.setCols(factors.get(factors.size() / 2));
+        } else {
+            l.setRows(factors.get(factors.size() / 2));
+            l.setCols(factors.get(factors.size() / 2 - 1));
+        }
+    }
+
+    private void setupLayoutForEquation(Equation equation) {
+        final int ax = equation.getAx();
+        final int b  = equation.getB();
+        final int cx = equation.getCx();
+        final int d  = equation.getD();
+
+        Log.d(TAG, equation.toString());
+
+        binding.leftSideGrid.reset();
+        binding.rightSideGrid.reset();
+
+        setupGrid(binding.leftSideGrid, ax);
+        setupGrid(binding.rightSideGrid, b);
+
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -69,9 +114,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
             }
         });
 
-
-        binding.rightSideGrid.setRows(4);
-        binding.rightSideGrid.setCols(5);
         binding.rightSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -90,146 +132,104 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        //TODO: Make this easier to access? in view methods?
-        List<String> points = new ArrayList<>();
-        for (int i = -10; i <= 10; ++i) {
-            points.add(Integer.toString(i));
+    //TODO: move somewhere else for reusability, add layouts as params (context, left, right)
+    private boolean animateObjects(int userAnswer, String xType, String oneType) {
+        //TODO: will have to refactor for later levels
+        int absAx            = Math.abs(eq.getAx());
+        int absB             = Math.abs(eq.getB());
+        int absUserAnswer    = Math.abs(userAnswer);
+        double correctAnswer = eq.getX();
+
+        if (absUserAnswer == 0) {
+            //DEBUG Only //TODO:Remove in release
+            setupLayoutForEquation(eq);
+            return false;
         }
 
-        binding.seekbar.setSeekBarMax(21);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(10);
-        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
+        if (absUserAnswer > absB) {
+            return false;
+        }
 
-        binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
-            @Override
-            public void onSeekBarValueChanged(int val) {
-                correctAnswer = val;
-                isAnswerCorrect(val);
-                if (val > 0) {
-//                    binding.rightSideGrid.reset();
-                    for (int i = 0; i < val; ++i) {
-//                        binding.rightSideGrid.addScaledImage(R.drawable.white_box);
-//                        Log.d(TAG, binding.rightSideGrid.toString());
+        //TODO: will have to change depending on where 1 is
+        Log.e(TAG, "Final drawables: " + xType + " with " + oneType + " inside.");
+        binding.leftSideGrid.setOneViewDrawables(oneType);
+
+        if (absAx == absB && absUserAnswer == 1) {
+            Log.d(TAG, "absAx == absB && absUserAnswer == 1");
+            for (int i = 0; i < absAx; ++i) {
+                Log.e(TAG, "move: \t" + i);
+                binding.rightSideGrid.animateOneView(i, 1000 * i);
+                Log.e(TAG, "scale: \t\t" + i + ", has: 1");
+                binding.leftSideGrid.animateXView(i, 500 * i, absUserAnswer);
+            }
+        } else if (absAx == 1) {
+            Log.d(TAG, "absAx == 1");
+            for (int i = 0; i < absUserAnswer; ++i) {
+                Log.e(TAG, "move: \t" + i);
+                binding.rightSideGrid.animateOneView(i, 0);
+            }
+            Log.e(TAG, "scale: \t\t" + 0 + ", has: " + absUserAnswer);
+            binding.leftSideGrid.animateXView(0, 0, absUserAnswer);
+        } else {
+            Log.d(TAG, "else");
+            int attemptToSolve = absB / absUserAnswer;
+            int remainingChildren = binding.rightSideGrid.getChildCount(); //TODO: will have to change depending on where 1 is
+            int currentChild = 0;
+            int outerLoop;
+            if (absB % absUserAnswer != 0) {
+                outerLoop = attemptToSolve + 1;
+            } else {
+                outerLoop = attemptToSolve;
+            }
+
+            if (outerLoop > absAx) {
+                outerLoop = absAx;
+            }
+
+            for (int i = 0; i < outerLoop; ++i) {
+                if (remainingChildren > absUserAnswer) {
+                    remainingChildren -= absUserAnswer;
+                    for (int j = 0; j < absUserAnswer; ++j) {
+                        Log.e(TAG, "move: \t" + currentChild);
+                        binding.rightSideGrid.animateOneView(currentChild, 1000 * i);
+                        currentChild++;
                     }
-                } else if (val < 0) {
-//                    binding.leftSideGrid.reset();
-                    for (int i = val; i < 0; ++i) {
-//                        binding.leftSideGrid.addScaledImage(R.drawable.black_box);
-//                        Log.d(TAG, binding.leftSideGrid.toString());
-                    }
+                    Log.e(TAG, "scale: \t\t" + i + ", has: " + absUserAnswer);
+                    binding.leftSideGrid.animateXView(i, 500 * i, absUserAnswer);
                 } else {
-//                    binding.leftSideGrid.reset();
-//                    binding.rightSideGrid.reset();
+                    for (int j = 0; j < remainingChildren; ++j) {
+                        Log.e(TAG, "move: \t" + currentChild);
+                        binding.rightSideGrid.animateOneView(currentChild, 1000 * i);
+                        currentChild++;
+                    }
+                    Log.e(TAG, "scale: \t\t" + i + ", has: " + remainingChildren);
+                    binding.leftSideGrid.animateXView(i, 500 * i, remainingChildren);
                 }
             }
-        });
+        }
 
-        binding.seekbar.reset();
-        binding.rightSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
-            @Override
-            public void onAnimationEnd(int val) {
-
-            }
-
-            @Override
-            public void onAnimationStart(int val) {
-                Handler leftSide = new Handler();
-                leftSide.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.leftSideGrid.setDividend(Math.abs(correctAnswer));
-                        binding.leftSideGrid.moveLeftXViews();
-                    }
-                }, 0);
-            }
-        });
+        //TODO: add actions here after answer is checked
+        Log.d(TAG, "correct/user answ: " + correctAnswer + "/" + userAnswer);
+        if (correctAnswer == (double) userAnswer) {
+            Log.w(TAG, "correct!");
+            return true;
+        } else {
+            Log.w(TAG, "incorrect");
+            return false;
+        }
     }
 
     //TODO: Add boolean or prevent seekbar from being used.
     private boolean isAnswerCorrect(int userAnswer) {
-        if (userAnswer == 0) {
-            return false;
-        }
-
-        //TODO: add more algo for scale anim
         String typesInLeft   = binding.leftSideGrid.getTypeContainedIn();
         String typesInRight  = binding.rightSideGrid.getTypeContainedIn();
-
-        double answer = eq.getX();
-        Log.d(TAG, "correct/user ans: " + answer + ", " + userAnswer);
-        //LEVEL 1
-        int remainder = eq.getB() % eq.getAx();
-        int wholes = Math.abs(eq.getB() / eq.getAx());
-        Log.d(TAG, "Wholes, remainder: " + wholes + "," + remainder);
-
-        int absAx = Math.abs(eq.getAx());
-        int absB = Math.abs(eq.getB());
-        int absUsrAns = Math.abs(userAnswer);
-
-        //TODO: since using absolute values, must check if user is correct first or not since it will also animate the same way if only the sign is incorrect
-        //TODO: Scale format (child, X container drawable, number of 1 objects, 1 drawable)
-        //TODO: limitation when answer is greater than B
-        if (absUsrAns == 1) { //Add condition if answer is correct
-            Log.d(TAG, "A == B");
-            for (int i = 0; i < absAx; ++i) {
-                Log.d(TAG, "move1: \t" + i);
-                Log.d(TAG, "scaleX: \t\t" + i + ", " + typesInLeft + ":1-" + typesInRight); //one circle each
-            }
-        } else if (wholes >= absAx) {
-            Log.d(TAG, "wholes >= Ax");
-            int currChild = 0;
-            int currChildCount = binding.rightSideGrid.getChildCount();
-            for (int i = 0; i < absAx; ++i) {
-                int counter;
-                if ((currChildCount / absUsrAns) > 0) {
-                    currChildCount -= absUsrAns;
-                    counter = absUsrAns;
-                } else {
-                    counter = binding.rightSideGrid.getChildCount() - absUsrAns;
-                }
-//                for (int j = 0; j < Math.abs(userAnswer); ++j) {
-                for (int j = 0; j < counter ; ++j) {
-                    //moveOneViewToX
-                    Log.d(TAG, "move1: \t" + currChild); //Can go past the number of children, so disregard any
-                    currChild++;
-                }
-                //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + i + ", " + typesInLeft + ":" + counter + "-" +  typesInRight);
-            }
-        } else {
-            Log.d(TAG, "wholes < Ax");
-            int currChild = 0;
-            int index = 0;
-            for (; index < absB / absUsrAns; ++index) {
-                for (int j = 0; j < absUsrAns; ++j) {
-                    //moveOneViewToX
-                    Log.d(TAG, "move1: \t" + currChild);
-                    currChild++;
-                }
-                //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + index + ", " + typesInLeft + ":" + absUsrAns + "-" +  typesInRight);
-            }
-            //ALL REMAINING VIEWS
-            if (binding.rightSideGrid.getChildCount() > currChild) { //replace with total values from layout
-                int numberOfObjects = 0;
-                for (; currChild < binding.rightSideGrid.getChildCount(); ++currChild, ++numberOfObjects) {
-                    //moveOneViewToX //all remaining
-                    Log.d(TAG, "move1: \t" + currChild);
-                }
-                //scaleXView(i, answer, pos);
-                Log.d(TAG, "scaleX: \t\t" + (index + 1) + ", " + typesInLeft + ":" + numberOfObjects + "-" +  typesInRight); //may not be working correctly
-            }
-        }
-
-        if (answer == (double) userAnswer) {
-            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "correct!");
+        if (animateObjects(userAnswer, typesInLeft, typesInRight)) {
+            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
             return true;
         } else {
-            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "incorrect");
+            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

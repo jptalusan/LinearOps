@@ -89,4 +89,30 @@ public class Equation {
     public int getLevel() {
         return level;
     }
+
+    //TODO: use this to confirm if user has already answered correctly
+    public int[] getAxEqualsBForm() {
+        int[] output = {0, 0};
+
+        switch(level) {
+            case Constants.LEVEL_1:
+                output[0] = ax;
+                output[1] = b;
+                break;
+            case Constants.LEVEL_2:
+                output[0] = ax;
+                output[1] = cx - b;
+                break;
+            case Constants.LEVEL_3:
+            case Constants.LEVEL_4:
+            case Constants.LEVEL_5:
+                output[0] = ax - cx;
+                output[1] = b - d;
+                break;
+            default:
+                break;
+        }
+
+        return output;
+    }
 }

@@ -3,7 +3,6 @@ package com.freelance.jptalusan.linearops.Views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -80,9 +79,6 @@ public class CustomGridLayout extends RelativeLayout {
 
                 scaledDimensons.width  = dimensions.width  / cols;
                 scaledDimensons.height = dimensions.height / rows;
-
-                Log.d(TAG, "dimensions:" + dimensions.toString());
-                Log.d(TAG, "scaled:" + scaledDimensons.toString());
             }
         });
     }
@@ -113,7 +109,6 @@ public class CustomGridLayout extends RelativeLayout {
             addView(imageView);
             return true;
         } else {
-            Log.d(TAG, "layout is full.");
             return false;
         }
     }

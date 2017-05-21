@@ -1,6 +1,7 @@
 package com.freelance.jptalusan.linearops.Views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -25,6 +26,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     public int negative1Count = 0;
     public Dimensions defaultDimensions = new Dimensions();
     private int[] drawables;
+    public String side = "";
 
     public LinearOpsGridLayout(Context context) {
         super(context);
@@ -32,17 +34,29 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     public LinearOpsGridLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.LinearOpsGridLayoutOptions,
+                0, 0);
+
+        try {
+            side = a.getString(R.styleable.LinearOpsGridLayoutOptions_side);
+        } finally {
+            a.recycle();
+        }
     }
 
     @Override
     public boolean addScaledImage(int imageResource) {
-        Log.d(TAG, "LinearOpsGridLayout:addScaledImage");
-        Log.d(TAG, "child/max" + getChildCount() + "/" + (super.rows * super.cols));
+//        Log.d(TAG, "LinearOpsGridLayout:addScaledImage");
+//        Log.d(TAG, "child/max" + getChildCount() + "/" + (super.rows * super.cols));
         if (getChildCount() < super.rows * super.cols) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
             linearOpsImageView.setImageResource(imageResource);
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
+            linearOpsImageView.setPadding(1, 1, 1, 1);
+//            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
             addView(linearOpsImageView);
 
             setImageViewType(imageResource);
@@ -50,11 +64,11 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             defaultDimensions.height = getChildAt(0).getHeight();
             defaultDimensions.width = getChildAt(0).getWidth();
 
-            Log.d(TAG, "count: " + getChildCount());
+//            Log.d(TAG, "count: " + getChildCount());
 
             return true;
         } else {
-            Log.d(TAG, "Full");
+//            Log.d(TAG, "Full");
             return false;
         }
     }
@@ -154,6 +168,16 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             return "";
     }
 
+    public String getValuesInside() {
+        if (positiveXCount > 0 || negativeXCount > 0) {
+            return Constants.X;
+        }
+        if (positive1Count > 0 || negative1Count > 0) {
+            return Constants.ONE;
+        }
+        return "";
+    }
+
     public boolean isLayoutUniform() {
         Log.d(TAG, "isLayoutUniform");
         if (positiveXCount + negativeXCount + positive1Count == 0) {
@@ -169,25 +193,37 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             return true;
         }
         return false;
-
     }
 
-    public void setOneViewDrawables(String oneViewDrawables) {
-        String xViewDrawables = getTypeContainedIn();
-
-        if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-            drawables = Constants.WHITE_BOX_WHITE_CIRLE;
-        } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
-            drawables = Constants.WHITE_BOX_BLACK_CIRLE;
-        } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-            drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+    //Determine what array of drawables is going to be placed in X drawable after animations
+    public void setOneViewDrawables(LinearOpsGridLayout x, LinearOpsGridLayout one, boolean isCorrectSign) {
+        String xViewDrawables = x.getTypeContainedIn();
+        String oneViewDrawables = one.getTypeContainedIn();
+        if (isCorrectSign) {
+            if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+                drawables = Constants.WHITE_BOX_WHITE_CIRLE;
+            } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
+                drawables = Constants.WHITE_BOX_BLACK_CIRLE;
+            } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+                drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+            } else {
+                drawables = Constants.BLACK_BOX_BLACK_CIRLE;
+            }
         } else {
-            drawables = Constants.BLACK_BOX_BLACK_CIRLE;
+            if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+                drawables = Constants.WHITE_BOX_BLACK_CIRLE;
+            } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
+                drawables = Constants.WHITE_BOX_WHITE_CIRLE;
+            } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+                drawables = Constants.BLACK_BOX_BLACK_CIRLE;
+            } else {
+                drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+            }
         }
     }
 
     public void animateXView(int child, int delay, final int dividend) {
-        Log.d(TAG, "animateXView");
+//        Log.d(TAG, "animateXView, div: " + dividend);
         final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
         if (temp == null)
             return;
@@ -201,6 +237,12 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         scaleAnimation.setRepeatMode(Animation.REVERSE);
         scaleAnimation.setStartOffset(delay);
 
+        if (this.side == Constants.LEFT) {
+
+        } else {
+
+        }
+
         //TODO: add color change
         animSet.addAnimation(scaleAnimation);
         temp.startAnimation(animSet);
@@ -208,6 +250,9 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                if (listener != null) {
+                    listener.onAnimationStart(temp.getId());
+                }
             }
 
             @Override
@@ -221,9 +266,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         });
     }
 
-    //TODO: check what layout is used so know which side to fly to.
     public void animateOneView(int child, int delay) {
-        Log.d(TAG, "animateOneView");
+//        Log.d(TAG, "animateOneView");
         final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
         if (temp == null)
             return;
@@ -232,12 +276,14 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.linear_interpolator));
 
-        int childLoc[] = {0, 0};
-        temp.getLocationOnScreen(childLoc);
-        int parentLoc[] = {0, 0};
-        getLocationInWindow(parentLoc);
         //Translate animation coordinates are based on the curresnt object. 0, 0 is the current position of the object
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + temp.getWidth()), 0, 0);
+        TranslateAnimation translateAnimation;
+//        Log.d(TAG, "Side of Layout: " + this.side);
+        if (this.side.equals(Constants.RIGHT)) { //Right going to left
+            translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + temp.getWidth()), 0, 0);
+        } else { //Left going to right
+            translateAnimation = new TranslateAnimation(0, 0 + (getWidth() + temp.getWidth()), 0, 0);
+        }
 
         translateAnimation.setDuration(Constants.ANIMATION_DURATION);
         translateAnimation.setRepeatCount(0);
@@ -248,6 +294,9 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                if (listener != null) {
+                    listener.onAnimationStart(temp.getId());
+                }
             }
 
             @Override
@@ -267,7 +316,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     }
 
     private void cancelOutViews(int childOne, int childTwo) {
-        Log.d(TAG, "cancelOutViews: " + childOne + "," + childTwo);
+//        Log.d(TAG, "cancelOutViews: " + childOne + "," + childTwo);
         final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(childOne);
         if (temp == null)
             return;
@@ -279,7 +328,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         AnimationSet animSet = new AnimationSet(false);
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.cycle_interpolator));
-        //TODO: fix for right
         AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
         alphaAnimation.setDuration(250);
         alphaAnimation.setRepeatCount(1);
@@ -294,6 +342,9 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                if (listener != null) {
+                    listener.onAnimationStart(temp.getId());
+                }
             }
 
             @Override
@@ -303,12 +354,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
                 removeImageViewType(temp2.getType());
                 temp2.setVisibility(View.GONE);
-
-                Log.d(TAG, "posX: " + positiveXCount);
-                Log.d(TAG, "negX: " + negativeXCount);
-                Log.d(TAG, "pos1: " + positive1Count);
-                Log.d(TAG, "neg1: " + negative1Count);
-                //TODO: add cancel out listener here;
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
@@ -375,7 +420,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     // Assign the listener implementing events interface that will receive the events
     public void onLinearOpsGridLayoutListener(LinearOpsGridLayoutListener listener) {
-        Log.d(TAG, "onLinearOpsGridLayoutListener");
+//        Log.d(TAG, "onLinearOpsGridLayoutListener");
         this.listener = listener;
     }
 }

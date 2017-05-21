@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/com.freelance.jptalusan.linearops"
     xmlns:tools="http://schemas.android.com/tools">
 <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
@@ -53,6 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_light"
+        custom:side="@string/right"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline2"
@@ -73,6 +75,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_blue_bright"
+        custom:side="@string/left"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"

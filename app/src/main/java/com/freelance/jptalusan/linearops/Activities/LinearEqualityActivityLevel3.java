@@ -22,14 +22,18 @@ import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityWithB
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinearEqualityActivityWithButtons extends AppCompatActivity {
-    private static String TAG = "LinEqActWithButtons";
+/**
+ * Created by JPTalusan on 21/05/2017.
+ */
+
+public class LinearEqualityActivityLevel3 extends AppCompatActivity {
+    private static String TAG = "Level3Activity";
     protected SharedPreferences prefs;
     private int currLevel = 0;
     private ActivityLinearEqualityWithButtonsBinding binding;
     private Equation eq;
     private boolean canUseSeekbar = false;
-    private boolean canUseButtons = true;
+    private boolean canUseButton = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).apply();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_3).apply();
 
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
@@ -75,7 +79,8 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding.whiteBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canUseButtons)
+                Log.d(TAG, "can use button: " + canUseButton);
+                if (canUseButton)
                     addImagesToBothSides(R.drawable.white_box);
             }
         });
@@ -83,7 +88,8 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding.blackBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canUseButtons)
+                Log.d(TAG, "can use button: " + canUseButton);
+                if (canUseButton)
                     addImagesToBothSides(R.drawable.black_box);
             }
         });
@@ -91,7 +97,8 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding.whiteCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canUseButtons)
+                Log.d(TAG, "can use button: " + canUseButton);
+                if (canUseButton)
                     addImagesToBothSides(R.drawable.white_circle);
             }
         });
@@ -99,7 +106,8 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding.blackCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canUseButtons)
+                Log.d(TAG, "can use button: " + canUseButton);
+                if (canUseButton)
                     addImagesToBothSides(R.drawable.black_circle);
             }
         });
@@ -107,12 +115,12 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding.rightSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
             @Override
             public void onAnimationEnd(int val) {
-                canUseButtons = true;
+                canUseButton = true;
             }
 
             @Override
             public void onAnimationStart(int val) {
-                canUseButtons = false;
+                canUseButton = false;
             }
 
             @Override
@@ -123,19 +131,19 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
                     canUseSeekbar = true;
                     binding.seekbar.setVisibility(View.VISIBLE);
                 }
-                canUseButtons = true;
+                canUseButton = true;
             }
         });
 
         binding.leftSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
             @Override
             public void onAnimationEnd(int val) {
-                canUseButtons = true;
+
             }
 
             @Override
             public void onAnimationStart(int val) {
-                canUseButtons = false;
+
             }
 
             @Override
@@ -146,7 +154,6 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
                     canUseSeekbar = true;
                     binding.seekbar.setVisibility(View.VISIBLE);
                 }
-                canUseButtons = true;
             }
         });
     }
@@ -209,7 +216,7 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
             public void onGlobalLayout() {
                 binding.leftSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 switch(currLevel) {
-                    case Constants.LEVEL_2:
+                    case Constants.LEVEL_3:
                         for (int i = 0; i < Math.abs(ax); ++i) {
                             if (ax > 0)
                                 binding.leftSideGrid.addScaledImage(R.drawable.white_box);
@@ -234,9 +241,15 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
             public void onGlobalLayout() {
                 binding.rightSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 switch(currLevel) {
-                    case Constants.LEVEL_2:
+                    case Constants.LEVEL_3:
                         for (int i = 0; i < Math.abs(cx); ++i) {
                             if (cx > 0)
+                                binding.rightSideGrid.addScaledImage(R.drawable.white_box);
+                            else
+                                binding.rightSideGrid.addScaledImage(R.drawable.black_box);
+                        }
+                        for (int i = 0; i < Math.abs(d); ++i) {
+                            if (d > 0)
                                 binding.rightSideGrid.addScaledImage(R.drawable.white_circle);
                             else
                                 binding.rightSideGrid.addScaledImage(R.drawable.black_circle);

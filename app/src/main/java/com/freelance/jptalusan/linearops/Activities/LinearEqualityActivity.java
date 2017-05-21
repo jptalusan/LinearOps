@@ -31,8 +31,11 @@ public class LinearEqualityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_equality);
-
         prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
+
+        //DEBUG
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
+
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
             prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
@@ -87,6 +90,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
         binding.leftSideGrid.reset();
         binding.rightSideGrid.reset();
+
+        binding.leftSideGrid.side = Constants.LEFT;
+        binding.rightSideGrid.side = Constants.RIGHT;
 
         setupGrid(binding.leftSideGrid, ax);
         setupGrid(binding.rightSideGrid, b);

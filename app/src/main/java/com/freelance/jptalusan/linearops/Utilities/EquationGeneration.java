@@ -48,7 +48,6 @@ public class EquationGeneration {
                 tempX = ax - cx;
                 temp1 = d - b;
 
-                System.out.println(ax + ", " + cx);
                 if (tempX != 0) {
                     if (temp1 % tempX != 0 || tempX == 1 || temp1 == 0) {
                         generatedEquation = generateEqualityEquation(Constants.LEVEL_4);
@@ -63,7 +62,6 @@ public class EquationGeneration {
                 tempX = ax - cx;
                 temp1 = d - b;
 
-                System.out.println(ax + ", " + cx);
                 if (tempX == 1 || temp1 == 0 || tempX == 0) {
                     generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
                 } else {

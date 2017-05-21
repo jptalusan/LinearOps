@@ -11,25 +11,23 @@
     <com.freelance.jptalusan.linearops.Views.AutoResizeTextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="8dp"
         android:text="LinearOps"
         android:textAlignment="center"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearEquality"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999"
-        app:textAllCaps="true" />
+        app:textAllCaps="true"
+        android:id="@+id/autoResizeTextView2"
+        app:layout_constraintBottom_toTopOf="@+id/linearEquality" />
 
     <Button
         android:id="@+id/linearEquality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Linear Equations"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autoResizeTextView2"
+        app:layout_constraintBottom_toTopOf="@+id/linearInequality"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -37,11 +35,56 @@
         android:id="@+id/linearInequality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Linear Inequalities"
+        android:text="Level 2"
+        app:layout_constraintBottom_toTopOf="@+id/level3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearEquality" />
+
+    <Button
+        android:id="@+id/level3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Level 3"
+        app:layout_constraintBottom_toTopOf="@+id/level4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearInequality" />
+
+    <Button
+        android:id="@+id/level4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="level 4"
+        app:layout_constraintBottom_toTopOf="@+id/level5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/level3" />
+
+    <Button
+        android:id="@+id/level5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="level 5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/level4" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintLeft_toRightOf="@+id/linearEquality"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@+id/linearEquality"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearInequality"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.545" />
 
 </android.support.constraint.ConstraintLayout>
 </layout>

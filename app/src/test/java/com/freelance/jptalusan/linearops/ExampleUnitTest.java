@@ -20,7 +20,6 @@ public class ExampleUnitTest {
 
     @Test
     public void generateEquation() {
-        System.out.println("HELLO");
         System.out.println(EquationGeneration.generateEqualityEquation(Constants.LEVEL_1) + "");
     }
 

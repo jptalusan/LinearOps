@@ -13,6 +13,12 @@ public class Constants {
     public static final String POSITIVE_1 = "Positive_1";
     public static final String NEGATIVE_1 = "Negative_1";
 
+    public static final String X = "X";
+    public static final String ONE = "ONE";
+
+    public static final String LEFT = "LEFT";
+    public static final String RIGHT = "RIGHT";
+
     public static int X_MAX = 15;
     public static int X_MIN = -15;
 
@@ -32,6 +38,7 @@ public class Constants {
 
     public static final int ANIMATION_DURATION = 1000;
 
+    //TODO: Add more drawables
     public static int[] BLACK_BOX_WHITE_CIRLE = {
             R.drawable.black_box,
             R.drawable.black_box_pos_one,

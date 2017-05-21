@@ -1,10 +1,13 @@
 package com.freelance.jptalusan.linearops.Utilities;
 
+import android.util.Log;
+
 /**
  * Created by JPTalusan on 01/05/2017.
  */
 
 public class Equation {
+    private static String TAG = "Equation";
     private int ax = 0;
     private int b = 0;
     private int cx = 0;
@@ -65,7 +68,12 @@ public class Equation {
             case Constants.LEVEL_2: return ((cx - b) / ax);
             case Constants.LEVEL_3:
             case Constants.LEVEL_4:
-            case Constants.LEVEL_5: return ((b - d)/(ax - cx));
+            case Constants.LEVEL_5:
+                Log.d(TAG, "ax: " + ax);
+                Log.d(TAG, "b: " + b);
+                Log.d(TAG, "cx: " + cx);
+                Log.d(TAG, "d: " + d);
+                return -((b - d)/(ax - cx));
             default:                return 0;
         }
     }
@@ -114,5 +122,9 @@ public class Equation {
         }
 
         return output;
+    }
+
+    public boolean isUserCorrect(int answer) {
+        return getX() == answer;
     }
 }

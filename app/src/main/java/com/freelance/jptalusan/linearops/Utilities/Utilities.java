@@ -34,15 +34,30 @@ public class Utilities {
         return out;
     }
 
-    //TODO: Fix for other levels
+    //TODO: must fix for level 3
     public static boolean animateObjects(Equation eq, LinearOpsGridLayout left, LinearOpsGridLayout right, int userAnswer, AppCompatActivity act) {
-        //TODO: will have to refactor for later levels
-        int absAx            = Math.abs(eq.getAx());
-        int absB             = Math.abs(eq.getB());
+        int absAx = 0;
+        int absB  = 0;
         int absUserAnswer    = Math.abs(userAnswer);
+
         double correctAnswer = eq.getX();
-        String xType         = left.getTypeContainedIn();
-        String oneType       = right.getTypeContainedIn();
+
+        Log.d(TAG, "eq: " + eq.toString());
+        Log.d(TAG, "correct: " + correctAnswer);
+        Log.d(TAG, "user: " + userAnswer);
+
+        boolean isCorrectSign = (userAnswer * -1) != correctAnswer;
+        if (left.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
+                left.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
+            absAx = Math.abs(left.getChildCount());
+            absB  = Math.abs(right.getChildCount());
+            left.setOneViewDrawables(left, right, isCorrectSign);
+
+        } else {
+            absAx = Math.abs(right.getChildCount());
+            absB  = Math.abs(left.getChildCount());
+            right.setOneViewDrawables(right, left, isCorrectSign);
+        }
 
         if (absUserAnswer == 0) {
             //DEBUG Only //TODO:Remove in release
@@ -60,26 +75,36 @@ public class Utilities {
             return false;
         }
 
-        //TODO: will have to change depending on where 1 is
-        Log.e(TAG, "Final drawables: " + xType + " with " + oneType + " inside.");
-        left.setOneViewDrawables(oneType);
-
         if (absAx == absB && absUserAnswer == 1) {
             Log.d(TAG, "absAx == absB && absUserAnswer == 1");
             for (int i = 0; i < absAx; ++i) {
-                Log.e(TAG, "move: \t" + i);
-                right.animateOneView(i, 1000 * i);
-                Log.e(TAG, "scale: \t\t" + i + ", has: 1");
-                left.animateXView(i, 500 * i, absUserAnswer);
+//                Log.e(TAG, "move: \t" + i);
+                if (right.getValuesInside() == Constants.ONE) {
+                    right.animateOneView(i, 1000 * i);
+//                    Log.e(TAG, "scale: \t\t" + i + ", has: 1");
+                    left.animateXView(i, 500 * i, absUserAnswer);
+                } else {
+                    left.animateOneView(i, 1000 * i);
+//                    Log.e(TAG, "scale: \t\t" + i + ", has: 1");
+                    right.animateXView(i, 500 * i, absUserAnswer);
+                }
             }
         } else if (absAx == 1) {
             Log.d(TAG, "absAx == 1");
             for (int i = 0; i < absUserAnswer; ++i) {
-                Log.e(TAG, "move: \t" + i);
-                right.animateOneView(i, 0);
+//                Log.e(TAG, "move: \t" + i);
+                if (right.getValuesInside() == Constants.ONE) {
+                    right.animateOneView(i, 0);
+                } else {
+                    left.animateOneView(i, 0);
+                }
             }
-            Log.e(TAG, "scale: \t\t" + 0 + ", has: " + absUserAnswer);
-            left.animateXView(0, 0, absUserAnswer);
+//            Log.e(TAG, "scale: \t\t" + 0 + ", has: " + absUserAnswer);
+            if (right.getValuesInside() == Constants.ONE) {
+                left.animateXView(0, 0, absUserAnswer);
+            } else {
+                right.animateXView(0, 0, absUserAnswer);
+            }
         } else {
             Log.d(TAG, "else");
             int attemptToSolve = absB / absUserAnswer;
@@ -100,20 +125,36 @@ public class Utilities {
                 if (remainingChildren > absUserAnswer) {
                     remainingChildren -= absUserAnswer;
                     for (int j = 0; j < absUserAnswer; ++j) {
-                        Log.e(TAG, "move: \t" + currentChild);
-                        right.animateOneView(currentChild, 1000 * i);
+//                        Log.e(TAG, "move: \t" + currentChild);
+                        if (right.getValuesInside() == Constants.ONE) {
+                            right.animateOneView(currentChild, 1000 * i);
+                        } else {
+                            left.animateOneView(currentChild, 1000 * i);
+                        }
                         currentChild++;
                     }
                     Log.e(TAG, "scale: \t\t" + i + ", has: " + absUserAnswer);
-                    left.animateXView(i, 500 * i, absUserAnswer);
+                    if (right.getValuesInside() == Constants.ONE) {
+                        left.animateXView(i, 500 * i, absUserAnswer);
+                    } else {
+                        right.animateXView(i, 500 * i, absUserAnswer);
+                    }
                 } else {
                     for (int j = 0; j < remainingChildren; ++j) {
-                        Log.e(TAG, "move: \t" + currentChild);
-                        right.animateOneView(currentChild, 1000 * i);
+//                        Log.e(TAG, "move: \t" + currentChild);
+                        if (right.getValuesInside() == Constants.ONE) {
+                            right.animateOneView(currentChild, 1000 * i);
+                        } else {
+                            left.animateOneView(currentChild, 1000 * i);
+                        }
                         currentChild++;
                     }
                     Log.e(TAG, "scale: \t\t" + i + ", has: " + remainingChildren);
-                    left.animateXView(i, 500 * i, remainingChildren);
+                    if (right.getValuesInside() == Constants.ONE) {
+                        left.animateXView(i, 500 * i, remainingChildren);
+                    } else {
+                        right.animateXView(i, 500 * i, remainingChildren);
+                    }
                 }
             }
         }

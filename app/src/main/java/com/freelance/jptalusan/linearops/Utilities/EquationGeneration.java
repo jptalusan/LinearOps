@@ -44,7 +44,7 @@ public class EquationGeneration {
                 }
                 break;
             case Constants.LEVEL_3:
-            case Constants.LEVEL_4:
+            case Constants.LEVEL_4: //TODO: Fix this, sometimes no value appearing
                 tempX = ax - cx;
                 temp1 = d - b;
 

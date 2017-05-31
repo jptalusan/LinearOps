@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/com.freelance.jptalusan.linearops"
+    xmlns:tools="http://schemas.android.com/tools">
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.freelance.jptalusan.linearops.Activities.LinearEqualityActivity">
+
+    <ImageButton
+        android:id="@+id/blackBoxButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:cropToPadding="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/whiteCircleButton"
+        app:layout_constraintLeft_toLeftOf="@+id/whiteBoxButton"
+        app:layout_constraintRight_toRightOf="@+id/whiteBoxButton"
+        app:layout_constraintTop_toBottomOf="@+id/whiteBoxButton"
+        app:srcCompat="@drawable/black_box" />
+
+    <ImageButton
+        android:id="@+id/blackCircleButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:cropToPadding="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/seekbar"
+        app:layout_constraintLeft_toLeftOf="@+id/whiteCircleButton"
+        app:layout_constraintRight_toRightOf="@+id/whiteCircleButton"
+        app:layout_constraintTop_toBottomOf="@+id/whiteCircleButton"
+        app:srcCompat="@drawable/black_circle" />
+
+    <ImageButton
+        android:id="@+id/whiteCircleButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:cropToPadding="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/blackCircleButton"
+        app:layout_constraintLeft_toLeftOf="@+id/blackBoxButton"
+        app:layout_constraintRight_toRightOf="@+id/blackBoxButton"
+        app:layout_constraintTop_toBottomOf="@+id/blackBoxButton"
+        app:srcCompat="@drawable/white_circle" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"
+        tools:layout_editor_absoluteY="25dp"
+        tools:layout_editor_absoluteX="533dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7"
+        tools:layout_editor_absoluteY="277dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.44"
+        tools:layout_editor_absoluteY="25dp"
+        tools:layout_editor_absoluteX="261dp" />
+
+    <com.freelance.jptalusan.linearops.Views.SeekBarLayout
+        android:id="@+id/seekbar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4">
+
+    </com.freelance.jptalusan.linearops.Views.SeekBarLayout>
+
+    <com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout
+        android:id="@+id/leftSideGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_blue_bright"
+        custom:side="@string/left"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout>
+
+    <ImageButton
+        android:id="@+id/whiteBoxButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:cropToPadding="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/blackBoxButton"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/white_box" />
+
+    <com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout
+        android:id="@+id/rightSideGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_green_light"
+        custom:side="@string/right"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout>
+
+    <Button
+        android:id="@+id/fractionButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="⅓"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/checkButton"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/equals"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <ImageButton
+        android:id="@+id/checkButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fractionButton"
+        app:srcCompat="@android:drawable/checkbox_on_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="8dp" />
+
+</android.support.constraint.ConstraintLayout>
+</layout>

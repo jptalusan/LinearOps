@@ -85,9 +85,12 @@ public class CustomGridLayout extends RelativeLayout {
 
     public RelativeLayout.LayoutParams generateParams() {
         //(width, height)
+        double size = scaledDimensons.width > scaledDimensons.height ? scaledDimensons.height : scaledDimensons.width;
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                (int) scaledDimensons.width,
+//                (int) scaledDimensons.height);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) scaledDimensons.width,
-                (int) scaledDimensons.height);
+                (int) size, (int) size);
 
         int rowFactor = getChildCount() / cols;
         int colFactor = getChildCount() % cols;

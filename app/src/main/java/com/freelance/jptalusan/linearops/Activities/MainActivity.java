@@ -39,5 +39,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        binding.level4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LinearEqualityActivityLevel4.class);
+                startActivity(i);
+            }
+        });
+
+        binding.level5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LinearEqualityActivityLevel5.class);
+                startActivity(i);
+            }
+        });
     }
 }

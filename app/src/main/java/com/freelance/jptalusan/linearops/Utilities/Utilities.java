@@ -170,6 +170,124 @@ public class Utilities {
         }
     }
 
+    public static boolean dontAnimateObjects(Equation eq, LinearOpsGridLayout left, LinearOpsGridLayout right, int userAnswer, AppCompatActivity act) {
+        int absAx = 0;
+        int absB  = 0;
+        int absUserAnswer    = Math.abs(userAnswer);
+
+        double correctAnswer = eq.getX();
+
+        boolean isCorrectSign = (userAnswer * -1) != correctAnswer;
+        if (left.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
+                left.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
+            absAx = Math.abs(left.getChildCount());
+            absB  = Math.abs(right.getChildCount());
+            left.setOneViewDrawables(left, right, isCorrectSign);
+
+        } else {
+            absAx = Math.abs(right.getChildCount());
+            absB  = Math.abs(left.getChildCount());
+            right.setOneViewDrawables(right, left, isCorrectSign);
+        }
+
+        if (absUserAnswer == 0) {
+            //DEBUG Only //TODO:Remove in release
+            if (act instanceof LinearEqualityActivity) {
+                ((LinearEqualityActivity)act).setupLayoutForEquation(eq);
+            }
+            if (act instanceof LinearEqualityActivityWithButtons) {
+                ((LinearEqualityActivityWithButtons)act).setupLayoutForEquation(eq);
+            }
+
+            return false;
+        }
+
+        if (absUserAnswer > absB) {
+            return false;
+        }
+
+        if (absAx == absB && absUserAnswer == 1) {
+            for (int i = 0; i < absAx; ++i) {
+                if (right.getValuesInside() == Constants.ONE) {
+                    right.animateOneView(i, 0);
+                    left.animateXView(i, 0, absUserAnswer);
+                } else {
+                    left.animateOneView(i, 0);
+                    right.animateXView(i, 0, absUserAnswer);
+                }
+            }
+        } else if (absAx == 1) {
+            for (int i = 0; i < absUserAnswer; ++i) {
+                if (right.getValuesInside() == Constants.ONE) {
+                    right.animateOneView(i, 0);
+                } else {
+                    left.animateOneView(i, 0);
+                }
+            }
+            if (right.getValuesInside() == Constants.ONE) {
+                left.animateXView(0, 0, absUserAnswer);
+            } else {
+                right.animateXView(0, 0, absUserAnswer);
+            }
+        } else {
+            int attemptToSolve = absB / absUserAnswer;
+            int remainingChildren = right.getChildCount(); //TODO: will have to change depending on where 1 is
+            int currentChild = 0;
+            int outerLoop;
+            if (absB % absUserAnswer != 0) {
+                outerLoop = attemptToSolve + 1;
+            } else {
+                outerLoop = attemptToSolve;
+            }
+
+            if (outerLoop > absAx) {
+                outerLoop = absAx;
+            }
+
+            for (int i = 0; i < outerLoop; ++i) {
+                if (remainingChildren > absUserAnswer) {
+                    remainingChildren -= absUserAnswer;
+                    for (int j = 0; j < absUserAnswer; ++j) {
+                        if (right.getValuesInside() == Constants.ONE) {
+                            right.animateOneView(currentChild, 0);
+                        } else {
+                            left.animateOneView(currentChild, 0);
+                        }
+                        currentChild++;
+                    }
+                    if (right.getValuesInside() == Constants.ONE) {
+                        left.animateXView(i, 0, absUserAnswer);
+                    } else {
+                        right.animateXView(i, 0, absUserAnswer);
+                    }
+                } else {
+                    for (int j = 0; j < remainingChildren; ++j) {
+                        if (right.getValuesInside() == Constants.ONE) {
+                            right.animateOneView(currentChild, 0);
+                        } else {
+                            left.animateOneView(currentChild, 0);
+                        }
+                        currentChild++;
+                    }
+                    if (right.getValuesInside() == Constants.ONE) {
+                        left.animateXView(i, 0, remainingChildren);
+                    } else {
+                        right.animateXView(i, 0, remainingChildren);
+                    }
+                }
+            }
+        }
+
+        //TODO: add actions here after answer is checked
+        if (correctAnswer == (double) userAnswer) {
+            Log.w(TAG, "correct!");
+            return true;
+        } else {
+            Log.w(TAG, "incorrect");
+            return false;
+        }
+    }
+
     public static String getTypeFromResource(int imageResource) {
         switch (imageResource) {
             case R.drawable.white_box:
@@ -195,6 +313,19 @@ public class Utilities {
                 return Constants.NEGATIVE_1;
             case Constants.NEGATIVE_1:
                 return Constants.POSITIVE_1;
+            default:
+                return "";
+        }
+    }
+
+    public static String getOneOrX(int imageResource) {
+        switch (imageResource) {
+            case R.drawable.white_box:
+            case R.drawable.black_box:
+                return "X";
+            case R.drawable.white_circle:
+            case R.drawable.black_circle:
+                return "1";
             default:
                 return "";
         }

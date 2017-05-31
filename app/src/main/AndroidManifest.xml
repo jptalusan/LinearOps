@@ -36,6 +36,16 @@
             android:screenOrientation="landscape">
 
         </activity>
+
+        <activity android:name=".Activities.LinearEqualityActivityLevel4"
+            android:screenOrientation="landscape">
+
+        </activity>
+
+        <activity android:name=".Activities.LinearEqualityActivityLevel5"
+            android:screenOrientation="landscape">
+
+        </activity>
     </application>
 
 </manifest>

@@ -53,7 +53,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         if (getChildCount() < super.rows * super.cols) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
-            linearOpsImageView.setImageResource(imageResource);
+            linearOpsImageView.setBackgroundResource(imageResource);
+            linearOpsImageView.setValueText(Utilities.getOneOrX(imageResource));
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
             linearOpsImageView.setPadding(1, 1, 1, 1);
 //            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
@@ -257,7 +258,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                temp.setImageResource(drawables[dividend]);
+                temp.setBackgroundResource(drawables[dividend]);
             }
 
             @Override
@@ -379,28 +380,32 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         for (int i = 0; i < positiveXCount; ++i) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
-            linearOpsImageView.setImageResource(R.drawable.white_box);
+            linearOpsImageView.setBackgroundResource(R.drawable.white_box);
+            linearOpsImageView.setValueText("X");
             linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.white_box));
             addView(linearOpsImageView);
         }
         for (int i = 0; i < negativeXCount; ++i) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
-            linearOpsImageView.setImageResource(R.drawable.black_box);
+            linearOpsImageView.setBackgroundResource(R.drawable.black_box);
+            linearOpsImageView.setValueText("X");
             linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.black_box));
             addView(linearOpsImageView);
         }
         for (int i = 0; i < positive1Count; ++i) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
-            linearOpsImageView.setImageResource(R.drawable.white_circle);
+            linearOpsImageView.setBackgroundResource(R.drawable.white_circle);
+            linearOpsImageView.setValueText("1");
             linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.white_circle));
             addView(linearOpsImageView);
         }
         for (int i = 0; i < negative1Count; ++i) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
-            linearOpsImageView.setImageResource(R.drawable.black_circle);
+            linearOpsImageView.setBackgroundResource(R.drawable.black_circle);
+            linearOpsImageView.setValueText("1");
             linearOpsImageView.setType(Utilities.getTypeFromResource(R.drawable.black_circle));
             addView(linearOpsImageView);
         }

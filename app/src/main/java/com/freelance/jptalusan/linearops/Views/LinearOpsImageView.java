@@ -60,6 +60,12 @@ public class LinearOpsImageView extends AppCompatTextView {
             setText(text);
             setTextColor(Color.GRAY);
             setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        } else {
+            if (text.equals("X")) {
+                setText("?");
+                setTextColor(Color.GRAY);
+                setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            }
         }
     }
 }

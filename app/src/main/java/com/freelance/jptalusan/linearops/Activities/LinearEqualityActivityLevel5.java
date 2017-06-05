@@ -41,13 +41,14 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_equality_level_five);
         prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
 
-        //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).apply();
-
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
         }
+
+        //DEBUG
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).commit();
+        
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         eq = EquationGeneration.generateEqualityEquation(currLevel);
@@ -133,6 +134,11 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                 }
                 canUseButton = true;
             }
+
+            @Override
+            public void onAllAnimationsEnd() {
+
+            }
         });
 
         binding.leftSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
@@ -154,6 +160,11 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                     canUseSeekbar = true;
                     binding.seekbar.setVisibility(View.VISIBLE);
                 }
+            }
+
+            @Override
+            public void onAllAnimationsEnd() {
+
             }
         });
     }

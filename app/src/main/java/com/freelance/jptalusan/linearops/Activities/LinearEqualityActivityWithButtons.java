@@ -37,13 +37,13 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_equality_with_buttons);
         prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
 
-        //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).apply();
-
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
         }
+
+        //DEBUG
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).commit();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         eq = EquationGeneration.generateEqualityEquation(currLevel);
@@ -125,6 +125,11 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
                 }
                 canUseButtons = true;
             }
+
+            @Override
+            public void onAllAnimationsEnd() {
+
+            }
         });
 
         binding.leftSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
@@ -147,6 +152,11 @@ public class LinearEqualityActivityWithButtons extends AppCompatActivity {
                     binding.seekbar.setVisibility(View.VISIBLE);
                 }
                 canUseButtons = true;
+            }
+
+            @Override
+            public void onAllAnimationsEnd() {
+
             }
         });
     }

@@ -50,6 +50,7 @@ public class Equation {
 
     @Override
     public String toString() {
+        System.out.println("LEVEL: " + level);
         switch(level) {
             case Constants.LEVEL_1: return "1: [ax = b]: " + printEquation();
             case Constants.LEVEL_2: return "2: [ax + b = c]: " + printEquation();

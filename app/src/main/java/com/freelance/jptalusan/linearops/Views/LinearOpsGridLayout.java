@@ -27,6 +27,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     public Dimensions defaultDimensions = new Dimensions();
     private int[] drawables;
     public String side = "";
+    private int objectCount = 0;
 
     public LinearOpsGridLayout(Context context) {
         super(context);
@@ -169,6 +170,19 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             return "";
     }
 
+    public int getCountOfTypeContainedIn() {
+        if (positiveXCount > 0)
+            return positiveXCount;
+        if (negativeXCount > 0)
+            return negativeXCount;
+        if (positive1Count > 0)
+            return positive1Count;
+        if (negative1Count > 0)
+            return negative1Count;
+        else
+            return -1;
+    }
+
     public String getValuesInside() {
         if (positiveXCount > 0 || negativeXCount > 0) {
             return Constants.X;
@@ -259,6 +273,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 temp.setBackgroundResource(drawables[dividend]);
+                temp.setText("");
+                listener.onAllAnimationsEnd();
             }
 
             @Override
@@ -419,6 +435,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         void onAnimationEnd(int val);
         void onAnimationStart(int val);
         void onCancelOutEnd(); //TODO: add listener too on when image is added
+        void onAllAnimationsEnd(); //TODO: Start with count of all objects, subtract each one after successful animation, when 0, throw this so listener in activity can start new eq (restart())
     }
 
     private LinearOpsGridLayoutListener listener;

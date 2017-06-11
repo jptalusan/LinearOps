@@ -137,7 +137,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                     if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
                         binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
                     } else {
-                        binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
+                        binding.seekbar.setResourceId(binding.leftSideGrid.getImageViewTypeWhenUniform());
                     }
                 }
                 canUseButtons = true;
@@ -191,7 +191,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                     if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
                         binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
                     } else {
-                        binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
+                        binding.seekbar.setResourceId(binding.leftSideGrid.getImageViewTypeWhenUniform());
                     }
                 }
                 canUseButtons = true;

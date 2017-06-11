@@ -255,7 +255,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
     }
 
-    //TODO: Add boolean or prevent seekbar from being used after answer?
     private boolean isAnswerCorrect(int userAnswer) {
         isDone = true;
         if (Utilities.animateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {

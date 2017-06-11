@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -76,7 +77,7 @@ public class SeekBarLayout extends ConstraintLayout {
         });
     }
 
-    private void getViewDimensions() {
+    public void getViewDimensions() {
         icons.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -87,6 +88,9 @@ public class SeekBarLayout extends ConstraintLayout {
                 iconDimension.width  = dimensions.width / ((comboSeekBar.getMax() - 1));
                 iconDimension.height = dimensions.height;
 
+                Log.d(TAG, iconDimension.toString());
+                Log.d(TAG, dimensions.toString());
+
                 center = dimensions.width / 2;
             }
         });
@@ -94,6 +98,7 @@ public class SeekBarLayout extends ConstraintLayout {
 
     //can extend this to modify what is added.
     private void addIcons(int val) {
+        Log.d(TAG, "addIcons: " + val);
         icons.removeAllViews();
         if (val > 0) {
             for (int i = 1; i <= val; ++i) {
@@ -112,7 +117,6 @@ public class SeekBarLayout extends ConstraintLayout {
         } else {
 
         }
-
     }
 
     private RelativeLayout.LayoutParams generateParams(int val) {

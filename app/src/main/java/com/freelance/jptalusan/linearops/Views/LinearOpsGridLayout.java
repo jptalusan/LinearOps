@@ -210,6 +210,23 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         return false;
     }
 
+    public int getImageViewTypeWhenUniform() {
+        Log.d(TAG, "getImageViewTypeWhenUniform: " + this.toString());
+        if (isLayoutUniform()) {
+            if (positiveXCount > 0)
+                return R.drawable.white_box;
+            if (negativeXCount > 0)
+                return R.drawable.black_box;
+            if (positive1Count > 0)
+                return R.drawable.white_circle;
+            if (negative1Count > 0)
+                return R.drawable.black_circle;
+            else
+                return -1;
+        }
+        return -1;
+    }
+
     //Determine what array of drawables is going to be placed in X drawable after animations
     public void setOneViewDrawables(LinearOpsGridLayout x, LinearOpsGridLayout one, boolean isCorrectSign) {
         String xViewDrawables = x.getTypeContainedIn();

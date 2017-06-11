@@ -108,5 +108,19 @@
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:srcCompat="@android:drawable/checkbox_on_background" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:srcCompat="@drawable/equals"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline" />
+
 </android.support.constraint.ConstraintLayout>
 </layout>

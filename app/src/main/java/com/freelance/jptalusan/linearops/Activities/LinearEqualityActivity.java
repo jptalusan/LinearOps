@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinearEqualityActivity extends AppCompatActivity {
-    private static String TAG = "LinearEqualityActivity";
+    private static String TAG = "Level1Activity";
     protected SharedPreferences prefs;
     private int currLevel = 0;
-    private Equation eq = new Equation();
+    private Equation eq;
     private ActivityLinearEqualityBinding binding;
     private int userAnswer = 0;
     private boolean isAnimationDone = false;
@@ -34,7 +35,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
     private boolean isDone = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_equality);
         prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
@@ -46,7 +47,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
         //DEBUG
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
-
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         startLinearOps();
@@ -59,8 +59,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
-        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
-
+//        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
@@ -101,7 +100,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
                     Log.d(TAG, "R: numberOfAnimatedX:" + numberOfAnimatedX);
                     if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
                             eq.getAx() == 1 ||
-                            (isDone && foo())
+                            (isDone && areAllXViewsDoneAnimating())
                             ) {
                         isDone = false;
                         //reset
@@ -141,7 +140,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
                     Log.d(TAG, "L: numberOfAnimatedX:" + numberOfAnimatedX);
                     if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
                             eq.getAx() == 1 ||
-                            (isDone && foo())
+                            (isDone && areAllXViewsDoneAnimating())
                             ) {
                         isDone = false;
                         //reset
@@ -159,7 +158,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
     }
 
-    private boolean foo() {
+    private boolean areAllXViewsDoneAnimating() {
         int solution = eq.getB() / userAnswer;
         int remaindr = eq.getB() % userAnswer;
 
@@ -240,10 +239,13 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 switch(currLevel) {
                     case Constants.LEVEL_1:
                         for (int i = 0; i < Math.abs(b); ++i) {
-                            if (b > 0)
+                            if (b > 0) {
                                 binding.rightSideGrid.addScaledImage(R.drawable.white_circle);
-                            else
+                                binding.seekbar.setResourceId(R.drawable.white_circle);
+                            } else {
                                 binding.rightSideGrid.addScaledImage(R.drawable.black_circle);
+                                binding.seekbar.setResourceId(R.drawable.black_circle);
+                            }
                         }
                         break;
                     default:

@@ -27,7 +27,7 @@
             android:screenOrientation="landscape">
 
         </activity>
-        <activity android:name=".Activities.LinearEqualityActivityWithButtons"
+        <activity android:name=".Activities.LinearEqualityActivityLevel2"
             android:screenOrientation="landscape">
 
         </activity>

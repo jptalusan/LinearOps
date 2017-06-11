@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.freelance.jptalusan.linearops.Activities.LinearEqualityActivity;
-import com.freelance.jptalusan.linearops.Activities.LinearEqualityActivityWithButtons;
+import com.freelance.jptalusan.linearops.Activities.LinearEqualityActivityLevel2;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout;
 
@@ -64,8 +64,8 @@ public class Utilities {
             if (act instanceof LinearEqualityActivity) {
                 ((LinearEqualityActivity)act).setupLayoutForEquation(eq);
             }
-            if (act instanceof LinearEqualityActivityWithButtons) {
-                ((LinearEqualityActivityWithButtons)act).setupLayoutForEquation(eq);
+            if (act instanceof LinearEqualityActivityLevel2) {
+                ((LinearEqualityActivityLevel2)act).setupLayoutForEquation(eq);
             }
 
             return false;
@@ -195,8 +195,8 @@ public class Utilities {
             if (act instanceof LinearEqualityActivity) {
                 ((LinearEqualityActivity)act).setupLayoutForEquation(eq);
             }
-            if (act instanceof LinearEqualityActivityWithButtons) {
-                ((LinearEqualityActivityWithButtons)act).setupLayoutForEquation(eq);
+            if (act instanceof LinearEqualityActivityLevel2) {
+                ((LinearEqualityActivityLevel2)act).setupLayoutForEquation(eq);
             }
 
             return false;

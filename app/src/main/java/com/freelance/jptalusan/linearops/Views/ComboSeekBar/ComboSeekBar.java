@@ -6,20 +6,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SeekBar;
 
 import com.freelance.jptalusan.linearops.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComboSeekBar extends SeekBar {
+public class ComboSeekBar extends AppCompatSeekBar {
     private CustomThumbDrawable mThumb;
     private List<Dot> mDots = new ArrayList<>();
     private OnItemClickListener mItemClickListener;
@@ -64,6 +64,7 @@ public class ComboSeekBar extends SeekBar {
     public void setColor(int color) {
         mColor = color;
         mThumb.setColor(color);
+        mThumb.setAlpha(0);
         setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mDotRadius, mThumb.getRadius(), mDots,
                 color, mTextSize, mTextBottomPadding));
     }

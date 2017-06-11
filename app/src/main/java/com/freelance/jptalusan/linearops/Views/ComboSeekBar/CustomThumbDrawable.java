@@ -69,6 +69,7 @@ public class CustomThumbDrawable extends Drawable {
 
     @Override
     public void setAlpha(int alpha) {
+        setAlpha(alpha);
     }
 
     @Override

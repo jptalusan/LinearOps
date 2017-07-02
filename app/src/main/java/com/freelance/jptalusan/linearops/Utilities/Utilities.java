@@ -330,4 +330,39 @@ public class Utilities {
                 return "";
         }
     }
+
+    public static int determineResetPeriodInMillis(LinearOpsGridLayout l, LinearOpsGridLayout r, int userAnswer, Equation eq) {
+        int xCount = 0;
+        int oneCount = 0;
+        int quotient;
+        int remainder;
+        int mUserAnswer = Math.abs(userAnswer);
+        if (l.getValuesInside().equals(Constants.ONE)) {
+            oneCount = Math.abs(l.getCountOfTypeContainedIn());
+            xCount = Math.abs(r.getCountOfTypeContainedIn());
+        } else if (r.getValuesInside().equals(Constants.ONE)) {
+            oneCount = Math.abs(r.getCountOfTypeContainedIn());
+            xCount = Math.abs(l.getCountOfTypeContainedIn());
+        }
+        //Correct answer
+        if (userAnswer == eq.getX()) {
+            Log.d(TAG, "Correct reset: " + (Constants.RESET_FACTOR * xCount) + " ms");
+            return Constants.RESET_FACTOR * xCount;
+        }
+        //Answer is greater than number of One's
+        if (mUserAnswer > oneCount) {
+            Log.d(TAG, "Default reset: Constants.DEFAULT_RESET ms");
+            return Constants.DEFAULT_RESET;
+        }
+        quotient = oneCount / mUserAnswer;
+        remainder = (oneCount % mUserAnswer) > 0 ? 1 : 0;
+        //Should not exceed number of X's
+        if (quotient + remainder >= xCount) {
+            Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
+            return xCount * Constants.RESET_FACTOR;
+        } else { //All other answers
+            Log.d(TAG, "Computed reset: " + ((quotient + remainder) * Constants.RESET_FACTOR) + " ms");
+            return (quotient + remainder) * Constants.RESET_FACTOR;
+        }
+    }
 }

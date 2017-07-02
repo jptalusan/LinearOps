@@ -1,5 +1,7 @@
 package com.freelance.jptalusan.linearops.Utilities;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -9,6 +11,8 @@ import java.util.Random;
  */
 
 public class EquationGeneration {
+    private static final String TAG = "EquationGeneration";
+
     public static Equation generateEqualityEquation(int level) {
         ArrayList<Integer> out = new ArrayList<>();
         long seed = Calendar.getInstance().getTimeInMillis();
@@ -22,6 +26,7 @@ public class EquationGeneration {
         Equation generatedEquation = new Equation();
         int tempX = 0;
         int temp1 = 0;
+        Log.d(TAG, "Level at generation: " + level);
         switch(level) {
             //TODO: Remove 1x?
             case Constants.LEVEL_1:
@@ -44,7 +49,7 @@ public class EquationGeneration {
                 }
                 break;
             case Constants.LEVEL_3:
-            case Constants.LEVEL_4: //TODO: Fix this, sometimes no value appearing
+            case Constants.LEVEL_4: //TODO: Fix this, sometimes no value appearing, due to layout appearing faster than generation of equation
                 tempX = ax - cx;
                 temp1 = d - b;
 
@@ -69,6 +74,7 @@ public class EquationGeneration {
                 }
                 break;
             default:
+                generateEqualityEquation(level);
                 break;
         }
         return generatedEquation;

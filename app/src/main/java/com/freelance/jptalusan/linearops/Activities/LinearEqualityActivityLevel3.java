@@ -33,11 +33,8 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
     private int currLevel = 0;
     private ActivityLinearEqualityLevelFiveBinding binding;
     private Equation eq;
-    private boolean canUseSeekbar = false;
     private boolean canUseButtons = true;
     private int userAnswer = 0;
-    private boolean isAnimationDone = false;
-    private int numberOfAnimatedX = 0;
     private boolean isDone = false;
 
     @Override
@@ -114,7 +111,21 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setViewAbility(false);
                 isAnswerCorrect(userAnswer);
+                int temp = Utilities.determineResetPeriodInMillis(
+                        binding.leftSideGrid,
+                        binding.rightSideGrid,
+                        userAnswer,
+                        eq);
+                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp);
             }
         });
 
@@ -134,7 +145,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
                 Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
                     binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
                     binding.checkButton.setVisibility(View.VISIBLE);
@@ -149,26 +159,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.rightSideGrid.isLayoutUniform() &&
-                        binding.rightSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "R: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "R:Reset.");
-                    }
-                }
             }
         });
 
@@ -188,7 +178,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
                 Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
                     binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
                     binding.checkButton.setVisibility(View.VISIBLE);
@@ -203,64 +192,34 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.leftSideGrid.isLayoutUniform() &&
-                        binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "L: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "L:Reset.");
-                    }
-                }
             }
         });
     }
 
-    private boolean areAllXViewsDoneAnimating() {
-        int solution = eq.getB() / userAnswer;
-        int remaindr = eq.getB() % userAnswer;
-
-        Log.d(TAG, "what; " + Math.abs(solution) + ", " + Math.abs(remaindr));
-        if (remaindr > 0)
-            return (Math.abs(solution) + 1) == numberOfAnimatedX;
-        else
-            return Math.abs(solution) == numberOfAnimatedX;
-    }
-
     private void startLinearOps() {
-        eq = EquationGeneration.generateEqualityEquation(currLevel);
+        do {
+            eq = EquationGeneration.generateEqualityEquation(currLevel);
+        } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-        numberOfAnimatedX = 0;
         isDone = false;
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
+        setViewAbility(true);
+    }
+
+    private void setViewAbility(boolean enabled) {
+        binding.seekbar.comboSeekBar.setEnabled(enabled);
+        binding.whiteBoxButton.setEnabled(enabled);
+        binding.blackBoxButton.setEnabled(enabled);
+        binding.whiteCircleButton.setEnabled(enabled);
+        binding.blackCircleButton.setEnabled(enabled);
+        binding.checkButton.setEnabled(enabled);
     }
 
     private boolean areLayoutsReady() {
-//        Log.d(TAG, "areLayoutsReady");
-//        Log.d(TAG, binding.leftSideGrid.toString());
-//        Log.d(TAG, binding.rightSideGrid.toString());
-        if (binding.leftSideGrid.isLayoutUniform()) {
-            if (binding.rightSideGrid.isLayoutUniform()) {
-                String leftSideType = binding.leftSideGrid.getTypeContainedIn();
-                String rightSideType = binding.rightSideGrid.getTypeContainedIn();
-//                Log.d(TAG, leftSideType + "/" + rightSideType);
-                return true;
-            }
-        }
-        return false;
+        return binding.leftSideGrid.isLayoutUniform()
+                && binding.rightSideGrid.isLayoutUniform();
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {

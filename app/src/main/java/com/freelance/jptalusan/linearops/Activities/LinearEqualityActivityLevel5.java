@@ -3,6 +3,7 @@ package com.freelance.jptalusan.linearops.Activities;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,13 +28,15 @@ import java.util.List;
  */
 
 public class LinearEqualityActivityLevel5 extends AppCompatActivity {
-    private static String TAG = "Level3Activity";
+    private static String TAG = "Level5Activity";
     protected SharedPreferences prefs;
     private int currLevel = 0;
     private ActivityLinearEqualityLevelFiveBinding binding;
     private Equation eq;
-    private boolean canUseSeekbar = false;
-    private boolean canUseButton = true;
+    private boolean canUseButtons = true;
+    private int userAnswer = 0;
+    private int numberOfAnimatedX = 0;
+    private boolean isDone = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,30 +51,27 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 
         //DEBUG
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).commit();
-        
-        currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
+        currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5);
 
-        eq = EquationGeneration.generateEqualityEquation(currLevel);
-        setupLayoutForEquation(eq);
-
-        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
+        startLinearOps();
 
         List<String> points = new ArrayList<>();
         for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
             points.add(Integer.toString(i));
         }
 
+        binding.fractionButton.setVisibility(View.GONE);
         binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
+        binding.checkButton.setVisibility(View.GONE);
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
-                if (canUseSeekbar) {
-                    isAnswerCorrect(val);
-                }
+                userAnswer = val;
             }
         });
 
@@ -80,8 +80,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.whiteBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "can use button: " + canUseButton);
-                if (canUseButton)
+                if (canUseButtons)
                     addImagesToBothSides(R.drawable.white_box);
             }
         });
@@ -89,8 +88,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.blackBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "can use button: " + canUseButton);
-                if (canUseButton)
+                if (canUseButtons)
                     addImagesToBothSides(R.drawable.black_box);
             }
         });
@@ -98,8 +96,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.whiteCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "can use button: " + canUseButton);
-                if (canUseButton)
+                if (canUseButtons)
                     addImagesToBothSides(R.drawable.white_circle);
             }
         });
@@ -107,21 +104,41 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.blackCircleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "can use button: " + canUseButton);
-                if (canUseButton)
+                if (canUseButtons)
                     addImagesToBothSides(R.drawable.black_circle);
+            }
+        });
+
+        binding.checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setViewAbility(false);
+                isAnswerCorrect(userAnswer);
+                int temp = Utilities.determineResetPeriodInMillis(
+                        binding.leftSideGrid,
+                        binding.rightSideGrid,
+                        userAnswer,
+                        eq);
+                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp);
             }
         });
 
         binding.rightSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
             @Override
             public void onAnimationEnd(int val) {
-                canUseButton = true;
+                canUseButtons = true;
             }
 
             @Override
             public void onAnimationStart(int val) {
-                canUseButton = false;
+                canUseButtons = false;
             }
 
             @Override
@@ -129,27 +146,32 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                 Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
+                    binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
+                    binding.checkButton.setVisibility(View.VISIBLE);
+                    if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
+                        binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
+                    } else {
+                        binding.seekbar.setResourceId(binding.leftSideGrid.getImageViewTypeWhenUniform());
+                    }
                 }
-                canUseButton = true;
+                canUseButtons = true;
             }
 
             @Override
             public void onAllAnimationsEnd() {
-
             }
         });
 
         binding.leftSideGrid.onLinearOpsGridLayoutListener(new LinearOpsGridLayout.LinearOpsGridLayoutListener() {
             @Override
             public void onAnimationEnd(int val) {
-
+                canUseButtons = true;
             }
 
             @Override
             public void onAnimationStart(int val) {
-
+                canUseButtons = false;
             }
 
             @Override
@@ -157,27 +179,52 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                 Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
+                    binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
+                    binding.checkButton.setVisibility(View.VISIBLE);
+                    if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
+                        binding.seekbar.setResourceId(binding.rightSideGrid.getImageViewTypeWhenUniform());
+                    } else {
+                        binding.seekbar.setResourceId(binding.leftSideGrid.getImageViewTypeWhenUniform());
+                    }
                 }
+                canUseButtons = true;
             }
 
             @Override
             public void onAllAnimationsEnd() {
-
             }
         });
     }
 
+    private void startLinearOps() {
+        Log.d(TAG, "startLinearOps: " + currLevel);
+        do {
+            eq = EquationGeneration.generateEqualityEquation(currLevel);
+        } while (eq.toString().equals("FAILED"));
+        setupLayoutForEquation(eq);
+        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        numberOfAnimatedX = 0;
+        isDone = false;
+        binding.seekbar.setVisibility(View.GONE);
+        binding.checkButton.setVisibility(View.GONE);
+        setViewAbility(true);
+    }
+
+    private void setViewAbility(boolean enabled) {
+        binding.seekbar.comboSeekBar.setEnabled(enabled);
+        binding.whiteBoxButton.setEnabled(enabled);
+        binding.blackBoxButton.setEnabled(enabled);
+        binding.whiteCircleButton.setEnabled(enabled);
+        binding.blackCircleButton.setEnabled(enabled);
+        binding.checkButton.setEnabled(enabled);
+    }
+
     private boolean areLayoutsReady() {
-        Log.d(TAG, "areLayoutsReady");
-        Log.d(TAG, binding.leftSideGrid.toString());
-        Log.d(TAG, binding.rightSideGrid.toString());
         if (binding.leftSideGrid.isLayoutUniform()) {
             if (binding.rightSideGrid.isLayoutUniform()) {
                 String leftSideType = binding.leftSideGrid.getTypeContainedIn();
                 String rightSideType = binding.rightSideGrid.getTypeContainedIn();
-                Log.d(TAG, leftSideType + "/" + rightSideType);
                 return true;
             }
         }
@@ -197,7 +244,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             l.setCols(factors.get(factors.size() / 2 - 1));
         }
     }
-
 
     public void setupLayoutForEquation(Equation equation) {
         final int ax = equation.getAx();
@@ -227,7 +273,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             public void onGlobalLayout() {
                 binding.leftSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 switch(currLevel) {
-                    case Constants.LEVEL_4:
+                    case Constants.LEVEL_5:
                         for (int i = 0; i < Math.abs(ax); ++i) {
                             if (ax > 0)
                                 binding.leftSideGrid.addScaledImage(R.drawable.white_box);
@@ -252,7 +298,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             public void onGlobalLayout() {
                 binding.rightSideGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 switch(currLevel) {
-                    case Constants.LEVEL_4:
+                    case Constants.LEVEL_5:
                         for (int i = 0; i < Math.abs(cx); ++i) {
                             if (cx > 0)
                                 binding.rightSideGrid.addScaledImage(R.drawable.white_box);
@@ -286,9 +332,10 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     }
 
     private boolean isAnswerCorrect(int userAnswer) {
-        //TODO: when answer is incorrect, drawables should be inverted too.
+        isDone = true;
+        //TODO: If needed really without any animations, override the animations in LinearOpsGridLayout to 0 delay
         if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) >= Constants.LEVEL_4) {
-            if (eq.getX() == userAnswer) {
+            if (Utilities.dontAnimateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
                 Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
                 return true;
             } else {

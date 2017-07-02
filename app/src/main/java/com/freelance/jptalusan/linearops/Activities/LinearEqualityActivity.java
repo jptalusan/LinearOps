@@ -168,7 +168,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
     }
 
     private void startLinearOps() {
-        eq = EquationGeneration.generateEqualityEquation(currLevel);
+        do {
+            eq = EquationGeneration.generateEqualityEquation(currLevel);
+        } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
         numberOfAnimatedX = 0;

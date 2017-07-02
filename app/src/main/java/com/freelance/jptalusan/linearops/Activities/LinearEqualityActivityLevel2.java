@@ -108,7 +108,11 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
             public void onClick(View view) {
                 setViewAbility(false);
                 isAnswerCorrect(userAnswer);
-                int temp = determineResetPeriodInMillis(userAnswer);
+                int temp = Utilities.determineResetPeriodInMillis(
+                        binding.leftSideGrid,
+                        binding.rightSideGrid,
+                        userAnswer,
+                        eq);
                 Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
@@ -188,7 +192,9 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     }
 
     private void startLinearOps() {
-        eq = EquationGeneration.generateEqualityEquation(currLevel);
+        do {
+            eq = EquationGeneration.generateEqualityEquation(currLevel);
+        } while (eq.toString().equals("FAILED"));
 //        eq = new Equation(3, 1, -8, 0, 2);
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
@@ -313,41 +319,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_LONG).show();
             return false;
-        }
-    }
-
-    private int determineResetPeriodInMillis(int userAnswer) {
-        int xCount = 0;
-        int oneCount = 0;
-        int quotient;
-        int remainder;
-        int mUserAnswer = Math.abs(userAnswer);
-        if (binding.leftSideGrid.getValuesInside().equals(Constants.ONE)) {
-            oneCount = Math.abs(binding.leftSideGrid.getCountOfTypeContainedIn());
-            xCount = Math.abs(binding.rightSideGrid.getCountOfTypeContainedIn());
-        } else if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
-            oneCount = Math.abs(binding.rightSideGrid.getCountOfTypeContainedIn());
-            xCount = Math.abs(binding.leftSideGrid.getCountOfTypeContainedIn());
-        }
-        //Correct answer
-        if (userAnswer == eq.getX()) {
-            Log.d(TAG, "Correct reset: " + (Constants.RESET_FACTOR * xCount) + " ms");
-            return Constants.RESET_FACTOR * xCount;
-        }
-        //Answer is greater than number of One's
-        if (mUserAnswer > oneCount) {
-            Log.d(TAG, "Default reset: Constants.DEFAULT_RESET ms");
-            return Constants.DEFAULT_RESET;
-        }
-        quotient = oneCount / mUserAnswer;
-        remainder = (oneCount % mUserAnswer) > 0 ? 1 : 0;
-        //Should not exceed number of X's
-        if (quotient + remainder >= xCount) {
-            Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
-            return xCount * Constants.RESET_FACTOR;
-        } else { //All other answers
-            Log.d(TAG, "Computed reset: " + ((quotient + remainder) * Constants.RESET_FACTOR) + " ms");
-            return (quotient + remainder) * Constants.RESET_FACTOR;
         }
     }
 }

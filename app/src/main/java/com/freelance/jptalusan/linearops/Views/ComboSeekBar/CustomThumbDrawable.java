@@ -49,7 +49,7 @@ public class CustomThumbDrawable extends Drawable {
     public final void draw(Canvas canvas) {
         int height = this.getBounds().centerY();
         int width = this.getBounds().centerX();
-        canvas.drawCircle(width + mRadius, height, mRadius, circlePaint);
+//        canvas.drawCircle(width + mRadius, height, mRadius, circlePaint);
     }
 
     @Override

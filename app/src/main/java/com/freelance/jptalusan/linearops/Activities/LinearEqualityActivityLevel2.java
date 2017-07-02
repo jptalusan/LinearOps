@@ -29,12 +29,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     private int currLevel = 0;
     private ActivityLinearEqualityLevelFiveBinding binding;
     private Equation eq;
-    private boolean canUseSeekbar = false;
     private boolean canUseButtons = true;
     private int userAnswer = 0;
-    private boolean isAnimationDone = false;
-    private int numberOfAnimatedX = 0;
-    private boolean isDone = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,7 +106,17 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setViewAbility(false);
                 isAnswerCorrect(userAnswer);
+                int temp = determineResetPeriodInMillis(userAnswer);
+                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp);
             }
         });
 
@@ -130,7 +136,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                 Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
                     binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
                     binding.checkButton.setVisibility(View.VISIBLE);
@@ -145,26 +150,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.rightSideGrid.isLayoutUniform() &&
-                        binding.rightSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "R: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "R:Reset.");
-                    }
-                }
             }
         });
 
@@ -184,7 +169,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                 Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
-                    canUseSeekbar = true;
                     binding.seekbar.getViewDimensions();
                     binding.seekbar.setVisibility(View.VISIBLE);
                     binding.checkButton.setVisibility(View.VISIBLE);
@@ -199,64 +183,32 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.leftSideGrid.isLayoutUniform() &&
-                        binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "L: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "L:Reset.");
-                    }
-                }
             }
         });
     }
 
-    private boolean areAllXViewsDoneAnimating() {
-        int solution = eq.getB() / userAnswer;
-        int remaindr = eq.getB() % userAnswer;
-
-        Log.d(TAG, "what; " + Math.abs(solution) + ", " + Math.abs(remaindr));
-        if (remaindr > 0)
-            return (Math.abs(solution) + 1) == numberOfAnimatedX;
-        else
-            return Math.abs(solution) == numberOfAnimatedX;
-    }
-
     private void startLinearOps() {
         eq = EquationGeneration.generateEqualityEquation(currLevel);
+//        eq = new Equation(3, 1, -8, 0, 2);
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-        numberOfAnimatedX = 0;
-        isDone = false;
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
+        setViewAbility(true);
+    }
+
+    private void setViewAbility(boolean enabled) {
+        binding.seekbar.comboSeekBar.setEnabled(enabled);
+        binding.whiteBoxButton.setEnabled(enabled);
+        binding.blackBoxButton.setEnabled(enabled);
+        binding.whiteCircleButton.setEnabled(enabled);
+        binding.blackCircleButton.setEnabled(enabled);
+        binding.checkButton.setEnabled(enabled);
     }
 
     private boolean areLayoutsReady() {
-//        Log.d(TAG, "areLayoutsReady");
-//        Log.d(TAG, binding.leftSideGrid.toString());
-//        Log.d(TAG, binding.rightSideGrid.toString());
-        if (binding.leftSideGrid.isLayoutUniform()) {
-            if (binding.rightSideGrid.isLayoutUniform()) {
-                String leftSideType = binding.leftSideGrid.getTypeContainedIn();
-                String rightSideType = binding.rightSideGrid.getTypeContainedIn();
-//                Log.d(TAG, leftSideType + "/" + rightSideType);
-                return true;
-            }
-        }
-        return false;
+        return binding.leftSideGrid.isLayoutUniform()
+                && binding.rightSideGrid.isLayoutUniform();
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {
@@ -354,14 +306,48 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     }
 
     private boolean isAnswerCorrect(int userAnswer) {
-        isDone = true;
         //TODO: when answer is incorrect, drawables should be inverted too.
         if (Utilities.animateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
-            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_LONG).show();
             return true;
         } else {
-            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_LONG).show();
             return false;
+        }
+    }
+
+    private int determineResetPeriodInMillis(int userAnswer) {
+        int xCount = 0;
+        int oneCount = 0;
+        int quotient;
+        int remainder;
+        int mUserAnswer = Math.abs(userAnswer);
+        if (binding.leftSideGrid.getValuesInside().equals(Constants.ONE)) {
+            oneCount = Math.abs(binding.leftSideGrid.getCountOfTypeContainedIn());
+            xCount = Math.abs(binding.rightSideGrid.getCountOfTypeContainedIn());
+        } else if (binding.rightSideGrid.getValuesInside().equals(Constants.ONE)) {
+            oneCount = Math.abs(binding.rightSideGrid.getCountOfTypeContainedIn());
+            xCount = Math.abs(binding.leftSideGrid.getCountOfTypeContainedIn());
+        }
+        //Correct answer
+        if (userAnswer == eq.getX()) {
+            Log.d(TAG, "Correct reset: " + (Constants.RESET_FACTOR * xCount) + " ms");
+            return Constants.RESET_FACTOR * xCount;
+        }
+        //Answer is greater than number of One's
+        if (mUserAnswer > oneCount) {
+            Log.d(TAG, "Default reset: Constants.DEFAULT_RESET ms");
+            return Constants.DEFAULT_RESET;
+        }
+        quotient = oneCount / mUserAnswer;
+        remainder = (oneCount % mUserAnswer) > 0 ? 1 : 0;
+        //Should not exceed number of X's
+        if (quotient + remainder >= xCount) {
+            Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
+            return xCount * Constants.RESET_FACTOR;
+        } else { //All other answers
+            Log.d(TAG, "Computed reset: " + ((quotient + remainder) * Constants.RESET_FACTOR) + " ms");
+            return (quotient + remainder) * Constants.RESET_FACTOR;
         }
     }
 }

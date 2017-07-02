@@ -98,10 +98,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
                         binding.rightSideGrid.getValuesInside().equals(Constants.X)) {
                     numberOfAnimatedX++;
                     Log.d(TAG, "R: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
+                    if (numberOfAnimatedX == Math.abs(eq.getAx())
+                            ||  eq.getAx() == 1
+                            || (isDone && areAllXViewsDoneAnimating())) {
                         isDone = false;
                         //reset
                         Handler h = new Handler();
@@ -138,10 +137,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
                         binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
                     numberOfAnimatedX++;
                     Log.d(TAG, "L: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx()) ||
-                            eq.getAx() == 1 ||
-                            (isDone && areAllXViewsDoneAnimating())
-                            ) {
+                    if (numberOfAnimatedX == Math.abs(eq.getAx())
+                            || eq.getAx() == 1
+                            || (isDone && areAllXViewsDoneAnimating())) {
                         isDone = false;
                         //reset
                         Handler h = new Handler();

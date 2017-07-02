@@ -38,7 +38,7 @@ public class Utilities {
     public static boolean animateObjects(Equation eq, LinearOpsGridLayout left, LinearOpsGridLayout right, int userAnswer, AppCompatActivity act) {
         int absAx = 0;
         int absB  = 0;
-        int absUserAnswer    = Math.abs(userAnswer);
+        int absUserAnswer = Math.abs(userAnswer);
 
         double correctAnswer = eq.getX();
 

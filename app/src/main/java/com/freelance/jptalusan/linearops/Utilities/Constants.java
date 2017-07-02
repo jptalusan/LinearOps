@@ -37,6 +37,8 @@ public class Constants {
     public static String FIRST_TIME = "FirstTime";
 
     public static final int ANIMATION_DURATION = 1000;
+    public static final int DEFAULT_RESET = 3000;
+    public static final int RESET_FACTOR = 1500;
 
     //TODO: Add more drawables
     public static int[] BLACK_BOX_WHITE_CIRLE = {

@@ -130,14 +130,14 @@ public class CustomDrawable extends Drawable {
             return;
         }
         int size = mDots.size() - 1;
-        Log.d(TAG, "Dots size: " + mDots.size());
+//        Log.d(TAG, "Dots size: " + mDots.size());
         canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size / 2).mX, middleY, redPaint);
         canvas.drawLine(mDots.get(size / 2).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
 
         for (ComboSeekBar.Dot dot : mDots) {
             drawText(canvas, dot, dot.mX, middleY);
             if (dot.isSelected) {
-                Log.d(TAG, "dot selected: " + dot.text);
+//                Log.d(TAG, "dot selected: " + dot.text);
 //                if (Integer.parseInt(dot.text) < 0) {
 //                    canvas.drawLine(mDots.get(size / 2).mX, middleY, dot.mX, middleY, selectLinePaint);
 //                } else {

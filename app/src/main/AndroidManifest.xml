@@ -23,29 +23,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.LinearEqualityActivity"
-            android:screenOrientation="landscape">
-
-        </activity>
-        <activity android:name=".Activities.LinearEqualityActivityLevel2"
-            android:screenOrientation="landscape">
-
-        </activity>
-
-        <activity android:name=".Activities.LinearEqualityActivityLevel3"
-            android:screenOrientation="landscape">
-
-        </activity>
-
-        <activity android:name=".Activities.LinearEqualityActivityLevel4"
-            android:screenOrientation="landscape">
-
-        </activity>
-
-        <activity android:name=".Activities.LinearEqualityActivityLevel5"
-            android:screenOrientation="landscape">
-
-        </activity>
+        <activity
+            android:name=".Activities.LinearEqualityActivity"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".Activities.LinearEqualityActivityLevel2"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".Activities.LinearEqualityActivityLevel3"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".Activities.LinearEqualityActivityLevel4"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".Activities.LinearEqualityActivityLevel5"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activities.LinearInequality"></activity>
     </application>
 
 </manifest>

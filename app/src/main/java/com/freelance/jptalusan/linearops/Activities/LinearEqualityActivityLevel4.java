@@ -60,7 +60,8 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
-        binding.fractionButton.setVisibility(View.GONE);
+        binding.increaseFractionButton.setVisibility(View.GONE);
+        binding.decreaseFractionButton.setVisibility(View.GONE);
         binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
@@ -114,11 +115,13 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
             public void onClick(View view) {
                 setViewAbility(false);
                 isAnswerCorrect(userAnswer);
-                int temp = Utilities.determineResetPeriodInMillis(
-                        binding.leftSideGrid,
-                        binding.rightSideGrid,
-                        userAnswer,
-                        eq);
+//                int temp = Utilities.determineResetPeriodInMillis(
+//                        binding.leftSideGrid,
+//                        binding.rightSideGrid,
+//                        userAnswer,
+//                        eq);
+
+                int temp = Constants.DEFAULT_RESET;
                 Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
@@ -253,6 +256,7 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
 
         //Log.d(TAG, equation.toString());
         System.out.println(TAG + ", " + equation);
+        System.out.println(TAG + ", " + equation.getX());
 
         binding.leftSideGrid.reset();
         binding.rightSideGrid.reset();

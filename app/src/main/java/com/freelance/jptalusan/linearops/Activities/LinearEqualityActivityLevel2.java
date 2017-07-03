@@ -54,7 +54,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
-        binding.fractionButton.setVisibility(View.GONE);
+        binding.increaseFractionButton.setVisibility(View.GONE);
+        binding.decreaseFractionButton.setVisibility(View.GONE);
         binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

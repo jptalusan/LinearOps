@@ -98,7 +98,7 @@ public class SeekBarLayout extends ConstraintLayout {
 
     //can extend this to modify what is added.
     private void addIcons(int val) {
-        Log.d(TAG, "addIcons: " + val);
+//        Log.d(TAG, "addIcons: " + val);
         icons.removeAllViews();
         if (val > 0) {
             for (int i = 1; i <= val; ++i) {

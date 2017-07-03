@@ -3,6 +3,7 @@ package com.freelance.jptalusan.linearops.Utilities;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -66,7 +67,11 @@ public class EquationGeneration {
             case Constants.LEVEL_5:
                 tempX = ax - cx;
                 temp1 = d - b;
-
+                double tX = ax - cx;
+                double t1 = d - b;
+                IntegerAndDecimal id = new IntegerAndDecimal(t1, tX);
+                String validity = id.isValid() ? " is" : " is not";
+                Log.d(TAG, "Int and Dec: " + id.toString() + validity + " valid.");
                 if (tempX == 1 || temp1 == 0 || tempX == 0) {
                     generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
                 } else {
@@ -88,5 +93,31 @@ public class EquationGeneration {
             return temp;
         else
             return pickRandom(rnd, min, max);
+    }
+}
+
+class IntegerAndDecimal {
+    private static final String TAG = "EquationGeneration";
+    double mWhole = 0.0;
+    double mDecimal = 0.0;
+    ArrayList<Double> validDecimals = new ArrayList<>(Arrays.asList(
+            0.16667, 0.33333, 0.66667, 0.83333, //recurring, thirds, sixths
+            0.2, 0.4, 0.6, 0.8, //fourths
+            0.25, 0.5, 0.75)); //quarters/fifths/halves
+    IntegerAndDecimal(double divisor, double dividend) {
+        Log.d(TAG, "number: " + divisor + "/" + dividend);
+        double quotient = Math.abs(divisor / dividend);
+
+        mWhole = (int) quotient;
+        mDecimal = Math.round((quotient % 1) * 100000.0) / 100000.0;
+    }
+
+    public boolean isValid() {
+        return mWhole < Constants.X_MAX && validDecimals.contains(mDecimal);
+    }
+
+    @Override
+    public String toString() {
+        return "Whole: " + mWhole + ", decimal: " + mDecimal;
     }
 }

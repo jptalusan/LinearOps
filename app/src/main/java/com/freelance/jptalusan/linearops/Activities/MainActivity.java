@@ -2,8 +2,8 @@ package com.freelance.jptalusan.linearops.Activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.freelance.jptalusan.linearops.R;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.linearInequality.setOnClickListener(new View.OnClickListener() {
+        binding.level2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, LinearEqualityActivityLevel2.class);
@@ -52,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, LinearEqualityActivityLevel5.class);
+                startActivity(i);
+            }
+        });
+
+        binding.linearInequality.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LinearInequality.class);
                 startActivity(i);
             }
         });

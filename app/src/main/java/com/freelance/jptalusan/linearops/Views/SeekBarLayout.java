@@ -38,6 +38,13 @@ public class SeekBarLayout extends ConstraintLayout {
         initializeViews(context);
     }
 
+    @Override
+    public void invalidate() {
+        icons.invalidate();
+        comboSeekBar.invalidate();
+        super.invalidate();
+    }
+
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,12 +64,14 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (i == comboSeekBar.getMax()) {
-                    i = comboSeekBar.getMax() - 1;
-                }
-                addIcons(i - (comboSeekBar.getMax() - 1) / 2);
+                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
+
+//                if (i == comboSeekBar.getMax()) {
+//                    i = comboSeekBar.getMax() - 1;
+//                }
+                addIcons(i - (comboSeekBar.getMax()) / 2);
                 if (listener != null)
-                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax() - 1) / 2);
+                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax()) / 2);
             }
 
             @Override
@@ -85,7 +94,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 dimensions.width  = icons.getMeasuredWidth();
                 dimensions.height = icons.getMeasuredHeight();
 
-                iconDimension.width  = dimensions.width / ((comboSeekBar.getMax() - 1));
+                iconDimension.width  = dimensions.width / ((comboSeekBar.getMax()));
                 iconDimension.height = dimensions.height;
 
                 Log.d(TAG, iconDimension.toString());
@@ -105,6 +114,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 ImageView iv = new ImageView(getContext());
                 iv.setImageResource(resourceId);
                 iv.setLayoutParams(generateParams(i));
+                iv.setPadding(2, 0, 2, 0);
                 icons.addView(iv);
             }
         } else if (val < 0) {
@@ -112,6 +122,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 ImageView iv = new ImageView(getContext());
                 iv.setImageResource(resourceId);
                 iv.setLayoutParams(generateParams(i));
+                iv.setPadding(2, 0, 2, 0);
                 icons.addView(iv);
             }
         } else {
@@ -167,4 +178,5 @@ public class SeekBarLayout extends ConstraintLayout {
     public void reset() {
         comboSeekBar.setProgress((comboSeekBar.getMax() - 1) / 2);
     }
+
 }

@@ -238,10 +238,10 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
     }
 
     public void setupLayoutForEquation(Equation equation) {
-        final int ax = equation.getAx();
-        final int b  = equation.getB();
-        final int cx = equation.getCx();
-        final int d  = equation.getD();
+        final double ax = equation.getAx();
+        final double b  = equation.getB();
+        final double cx = equation.getCx();
+        final double d  = equation.getD();
 
         //Log.d(TAG, equation.toString());
         System.out.println(TAG + ", " + equation);

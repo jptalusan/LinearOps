@@ -38,7 +38,9 @@
         <activity
             android:name=".Activities.LinearEqualityActivityLevel5"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activities.LinearInequality"></activity>
+        <activity
+            android:name=".Activities.LinearInequality"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

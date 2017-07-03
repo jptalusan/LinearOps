@@ -40,6 +40,8 @@ public class Constants {
     public static final int DEFAULT_RESET = 3000;
     public static final int RESET_FACTOR = 1500;
 
+    public static final int SEEKBAR_CUSTOM_WIDTH = 15;
+
     //TODO: Add more drawables
     public static int[] BLACK_BOX_WHITE_CIRLE = {
             R.drawable.black_box,

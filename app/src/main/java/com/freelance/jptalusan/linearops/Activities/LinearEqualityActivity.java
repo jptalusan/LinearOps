@@ -156,9 +156,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
     }
 
+    //TODO: Possibly lossy, but since always whole, ok, but refactor new eq after check same as level 2 above
     private boolean areAllXViewsDoneAnimating() {
-        int solution = eq.getB() / userAnswer;
-        int remaindr = eq.getB() % userAnswer;
+        double solution = eq.getB() / userAnswer;
+        double remaindr = eq.getB() % userAnswer;
 
         Log.d(TAG, "what; " + Math.abs(solution) + ", " + Math.abs(remaindr));
         if (remaindr > 0)
@@ -192,10 +193,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
     }
 
     public void setupLayoutForEquation(Equation equation) {
-        final int ax = equation.getAx();
-        final int b  = equation.getB();
-        final int cx = equation.getCx();
-        final int d  = equation.getD();
+        final double ax = equation.getAx();
+        final double b  = equation.getB();
+        final double cx = equation.getCx();
+        final double d  = equation.getD();
 
         Log.d(TAG, equation.toString());
 

@@ -8,7 +8,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.List;
@@ -130,25 +129,13 @@ public class CustomDrawable extends Drawable {
             return;
         }
         int size = mDots.size() - 1;
-//        Log.d(TAG, "Dots size: " + mDots.size());
         canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size / 2).mX, middleY, redPaint);
         canvas.drawLine(mDots.get(size / 2).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
 
         for (ComboSeekBar.Dot dot : mDots) {
             drawText(canvas, dot, dot.mX, middleY);
             if (dot.isSelected) {
-//                Log.d(TAG, "dot selected: " + dot.text);
-//                if (Integer.parseInt(dot.text) < 0) {
-//                    canvas.drawLine(mDots.get(size / 2).mX, middleY, dot.mX, middleY, selectLinePaint);
-//                } else {
-//                    canvas.drawLine(mDots.get(size / 2).mX, middleY, dot.mX, middleY, selectLinePaint);
-//                }
                 canvas.drawCircle(dot.mX, middleY, 20, selectedCirclePaint);
-
-//                if (dot.isSelected) {
-//                    canvas.drawLine(mDots.get(0).mX, middleY, dot.mX, middleY, selectLinePaint);
-//                    canvas.drawLine(dot.mX, middleY, mDots.get(mDots.size() - 1).mX, middleY, unselectLinePaint);
-//                }
             }
             canvas.drawCircle(dot.mX, middleY, mDotRadius, circleLinePaint);
         }

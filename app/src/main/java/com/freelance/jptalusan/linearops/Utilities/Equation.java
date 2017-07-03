@@ -8,17 +8,17 @@ import android.util.Log;
 
 public class Equation {
     private static String TAG = "Equation";
-    private int ax = 0;
-    private int b = 0;
-    private int cx = 0;
-    private int d = 0;
+    private double ax = 0;
+    private double b = 0;
+    private double cx = 0;
+    private double d = 0;
     private int level = 0;
 
 
     public Equation() {
     }
 
-    public Equation(int ax, int b, int cx, int d, int level) {
+    public Equation(double ax, double b, double cx, double d, int level) {
         this.ax = ax;
         this.b = b;
         this.cx = cx;
@@ -68,8 +68,8 @@ public class Equation {
             case Constants.LEVEL_1: return b / ax;
             case Constants.LEVEL_2: return ((cx - b) / ax);
             case Constants.LEVEL_3:
-            case Constants.LEVEL_4:
-            case Constants.LEVEL_5: //return (d - b) / (ax - cx);
+            case Constants.LEVEL_4: return (d - b) / (ax - cx);
+            case Constants.LEVEL_5:
                 Log.d(TAG, "ax: " + ax);
                 Log.d(TAG, "b: " + b);
                 Log.d(TAG, "cx: " + cx);
@@ -80,19 +80,19 @@ public class Equation {
         }
     }
 
-    public int getAx() {
+    public double getAx() {
         return ax;
     }
 
-    public int getB() {
+    public double getB() {
         return b;
     }
 
-    public int getCx() {
+    public double getCx() {
         return cx;
     }
 
-    public int getD() {
+    public double getD() {
         return d;
     }
 
@@ -101,8 +101,8 @@ public class Equation {
     }
 
     //TODO: use this to confirm if user has already answered correctly
-    public int[] getAxEqualsBForm() {
-        int[] output = {0, 0};
+    public double[] getAxEqualsBForm() {
+        double[] output = {0, 0};
 
         switch(level) {
             case Constants.LEVEL_1:

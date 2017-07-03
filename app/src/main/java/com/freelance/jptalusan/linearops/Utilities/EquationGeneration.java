@@ -72,7 +72,7 @@ public class EquationGeneration {
                 IntegerAndDecimal id = new IntegerAndDecimal(t1, tX);
                 String validity = id.isValid() ? " is" : " is not";
                 Log.d(TAG, "Int and Dec: " + id.toString() + validity + " valid.");
-                if (tempX == 1 || temp1 == 0 || tempX == 0) {
+                if (!id.isValid()) {
                     generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
                 } else {
                     generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_5);
@@ -104,6 +104,7 @@ class IntegerAndDecimal {
             0.16667, 0.33333, 0.66667, 0.83333, //recurring, thirds, sixths
             0.2, 0.4, 0.6, 0.8, //fourths
             0.25, 0.5, 0.75)); //quarters/fifths/halves
+
     IntegerAndDecimal(double divisor, double dividend) {
         Log.d(TAG, "number: " + divisor + "/" + dividend);
         double quotient = Math.abs(divisor / dividend);
@@ -113,7 +114,7 @@ class IntegerAndDecimal {
     }
 
     public boolean isValid() {
-        return mWhole < Constants.X_MAX && validDecimals.contains(mDecimal);
+        return mWhole > 0 && validDecimals.contains(mDecimal);
     }
 
     @Override

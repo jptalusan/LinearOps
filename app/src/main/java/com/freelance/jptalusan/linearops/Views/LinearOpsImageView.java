@@ -58,12 +58,12 @@ public class LinearOpsImageView extends AppCompatTextView {
         prefs = getContext().getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
         if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) >= Constants.LEVEL_4) {
             setText(text);
-            setTextColor(Color.GRAY);
+            setTextColor(Color.BLACK);
             setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         } else {
             if (text.equals("X")) {
                 setText("?");
-                setTextColor(Color.GRAY);
+                setTextColor(Color.BLACK);
                 setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             }
         }

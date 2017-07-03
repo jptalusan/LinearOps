@@ -129,4 +129,23 @@ public class Equation {
     public boolean isUserCorrect(int answer) {
         return getX() == answer;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!Equation.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        final Equation other = (Equation) obj;
+        if (this.ax != other.ax
+                && this.b != other.b
+                && this.cx != other.cx
+                && this.d != other.d) {
+            return false;
+        }
+        return true;
+    }
+
 }

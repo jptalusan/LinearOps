@@ -73,7 +73,21 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setViewAbility(false);
                 isAnswerCorrect(userAnswer);
+                int temp = Utilities.determineResetPeriodInMillis(
+                        binding.leftSideGrid,
+                        binding.rightSideGrid,
+                        userAnswer,
+                        eq);
+                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp);
             }
         });
 
@@ -94,25 +108,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.rightSideGrid.isLayoutUniform() &&
-                        binding.rightSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "R: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx())
-                            ||  eq.getAx() == 1
-                            || (isDone && areAllXViewsDoneAnimating())) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "R:Reset.");
-                    }
-                }
             }
         });
 
@@ -133,39 +128,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
             @Override
             public void onAllAnimationsEnd() {
-                if (binding.leftSideGrid.isLayoutUniform() &&
-                        binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
-                    numberOfAnimatedX++;
-                    Log.d(TAG, "L: numberOfAnimatedX:" + numberOfAnimatedX);
-                    if (numberOfAnimatedX == Math.abs(eq.getAx())
-                            || eq.getAx() == 1
-                            || (isDone && areAllXViewsDoneAnimating())) {
-                        isDone = false;
-                        //reset
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startLinearOps();
-                            }
-                        }, 2500);
-                        Log.d(TAG, "L:Reset.");
-                    }
-                }
             }
         });
-    }
-
-    //TODO: Possibly lossy, but since always whole, ok, but refactor new eq after check same as level 2 above
-    private boolean areAllXViewsDoneAnimating() {
-        double solution = eq.getB() / userAnswer;
-        double remaindr = eq.getB() % userAnswer;
-
-        Log.d(TAG, "what; " + Math.abs(solution) + ", " + Math.abs(remaindr));
-        if (remaindr > 0)
-            return (Math.abs(solution) + 1) == numberOfAnimatedX;
-        else
-            return Math.abs(solution) == numberOfAnimatedX;
     }
 
     private void startLinearOps() {
@@ -176,6 +140,12 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
         numberOfAnimatedX = 0;
         isDone = false;
+        setViewAbility(true);
+    }
+
+    private void setViewAbility(boolean enabled) {
+        binding.seekbar.comboSeekBar.setEnabled(enabled);
+        binding.checkButton.setEnabled(enabled);
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {

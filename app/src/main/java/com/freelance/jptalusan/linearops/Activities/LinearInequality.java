@@ -4,12 +4,13 @@ import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -24,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 public class LinearInequality extends AppCompatActivity {
     private static final String TAG = "LinearInequality";
@@ -45,6 +44,10 @@ public class LinearInequality extends AppCompatActivity {
     private boolean isGreaterThanChecked = false;
     private int inequalityIndex = -1;
     private boolean hasFirstBeenAnswered = false;
+    private boolean lessThanSuppossedToBeChecked = false;
+    private boolean answerSuppossedToBeChecked = false;
+    private boolean greaterThanSuppossedToBeChecked = false;
+    private String symbols[] = {"<", "≤", ">", "≥"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,25 +87,107 @@ public class LinearInequality extends AppCompatActivity {
                         hasFirstBeenAnswered = true;
                         setUpInequality();
                     }
-                }else {
+                } else {
                     if (isSecondAnswerCorrect()) {
                         Toast.makeText(LinearInequality.this, "2: Correct", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
+                        setupIncorrectText();
                     }
+                    int temp = Constants.DEFAULT_RESET * 3;
+                    Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startLinearOps();
+                        }
+                    }, temp);
                 }
-//                isSecondAnswerCorrect(userAnswer);
-//                int temp = Constants.DEFAULT_RESET;
-//                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-//                Handler h = new Handler();
-//                h.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        startLinearOps();
-//                    }
-//                }, temp);
             }
         });
+    }
+
+    private void setupIncorrectText() {
+        int answer = userAnswer + Constants.X_MAX;
+        int lessThan = answer / 2;
+        int greaterThan = answer + ((Constants.X_MAX * 2 + 1) - answer) / 2;
+        answer -= Constants.X_MAX;
+        lessThan -= Constants.X_MAX;
+        greaterThan -= Constants.X_MAX;
+        Log.d(TAG, "log: " + lessThan + "," + answer + "," + greaterThan);
+
+        if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
+            AppCompatTextView tx1 = new AppCompatTextView(this);
+            tx1.setLayoutParams(generateParamsForTextAtIndex(lessThan));
+            String temp = "(" + lessThan + ")";
+            tx1.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✔");
+            tx1.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx1);
+        }
+
+        if (!lessThanSuppossedToBeChecked && isLessThanChecked) {
+            AppCompatTextView tx2 = new AppCompatTextView(this);
+            tx2.setLayoutParams(generateParamsForTextAtIndex(lessThan));
+            String temp = "(" + lessThan + ")";
+            tx2.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✖");
+            tx2.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx2);
+        }
+
+        if (answerSuppossedToBeChecked && !isAnswerChecked) {
+            AppCompatTextView tx3 = new AppCompatTextView(this);
+            tx3.setLayoutParams(generateParamsForTextAtIndex(answer));
+            String temp = "(" + answer + ")";
+            tx3.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✔");
+            tx3.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx3);
+        }
+
+        if (!answerSuppossedToBeChecked && isAnswerChecked) {
+            AppCompatTextView tx4 = new AppCompatTextView(this);
+            tx4.setLayoutParams(generateParamsForTextAtIndex(answer));
+            String temp = "(" + answer + ")";
+            tx4.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✖");
+            tx4.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx4);
+        }
+
+        if (greaterThanSuppossedToBeChecked && !isGreaterThanChecked) {
+            AppCompatTextView tx5 = new AppCompatTextView(this);
+            tx5.setLayoutParams(generateParamsForTextAtIndex(greaterThan));
+            String temp = "(" + greaterThan + ")";
+            tx5.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✔");
+            tx5.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx5);
+        }
+
+        if (!greaterThanSuppossedToBeChecked && isGreaterThanChecked) {
+            AppCompatTextView tx6 = new AppCompatTextView(this);
+            tx6.setLayoutParams(generateParamsForTextAtIndex(greaterThan));
+            String temp = "(" + greaterThan + ")";
+            tx6.setText(eq.printEquation()
+                    .replace("x", temp)
+                    .replace("=", symbols[inequalityIndex])
+                    + " ✖");
+            tx6.setPadding(0, 30, 0, 0);
+            binding.checkBoxesLayout.addView(tx6);
+        }
     }
 
     private void setUpInequality() {
@@ -120,6 +205,7 @@ public class LinearInequality extends AppCompatActivity {
         int answer = userAnswer + Constants.X_MAX;
         int lessThan = answer / 2;
         int greaterThan = answer + ((Constants.X_MAX * 2 + 1) - answer) / 2;
+
         lessThan = lessThan == Constants.X_MIN ? lessThan + 2 : lessThan;
         greaterThan = greaterThan == Constants.X_MAX ? greaterThan - 2 : greaterThan;
 
@@ -156,42 +242,6 @@ public class LinearInequality extends AppCompatActivity {
         binding.checkBoxesLayout.addView(greaterThanCB);
     }
 
-    private boolean isSecondAnswerCorrect() {
-        //String symbols[] = {"<", "≤", ">", "≥"};
-        switch (inequalityIndex) {
-            case 0:
-                if (isLessThanChecked
-                        && !isAnswerChecked
-                        && !isGreaterThanChecked) {
-                    return true;
-                }
-                break;
-            case 1:
-                if (isLessThanChecked
-                        && isAnswerChecked
-                        && !isGreaterThanChecked) {
-                    return true;
-                }
-                break;
-            case 2:
-                if (!isLessThanChecked
-                        && !isAnswerChecked
-                        && isGreaterThanChecked) {
-                    return true;
-                }
-                break;
-            case 3:
-                if (!isLessThanChecked
-                        && isAnswerChecked
-                        && isGreaterThanChecked) {
-                    return true;
-                }
-                break;
-        }
-        return false;
-    }
-
-    //TODO: Add checking if index is > width
     private RelativeLayout.LayoutParams generateParamsAtIndex(int index) {
         Log.d(TAG, "Generate: " + index);
         int slice = (int) binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
@@ -203,6 +253,21 @@ public class LinearInequality extends AppCompatActivity {
 
         params.leftMargin = (slice * index) - (slice / 2);
         params.bottomMargin = 140;
+        return params;
+    }
+
+    private RelativeLayout.LayoutParams generateParamsForTextAtIndex(int index) {
+        Log.d(TAG, "Generate: " + index);
+        int slice = (int) binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                (int) binding.checkBoxesLayout.getHeight());
+
+        Log.d(TAG, "params: " + slice + " x " + params.height);
+
+        params.leftMargin = (slice * index) - (slice / 2);
+        params.topMargin = 50;
+        params.bottomMargin = 100;
         return params;
     }
 
@@ -226,6 +291,10 @@ public class LinearInequality extends AppCompatActivity {
         isGreaterThanChecked = false;
         inequalityIndex = -1;
         hasFirstBeenAnswered = false;
+
+        lessThanSuppossedToBeChecked = false;
+        answerSuppossedToBeChecked = false;
+        greaterThanSuppossedToBeChecked = false;
     }
 
     private boolean isFirstAnswerCorrect(int userAnswer) {
@@ -238,12 +307,48 @@ public class LinearInequality extends AppCompatActivity {
         }
     }
 
-    private boolean isSecondAnswerCorrect(int userAnswer) {
+    private boolean isSecondAnswerCorrect() {
+        //String symbols[] = {"<", "≤", ">", "≥"};
+        switch (inequalityIndex) {
+            case 0:
+                lessThanSuppossedToBeChecked = true;
+                if (isLessThanChecked
+                        && !isAnswerChecked
+                        && !isGreaterThanChecked) {
+                    return true;
+                }
+                break;
+            case 1:
+                lessThanSuppossedToBeChecked = true;
+                answerSuppossedToBeChecked = true;
+                if (isLessThanChecked
+                        && isAnswerChecked
+                        && !isGreaterThanChecked) {
+                    return true;
+                }
+                break;
+            case 2:
+                greaterThanSuppossedToBeChecked = true;
+                if (!isLessThanChecked
+                        && !isAnswerChecked
+                        && isGreaterThanChecked) {
+                    return true;
+                }
+                break;
+            case 3:
+                answerSuppossedToBeChecked = true;
+                greaterThanSuppossedToBeChecked = true;
+                if (!isLessThanChecked
+                        && isAnswerChecked
+                        && isGreaterThanChecked) {
+                    return true;
+                }
+                break;
+        }
         return false;
     }
 
     private String getRandomInequality() {
-        String symbols[] = {"<", "≤", ">", "≥"};
         int x = EquationGeneration.pickRandom(rnd, 0, 3);
         inequalityIndex = x;
         return symbols[x];

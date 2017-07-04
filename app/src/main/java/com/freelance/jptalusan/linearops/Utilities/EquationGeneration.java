@@ -33,7 +33,8 @@ public class EquationGeneration {
             case Constants.LEVEL_1:
                 cx = 0;
                 d  = 0;
-                if (b % ax != 0) {
+                int absAx = Math.abs(ax);
+                if (b % ax != 0 || absAx > Constants.X_MAX) {
                     generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
                 } else {
                     generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_1);

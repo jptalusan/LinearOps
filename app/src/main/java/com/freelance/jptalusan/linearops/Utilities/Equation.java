@@ -31,6 +31,10 @@ public class Equation {
         switch(level) {
             case Constants.LEVEL_1:
                 temp = ax + "x=" + b;
+                temp = temp.replace(".0", "");
+                temp = temp.replace("+-", " - ");
+                temp = temp.replace("x+", "x + ");
+                temp = temp.replace("=", " = ");
                 break;
             case Constants.LEVEL_2:
                 temp = ax + "x+" + b + "=" + cx;

@@ -65,6 +65,11 @@ public class ComboSeekBar extends AppCompatSeekBar {
                 mColor, mTextSize, mTextBottomPadding));
     }
 
+    public void setCustomDrawable() {
+        setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mDotRadius, mThumb.getRadius(), mDots,
+                mColor, mTextSize, mTextBottomPadding));
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         isSelected = false;

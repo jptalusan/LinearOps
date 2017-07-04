@@ -142,7 +142,7 @@ public class LinearInequalityDrawable extends Drawable {
         for (ComboSeekBar.Dot dot : mDots) {
             drawText(canvas, dot, dot.mX, middleY);
             if (dot.isSelected) {
-                canvas.drawCircle(dot.mX, middleY, 20, selectedCirclePaint);
+                canvas.drawCircle(dot.mX,  middleY, 20, selectedCirclePaint);
             }
             canvas.drawCircle(dot.mX, middleY, mDotRadius, circleLinePaint);
         }

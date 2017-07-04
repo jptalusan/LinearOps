@@ -125,8 +125,6 @@ public class SeekBarLayout extends ConstraintLayout {
                 iv.setPadding(2, 0, 2, 0);
                 icons.addView(iv);
             }
-        } else {
-
         }
     }
 
@@ -146,7 +144,12 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void drawResourceOn(int index) {
-        addIcons(index);
+        icons.removeAllViews();
+        ImageView iv = new ImageView(getContext());
+        iv.setImageResource(resourceId);
+        iv.setLayoutParams(generateParams(index));
+        iv.setPadding(2, 0, 2, 0);
+        icons.addView(iv);
     }
 
     public void setResourceId(int resourceId) {

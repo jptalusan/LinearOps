@@ -42,8 +42,9 @@ public class EquationGeneration {
             case Constants.LEVEL_2:
                 d = 0;
                 int temp = cx - b;
+                int absTemp = Math.abs(temp);
 
-                if (temp % ax != 0) {
+                if (temp % ax != 0 || absTemp > Constants.X_MAX || Math.abs(ax) > absTemp) {
                     generatedEquation = generateEqualityEquation(Constants.LEVEL_2);
                 } else {
                     generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_2);

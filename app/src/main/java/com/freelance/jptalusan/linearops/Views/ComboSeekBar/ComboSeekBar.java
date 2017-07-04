@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import com.freelance.jptalusan.linearops.R;
 import java.util.ArrayList;
 import java.util.List;
 
+//Seems useful https://stackoverflow.com/questions/10536202/how-to-set-android-seekbar-progress-drawable-programatically
 public class ComboSeekBar extends AppCompatSeekBar {
     private CustomThumbDrawable mThumb;
     private List<Dot> mDots = new ArrayList<>();
@@ -30,6 +32,7 @@ public class ComboSeekBar extends AppCompatSeekBar {
     private int mTextBottomPadding;
     private int mDotRadius;
     private int mThumbRadius;
+    private boolean useLinearInequality = false;
 
     public ComboSeekBar(Context context) {
         super(context);
@@ -37,6 +40,7 @@ public class ComboSeekBar extends AppCompatSeekBar {
 
     public ComboSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Log.d("ComboSeekBar", "ComboSeekBar()");
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ComboSeekBar);
 
         mColor = a.getColor(R.styleable.ComboSeekBar_color, Color.WHITE);
@@ -49,10 +53,16 @@ public class ComboSeekBar extends AppCompatSeekBar {
 
         mThumb = new CustomThumbDrawable(mColor, mThumbRadius);
         setThumb(mThumb);
+
         setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mDotRadius, mThumb.getRadius(), mDots,
                 mColor, mTextSize, mTextBottomPadding));
 
         setPadding(0, 0, 0, 0);
+    }
+
+    public void setLinearInequalityDrawable() {
+        setProgressDrawable(new LinearInequalityDrawable(this.getProgressDrawable(), this, mDotRadius, mThumb.getRadius(), mDots,
+                mColor, mTextSize, mTextBottomPadding));
     }
 
     @Override

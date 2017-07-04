@@ -22,7 +22,7 @@ public class SeekBarLayout extends ConstraintLayout {
     private RelativeLayout icons;
     public ComboSeekBar comboSeekBar;
     private static String TAG = "SeekBarLayout";
-    private int resourceId = R.mipmap.ic_launcher;
+    private int resourceId = 0;
     private int tempInt = 0;
     private Dimensions dimensions = new Dimensions();
     private Dimensions iconDimension = new Dimensions();
@@ -64,7 +64,7 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
+//                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
 
 //                if (i == comboSeekBar.getMax()) {
 //                    i = comboSeekBar.getMax() - 1;
@@ -143,6 +143,10 @@ public class SeekBarLayout extends ConstraintLayout {
         }
 
         return params;
+    }
+
+    public void drawResourceOn(int index) {
+        addIcons(index);
     }
 
     public void setResourceId(int resourceId) {

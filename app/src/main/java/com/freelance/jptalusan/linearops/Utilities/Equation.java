@@ -34,7 +34,10 @@ public class Equation {
                 break;
             case Constants.LEVEL_2:
                 temp = ax + "x+" + b + "=" + cx;
-                temp = temp.replace("+-", "-");
+                temp = temp.replace(".0", "");
+                temp = temp.replace("+-", " - ");
+                temp = temp.replace("x+", "x + ");
+                temp = temp.replace("=", " = ");
                 break;
             case Constants.LEVEL_3:
             case Constants.LEVEL_4:

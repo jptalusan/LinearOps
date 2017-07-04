@@ -85,7 +85,7 @@ public class EquationGeneration {
         return generatedEquation;
     }
 
-    private static int pickRandom(Random rnd, int min, int max) {
+    public static int pickRandom(Random rnd, int min, int max) {
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
         int temp = rnd.nextInt((max - min) + 1) + min;

@@ -94,15 +94,15 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-                    int temp = Constants.DEFAULT_RESET * 3;
-                    Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-                    Handler h = new Handler();
-                    h.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            startLinearOps();
-                        }
-                    }, temp);
+//                    int temp = Constants.DEFAULT_RESET * 3;
+//                    Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+//                    Handler h = new Handler();
+//                    h.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            startLinearOps();
+//                        }
+//                    }, temp);
                 }
             }
         });
@@ -112,6 +112,11 @@ public class LinearInequality extends AppCompatActivity {
         int answer = userAnswer + Constants.X_MAX;
         int lessThan = answer / 2;
         int greaterThan = answer + ((Constants.X_MAX * 2 + 1) - answer) / 2;
+
+        int tempAnswer = answer;
+        int tempLess = lessThan;
+        int tempGreat = greaterThan;
+
         answer -= Constants.X_MAX;
         lessThan -= Constants.X_MAX;
         greaterThan -= Constants.X_MAX;
@@ -119,7 +124,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
             AppCompatTextView tx1 = new AppCompatTextView(this);
-            tx1.setLayoutParams(generateParamsForTextAtIndex(lessThan));
+            tx1.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
+            tx1.setTextColor(Color.RED);
             String temp = "(" + lessThan + ")";
             tx1.setText(eq.printEquation()
                     .replace("x", temp)
@@ -131,7 +137,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (!lessThanSuppossedToBeChecked && isLessThanChecked) {
             AppCompatTextView tx2 = new AppCompatTextView(this);
-            tx2.setLayoutParams(generateParamsForTextAtIndex(lessThan));
+            tx2.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
+            tx2.setTextColor(Color.RED);
             String temp = "(" + lessThan + ")";
             tx2.setText(eq.printEquation()
                     .replace("x", temp)
@@ -143,7 +150,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (answerSuppossedToBeChecked && !isAnswerChecked) {
             AppCompatTextView tx3 = new AppCompatTextView(this);
-            tx3.setLayoutParams(generateParamsForTextAtIndex(answer));
+            tx3.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
+            tx3.setTextColor(Color.BLUE);
             String temp = "(" + answer + ")";
             tx3.setText(eq.printEquation()
                     .replace("x", temp)
@@ -155,7 +163,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (!answerSuppossedToBeChecked && isAnswerChecked) {
             AppCompatTextView tx4 = new AppCompatTextView(this);
-            tx4.setLayoutParams(generateParamsForTextAtIndex(answer));
+            tx4.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
+            tx4.setTextColor(Color.BLUE);
             String temp = "(" + answer + ")";
             tx4.setText(eq.printEquation()
                     .replace("x", temp)
@@ -167,7 +176,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (greaterThanSuppossedToBeChecked && !isGreaterThanChecked) {
             AppCompatTextView tx5 = new AppCompatTextView(this);
-            tx5.setLayoutParams(generateParamsForTextAtIndex(greaterThan));
+            tx5.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
+            tx5.setTextColor(Color.GREEN);
             String temp = "(" + greaterThan + ")";
             tx5.setText(eq.printEquation()
                     .replace("x", temp)
@@ -179,7 +189,8 @@ public class LinearInequality extends AppCompatActivity {
 
         if (!greaterThanSuppossedToBeChecked && isGreaterThanChecked) {
             AppCompatTextView tx6 = new AppCompatTextView(this);
-            tx6.setLayoutParams(generateParamsForTextAtIndex(greaterThan));
+            tx6.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
+            tx6.setTextColor(Color.GREEN);
             String temp = "(" + greaterThan + ")";
             tx6.setText(eq.printEquation()
                     .replace("x", temp)
@@ -256,7 +267,8 @@ public class LinearInequality extends AppCompatActivity {
         return params;
     }
 
-    private RelativeLayout.LayoutParams generateParamsForTextAtIndex(int index) {
+    //TODO: what if the checkboxes are close to each other?
+    private RelativeLayout.LayoutParams generateParamsForTextAtIndex(int index, int someValue) {
         Log.d(TAG, "Generate: " + index);
         int slice = (int) binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -266,7 +278,7 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "params: " + slice + " x " + params.height);
 
         params.leftMargin = (slice * index) - (slice / 2);
-        params.topMargin = 50;
+        params.topMargin = 50 + (20 * 0);
         params.bottomMargin = 100;
         return params;
     }

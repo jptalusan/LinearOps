@@ -30,6 +30,8 @@ public class CustomDrawable extends Drawable {
     private List<ComboSeekBar.Dot> mDots;
     private Paint selectLinePaint;
     private Paint circleLinePaint;
+    private Paint redCircleLinePaint;
+    private Paint greenCircleLinePaint;
     private Paint selectedCirclePaint;
     private Paint redPaint;
     private Paint greenPaint;
@@ -39,6 +41,8 @@ public class CustomDrawable extends Drawable {
     private float mTextMargin;
     private int mTextHeight;
     private float mTextBottomPadding;
+    private Paint redText;
+    private Paint greenText;
 
     public CustomDrawable(Drawable base, ComboSeekBar slider,
                           float dotRadius, float thumbRadius, List<ComboSeekBar.Dot> dots,
@@ -50,6 +54,14 @@ public class CustomDrawable extends Drawable {
         textUnselected = new Paint(Paint.ANTI_ALIAS_FLAG);
         textUnselected.setColor(color);
         textUnselected.setAlpha(255);
+
+        redText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        redText.setColor(Color.RED);
+        redText.setAlpha(255);
+
+        greenText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        greenText.setColor(Color.GREEN);
+        greenText.setAlpha(255);
 
         textSelected = new Paint(Paint.ANTI_ALIAS_FLAG);
         textSelected.setTypeface(Typeface.DEFAULT_BOLD);
@@ -69,13 +81,21 @@ public class CustomDrawable extends Drawable {
         selectLinePaint.setColor(color);
         selectLinePaint.setStrokeWidth(toPix(3));
 
+        redCircleLinePaint = new Paint();
+        redCircleLinePaint.setColor(Color.parseColor("#C62828"));
+        redCircleLinePaint.setStrokeWidth(toPix(1));
+
+        greenCircleLinePaint = new Paint();
+        greenCircleLinePaint.setColor(Color.parseColor("#00695C"));
+        greenCircleLinePaint.setStrokeWidth(toPix(1));
+
         redPaint = new Paint();
-        redPaint.setColor(Color.RED);
+        redPaint.setColor(Color.parseColor("#FFCDD2"));
         redPaint.setStrokeWidth(toPix(10));
         redPaint.setAlpha(255);
 
         greenPaint = new Paint();
-        greenPaint.setColor(Color.GREEN);
+        greenPaint.setColor(Color.parseColor("#E0F2F1"));
         greenPaint.setStrokeWidth(toPix(10));
         greenPaint.setAlpha(255);
 
@@ -90,8 +110,16 @@ public class CustomDrawable extends Drawable {
         textSelected.setTextSize((int) (mTextSize * 2));
         textSelected.getTextBounds("M", 0, 1, textBounds);
 
+        greenText.setTextSize((int) (mTextSize * 2));
+        greenText.getTextBounds("M", 0, 1, textBounds);
+
+        redText.setTextSize((int) (mTextSize * 2));
+        redText.getTextBounds("M", 0, 1, textBounds);
+
         textUnselected.setTextSize(mTextSize);
         textSelected.setTextSize(mTextSize);
+        greenText.setTextSize(mTextSize);
+        redText.setTextSize(mTextSize);
 
         mTextHeight = textBounds.height() + 20;
         mDotRadius = dotRadius;
@@ -132,12 +160,19 @@ public class CustomDrawable extends Drawable {
         canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size / 2).mX, middleY, redPaint);
         canvas.drawLine(mDots.get(size / 2).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
 
+        for (int i = 0; i <= size / 2; ++i) {
+            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, false);
+            canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, redCircleLinePaint);
+        }
+
+        for (int i = size / 2; i <= size; ++i) {
+            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, true);
+            canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, greenCircleLinePaint);
+        }
         for (ComboSeekBar.Dot dot : mDots) {
-            drawText(canvas, dot, dot.mX, middleY);
             if (dot.isSelected) {
                 canvas.drawCircle(dot.mX, middleY, 20, selectedCirclePaint);
             }
-            canvas.drawCircle(dot.mX, middleY, mDotRadius, circleLinePaint);
         }
     }
 
@@ -147,7 +182,7 @@ public class CustomDrawable extends Drawable {
      * @param x      x cor.
      * @param y      y cor.
      */
-    private void drawText(Canvas canvas, ComboSeekBar.Dot dot, float x, float y) {
+    private void drawText(Canvas canvas, ComboSeekBar.Dot dot, float x, float y, boolean b) {
         final Rect textBounds = new Rect();
         textSelected.getTextBounds(dot.text, 0, dot.text.length(), textBounds);
         float xres;
@@ -161,7 +196,11 @@ public class CustomDrawable extends Drawable {
 
         float yres = y - mThumbRadius - mTextBottomPadding;
 
-        canvas.drawText(dot.text, xres, yres, dot.isSelected ? textSelected : textUnselected);
+        if (b) { //Positive
+            canvas.drawText(dot.text, xres, yres, dot.isSelected ? textSelected : greenText);
+        } else {
+            canvas.drawText(dot.text, xres, yres, dot.isSelected ? textSelected : redText);
+        }
     }
 
 

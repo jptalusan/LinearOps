@@ -29,55 +29,65 @@ public class EquationGeneration {
         int temp1 = 0;
         Log.d(TAG, "Level at generation: " + level);
         switch(level) {
-            //TODO: Remove 1x?
             case Constants.LEVEL_1:
                 cx = 0;
                 d  = 0;
                 int absAx = Math.abs(ax);
-                if (b % ax != 0 || absAx > Constants.X_MAX) {
-                    generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
+                if (ax != 0) {
+                    int result = Math.abs(b / ax);
+                    if (b % ax != 0 || absAx > Constants.X_MAX || absAx == 1 || result == 1) {
+                        generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
+                    } else {
+                        generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_1);
+                    }
                 } else {
-                    generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_1);
+                    generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
                 }
                 break;
             case Constants.LEVEL_2:
                 d = 0;
                 int temp = cx - b;
                 int absTemp = Math.abs(temp);
-
-                if (temp % ax != 0 || absTemp > Constants.X_MAX || Math.abs(ax) > absTemp) {
-                    generatedEquation = generateEqualityEquation(Constants.LEVEL_2);
+                if (ax != 0) {
+                    double result = Math.abs(temp1 / ax);
+                    if (temp % ax != 0 || absTemp > Constants.X_MAX || Math.abs(ax) > absTemp || Math.abs(ax) == 1 || result == 1) {
+                        generatedEquation = generateEqualityEquation(Constants.LEVEL_2);
+                    } else {
+                        generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_2);
+                    }
                 } else {
-                    generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_2);
+                    generatedEquation = generateEqualityEquation(Constants.LEVEL_2);
                 }
                 break;
             case Constants.LEVEL_3:
-            case Constants.LEVEL_4: //TODO: Fix this, sometimes no value appearing, due to layout appearing faster than generation of equation
+            case Constants.LEVEL_4:
                 tempX = ax - cx;
                 temp1 = d - b;
-
                 if (tempX != 0) {
-                    if (temp1 % tempX != 0 || tempX == 1 || temp1 == 0) {
+                    double result = Math.abs(temp1 / tempX);
+                    if (temp1 % tempX != 0 || Math.abs(tempX) == 1 || temp1 == 0 || result == 1) {
                         generatedEquation = generateEqualityEquation(Constants.LEVEL_4);
                     } else {
                         generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_4);
                     }
+                } else {
+                    generatedEquation = generateEqualityEquation(Constants.LEVEL_4);
                 }
                 break;
-            //TODO: Must fix level 5 generation, it is wacked, i think only ~0.5, 0.333, 0.25, 0.2 and 0.1666 are allowed (how to check?)
-            //TODO: i think the x = 1 must be removed here
             case Constants.LEVEL_5:
-                tempX = ax - cx;
-                temp1 = d - b;
                 double tX = ax - cx;
                 double t1 = d - b;
                 IntegerAndDecimal id = new IntegerAndDecimal(t1, tX);
                 String validity = id.isValid() ? " is" : " is not";
                 Log.d(TAG, "Int and Dec: " + id.toString() + validity + " valid.");
-                if (!id.isValid()) {
-                    generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
+                if (tX != 0) {
+                    if (!id.isValid() || Math.abs(tX) == 1 || Math.abs(generatedEquation.getX()) == 1) {
+                        generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
+                    } else {
+                        generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_5);
+                    }
                 } else {
-                    generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_5);
+                    generatedEquation = generateEqualityEquation(Constants.LEVEL_5);
                 }
                 break;
             default:

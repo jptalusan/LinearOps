@@ -112,7 +112,7 @@ public class SeekBarLayout extends ConstraintLayout {
         if (val > 0) {
             for (int i = 1; i <= val; ++i) {
                 ImageView iv = new ImageView(getContext());
-                iv.setImageResource(resourceId);
+                iv.setImageResource(R.drawable.white_circle);
                 iv.setLayoutParams(generateParams(i));
                 iv.setPadding(2, 0, 2, 0);
                 icons.addView(iv);
@@ -120,7 +120,7 @@ public class SeekBarLayout extends ConstraintLayout {
         } else if (val < 0) {
             for (int i = -1; i >= val; --i) {
                 ImageView iv = new ImageView(getContext());
-                iv.setImageResource(resourceId);
+                iv.setImageResource(R.drawable.black_circle);
                 iv.setLayoutParams(generateParams(i));
                 iv.setPadding(2, 0, 2, 0);
                 icons.addView(iv);

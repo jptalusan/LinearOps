@@ -108,7 +108,12 @@ public class Utilities {
         } else {
             Log.d(TAG, "else");
             int attemptToSolve = absB / absUserAnswer;
-            int remainingChildren = right.getChildCount(); //TODO: will have to change depending on where 1 is
+            int remainingChildren;
+            if (right.getValuesInside() == Constants.ONE) {
+                remainingChildren = right.getChildCount();
+            } else {
+                remainingChildren = left.getChildCount();
+            }
             int currentChild = 0;
             int outerLoop;
             if (absB % absUserAnswer != 0) {
@@ -123,6 +128,7 @@ public class Utilities {
 
             for (int i = 0; i < outerLoop; ++i) {
                 if (remainingChildren > absUserAnswer) {
+                    Log.d(TAG, "else: if");
                     remainingChildren -= absUserAnswer;
                     for (int j = 0; j < absUserAnswer; ++j) {
 //                        Log.e(TAG, "move: \t" + currentChild);
@@ -140,6 +146,7 @@ public class Utilities {
                         right.animateXView(i, 500 * i, absUserAnswer);
                     }
                 } else {
+                    Log.d(TAG, "else: else");
                     for (int j = 0; j < remainingChildren; ++j) {
 //                        Log.e(TAG, "move: \t" + currentChild);
                         if (right.getValuesInside() == Constants.ONE) {
@@ -231,7 +238,12 @@ public class Utilities {
             }
         } else {
             int attemptToSolve = absB / absUserAnswer;
-            int remainingChildren = right.getChildCount(); //TODO: will have to change depending on where 1 is
+            int remainingChildren;
+            if (right.getValuesInside() == Constants.ONE) {
+                remainingChildren = right.getChildCount();
+            } else {
+                remainingChildren = left.getChildCount();
+            }
             int currentChild = 0;
             int outerLoop;
             if (absB % absUserAnswer != 0) {
@@ -343,6 +355,9 @@ public class Utilities {
         } else if (r.getValuesInside().equals(Constants.ONE)) {
             oneCount = Math.abs(r.getCountOfTypeContainedIn());
             xCount = Math.abs(l.getCountOfTypeContainedIn());
+        }
+        if (userAnswer == 0) { //Empty answer
+            return Constants.DEFAULT_RESET;
         }
         //Correct answer
         if (userAnswer == eq.getX()) {

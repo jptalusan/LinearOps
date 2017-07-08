@@ -204,6 +204,7 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
         Log.d(TAG, "startLinearOps: " + currLevel);
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
+//            eq = new Equation(1, 12, -3, 0, 4);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

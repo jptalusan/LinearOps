@@ -140,27 +140,31 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.increaseFractionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fractionCounter == 6) {
-                    fractionCounter = 1;
-                } else {
-                    fractionCounter++;
-                }
-                setupSeekbarValues();
+//                if (mCenterValue != 0) {
+                    if (fractionCounter == 6) {
+                        fractionCounter = 1;
+                    } else {
+                        fractionCounter++;
+                    }
+                    setupSeekbarValues();
 
-                Log.d(TAG, "fraction: " + fractionCounter);
+                    Log.d(TAG, "fraction: " + fractionCounter);
+//                }
             }
         });
 
         binding.decreaseFractionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fractionCounter == 1) {
-                    fractionCounter = 6;
-                } else {
-                    fractionCounter--;
-                }
-                setupSeekbarValues();
-                Log.d(TAG, "Fraction: " + fractionCounter);
+//                if (mCenterValue != 0) {
+                    if (fractionCounter == 1) {
+                        fractionCounter = 6;
+                    } else {
+                        fractionCounter--;
+                    }
+                    setupSeekbarValues();
+                    Log.d(TAG, "Fraction: " + fractionCounter);
+//                }
             }
         });
 
@@ -244,19 +248,20 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         int max = Constants.X_MAX;
         points = new ArrayList<>();
         pointsVal = new ArrayList<>();
-        if (mCenterValue != 0) {
-            Log.d(TAG, "mCenter: " + (mCenterValue));
-            min = (int)(mCenterValue) - Constants.SEEKBAR_CUSTOM_WIDTH;
-            max = (int)(mCenterValue) + Constants.SEEKBAR_CUSTOM_WIDTH;
+        int tempCenter = (int)mCenterValue;
+//        if (tempCenter != 0) {
+            Log.d(TAG, "mCenter: " + (tempCenter));
+            min = (int)(tempCenter) - Constants.SEEKBAR_CUSTOM_WIDTH;
+            max = (int)(tempCenter) + Constants.SEEKBAR_CUSTOM_WIDTH;
 
             for (double i = min; i <= max; ++i) {
-                double hatch = ((i - mCenterValue) * (1.0/fractionCounter));
-                double currNode = hatch + mCenterValue;
+                double hatch = ((i - tempCenter) * (1.0/fractionCounter));
+                double currNode = hatch + tempCenter;
 
-                if (i == mCenterValue) {
+                if (i == tempCenter) {
                     points.add(Integer.toString((int)i));
                 } else if (currNode == (int)currNode) {
-                    points.add(Integer.toString((int)(mCenterValue + hatch)));
+                    points.add(Integer.toString((int)(tempCenter + hatch)));
                 } else {
                     points.add("|");
                 }
@@ -267,15 +272,15 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
             Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
             binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
-        } else {
-            for (int i = min; i <= max; ++i) {
-                points.add(Integer.toString(i));
-                pointsVal.add((double)i);
-            }
-            binding.seekbar.setSeekBarMax((Constants.X_MAX * 2) + 1);
-            Log.d(TAG, "0 setupSeekbarValues: " + max + "/" + min + "/" + (max * 2 + 1));
-            binding.seekbar.setComboSeekBarProgress(max);
-        }
+//        } else {
+//            for (int i = min; i <= max; ++i) {
+//                points.add(Integer.toString(i));
+//                pointsVal.add((double)i);
+//            }
+//            binding.seekbar.setSeekBarMax((Constants.X_MAX * 2) + 1);
+//            Log.d(TAG, "0 setupSeekbarValues: " + max + "/" + min + "/" + (max * 2 + 1));
+//            binding.seekbar.setComboSeekBarProgress(max);
+//        }
         pointsVal.add(pointsVal.get(pointsVal.size() - 1)); //HACK
 
         //debug

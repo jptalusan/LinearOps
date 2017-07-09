@@ -2,6 +2,7 @@ package com.freelance.jptalusan.linearops.Views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -254,6 +255,45 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
+    public void pulseOneView(int child, int delay) {
+        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
+        final Drawable tempResource = temp.getBackground();
+        AnimationSet animSet = new AnimationSet(false);
+        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
+                android.R.anim.cycle_interpolator));
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(250);
+        alphaAnimation.setRepeatCount(1);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+//        alphaAnimation.setStartOffset(delay);
+
+        animSet.addAnimation(alphaAnimation);
+        animSet.setDuration(250);
+        animSet.setStartOffset(delay);
+//        animSet.setStartTime(delay);
+        temp.startAnimation(animSet);
+
+        animSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (listener != null) {
+                    listener.onAnimationStart(temp.getId());
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                temp.setBackground(tempResource);
+                temp.setText("");
+                listener.onAllAnimationsEnd();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+    }
+
     public void pulseXView(int child, int delay, final int dividend) {
         final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
         AnimationSet animSet = new AnimationSet(false);
@@ -400,8 +440,9 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.cycle_interpolator));
         AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation.setDuration(500);
-        alphaAnimation.setRepeatCount(2);
+        //alphaAnimation.setDuration(500);
+        alphaAnimation.setDuration(100);
+        alphaAnimation.setRepeatCount(1);
         alphaAnimation.setRepeatMode(Animation.REVERSE);
         alphaAnimation.setStartOffset(0);
 

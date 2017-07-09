@@ -195,7 +195,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     private void startLinearOps() {
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//        eq = new Equation(2, 7, -3, 0, 2);
+//        eq = new Equation(2, 1, -11, 0, 2);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

@@ -83,15 +83,20 @@ public class Utilities {
             } else {
                 remainingChildren = l.getChildCount();
             }
+            int numberOfCircles = remainingChildren;
             int currentChild = 0;
             int outerLoop;
+            int leftOverCircles = 0;
             if (absB % absUserAnswer != 0) {
                 outerLoop = attemptToSolve + 1;
             } else {
                 outerLoop = attemptToSolve;
             }
 
+            Log.d(TAG, "outerLoop: " + outerLoop);
             if (outerLoop > absAx) {
+                //Compute for left over circles
+                leftOverCircles = (outerLoop - absAx) * absUserAnswer;
                 outerLoop = absAx;
             }
 
@@ -100,6 +105,10 @@ public class Utilities {
             * into the boxes. So if outerLoop is less than absAx, then that is the number of boxes
             * left over without any circles inside.
             */
+
+            /*
+            * Outer loop will only reach valid circles, left over circles will be animated later.
+             */
             for (int i = 0; i < outerLoop; ++i) {
                 //Group the circles (remaining circles together)
                 if (remainingChildren > absUserAnswer) {
@@ -124,6 +133,13 @@ public class Utilities {
                 }
             }
 
+            Log.d(TAG, "LeftOverCircles: " + leftOverCircles);
+            Log.d(TAG, "r.count:" + numberOfCircles);
+            //Either there will be left over circles or empty boxes but not both
+            for (int i = numberOfCircles - leftOverCircles; i < numberOfCircles; ++i) {
+                Log.d(TAG, "leftover:" + i);
+                chooseWhichOneToPulse(i, 1000 * outerLoop * delayFactor);
+            }
             /*
             * Animate remaining number of boxes that did not receive any circles at all.
             * Use only if there are any remaining boxes (absAx > outerLoop).
@@ -143,7 +159,7 @@ public class Utilities {
 
             for (int i = startingChildForRemainingBoxes + 1; i <= boxCount; ++i) {
                 //Dividend is zero because the box should be empty after animation
-                chooseWhichXToPulse(i, 500 * i, 0);
+                chooseWhichXToPulse(i, 500 * i * delayFactor, 0);
             }
         }
 
@@ -179,6 +195,14 @@ public class Utilities {
             l.pulseXView(child, delay, dividend);
         } else {
             r.pulseXView(child, delay, dividend);
+        }
+    }
+
+    private void chooseWhichOneToPulse(int child, int delay) {
+        if (r.getValuesInside().equals(Constants.ONE)) {
+            r.pulseOneView(child, delay);
+        } else {
+            l.pulseOneView(child, delay);
         }
     }
 

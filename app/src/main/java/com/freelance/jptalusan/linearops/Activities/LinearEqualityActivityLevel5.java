@@ -51,11 +51,11 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         }
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).commit();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5);
 
         startLinearOps();
@@ -156,15 +156,13 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.decreaseFractionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (mCenterValue != 0) {
-                    if (fractionCounter == 1) {
-                        fractionCounter = 6;
-                    } else {
-                        fractionCounter--;
-                    }
-                    setupSeekbarValues();
-                    Log.d(TAG, "Fraction: " + fractionCounter);
-//                }
+                if (fractionCounter == 1) {
+                    fractionCounter = 6;
+                } else {
+                    fractionCounter--;
+                }
+                setupSeekbarValues();
+                Log.d(TAG, "Fraction: " + fractionCounter);
             }
         });
 
@@ -242,45 +240,34 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     //TODO: Bind correctly to buttons
     //TODO: get string value of node and convert to int so it will be new center value
     private void setupSeekbarValues() {
-        //mCenterValue = centerValue;
         Log.d(TAG, "setupseekbar center: " + mCenterValue + ", fraction: " + fractionCounter);
-        int min = Constants.X_MIN;
-        int max = Constants.X_MAX;
+        int min;
+        int max;
         points = new ArrayList<>();
         pointsVal = new ArrayList<>();
         int tempCenter = (int)mCenterValue;
-//        if (tempCenter != 0) {
-            Log.d(TAG, "mCenter: " + (tempCenter));
-            min = (int)(tempCenter) - Constants.SEEKBAR_CUSTOM_WIDTH;
-            max = (int)(tempCenter) + Constants.SEEKBAR_CUSTOM_WIDTH;
+        Log.d(TAG, "mCenter: " + (tempCenter));
+        min = tempCenter - Constants.SEEKBAR_CUSTOM_WIDTH;
+        max = tempCenter + Constants.SEEKBAR_CUSTOM_WIDTH;
 
-            for (double i = min; i <= max; ++i) {
-                double hatch = ((i - tempCenter) * (1.0/fractionCounter));
-                double currNode = hatch + tempCenter;
+        for (double i = min; i <= max; ++i) {
+            double hatch = ((i - tempCenter) * (1.0/fractionCounter));
+            double currNode = hatch + tempCenter;
 
-                if (i == tempCenter) {
-                    points.add(Integer.toString((int)i));
-                } else if (currNode == (int)currNode) {
-                    points.add(Integer.toString((int)(tempCenter + hatch)));
-                } else {
-                    points.add("|");
-                }
-                pointsVal.add((double) Math.round(currNode * 100000) / 100000);
+            if (i == tempCenter) {
+                points.add(Integer.toString((int)i));
+            } else if (currNode == (int)currNode) {
+                points.add(Integer.toString((int)(tempCenter + hatch)));
+            } else {
+                points.add("|");
             }
+            pointsVal.add((double) Math.round(currNode * 100000) / 100000);
+        }
 
-            //IF custom wwidth is small, remove +1
-            binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
-            Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
-            binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
-//        } else {
-//            for (int i = min; i <= max; ++i) {
-//                points.add(Integer.toString(i));
-//                pointsVal.add((double)i);
-//            }
-//            binding.seekbar.setSeekBarMax((Constants.X_MAX * 2) + 1);
-//            Log.d(TAG, "0 setupSeekbarValues: " + max + "/" + min + "/" + (max * 2 + 1));
-//            binding.seekbar.setComboSeekBarProgress(max);
-//        }
+        //IF custom wwidth is small, remove +1
+        binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
+        Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
+        binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
         pointsVal.add(pointsVal.get(pointsVal.size() - 1)); //HACK
 
         //debug
@@ -294,9 +281,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.seekbar.getViewDimensions();
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.invalidate();
-
-
     }
+
     private void startLinearOps() {
         Log.d(TAG, "startLinearOps: " + currLevel);
         do {
@@ -327,14 +313,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     }
 
     private boolean areLayoutsReady() {
-        if (binding.leftSideGrid.isLayoutUniform()) {
-            if (binding.rightSideGrid.isLayoutUniform()) {
-                String leftSideType = binding.leftSideGrid.getTypeContainedIn();
-                String rightSideType = binding.rightSideGrid.getTypeContainedIn();
-                return true;
-            }
-        }
-        return false;
+        return binding.rightSideGrid.isLayoutUniform() && binding.leftSideGrid.isLayoutUniform();
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {

@@ -269,11 +269,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         scaleAnimation.setRepeatMode(Animation.REVERSE);
         scaleAnimation.setStartOffset(delay);
 
-        if (this.side == Constants.LEFT) {
-
-        } else {
-
-        }
 
         //TODO: add color change
         animSet.addAnimation(scaleAnimation);

@@ -82,20 +82,20 @@ public class CustomDrawable extends Drawable {
         selectLinePaint.setStrokeWidth(toPix(3));
 
         redCircleLinePaint = new Paint();
-        redCircleLinePaint.setColor(Color.parseColor("#C62828"));
+        redCircleLinePaint.setColor(Color.parseColor("#FFCDD2"));
         redCircleLinePaint.setStrokeWidth(toPix(1));
 
         greenCircleLinePaint = new Paint();
-        greenCircleLinePaint.setColor(Color.parseColor("#00695C"));
+        greenCircleLinePaint.setColor(Color.parseColor("#E0F2F1"));
         greenCircleLinePaint.setStrokeWidth(toPix(1));
 
         redPaint = new Paint();
-        redPaint.setColor(Color.parseColor("#FFCDD2"));
+        redPaint.setColor(Color.parseColor("#C62828"));
         redPaint.setStrokeWidth(toPix(10));
         redPaint.setAlpha(255);
 
         greenPaint = new Paint();
-        greenPaint.setColor(Color.parseColor("#E0F2F1"));
+        greenPaint.setColor(Color.parseColor("#00695C"));
         greenPaint.setStrokeWidth(toPix(10));
         greenPaint.setAlpha(255);
 

@@ -42,11 +42,11 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         }
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         startLinearOps();
@@ -59,11 +59,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
-//        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
-                //Should only be called when layout is in the for ax = b only
+            //Should only be called when layout is in the for ax = b only
                 userAnswer = val;
             }
         });
@@ -228,7 +227,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
     private boolean isAnswerCorrect(int userAnswer) {
         isDone = true;
-        if (Utilities.animateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
+        Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
+        if (u.animateObjects(eq, userAnswer, true)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
             return true;
         } else {

@@ -46,11 +46,11 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
 
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         }
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_4).commit();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_4).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_4);
 
         startLinearOps();
@@ -337,24 +337,13 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
     }
 
     private boolean isAnswerCorrect(int userAnswer) {
-        isDone = true;
-        //TODO: If needed really without any animations, override the animations in LinearOpsGridLayout to 0 delay
-        if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) >= Constants.LEVEL_4) {
-            if (Utilities.dontAnimateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
-                Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-                return true;
-            } else {
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+        Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
+        if (u.animateObjects(eq, userAnswer, false)) {
+            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
+            return true;
         } else {
-            if (Utilities.animateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
-                Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-                return true;
-            } else {
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 }

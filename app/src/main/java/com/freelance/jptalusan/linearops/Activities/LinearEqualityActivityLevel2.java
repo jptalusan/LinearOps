@@ -40,11 +40,11 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
         if (prefs.getBoolean(Constants.FIRST_TIME, true)) {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
-            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).commit();
+            prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         }
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).commit();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         startLinearOps();
@@ -313,8 +313,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     }
 
     private boolean isAnswerCorrect(int userAnswer) {
-        //TODO: when answer is incorrect, drawables should be inverted too.
-        if (Utilities.animateObjects(eq, binding.leftSideGrid, binding.rightSideGrid, userAnswer, this)) {
+        Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
+        if (u.animateObjects(eq, userAnswer, true)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_LONG).show();
             return true;
         } else {

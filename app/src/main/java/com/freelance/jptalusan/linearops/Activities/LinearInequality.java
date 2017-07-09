@@ -94,15 +94,15 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-//                    int temp = Constants.DEFAULT_RESET * 3;
-//                    Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-//                    Handler h = new Handler();
-//                    h.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            startLinearOps();
-//                        }
-//                    }, temp);
+                    int temp = Constants.DEFAULT_RESET;
+                    Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startLinearOps();
+                        }
+                    }, temp);
                 }
             }
         });
@@ -210,7 +210,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.comboSeekBar.setLinearInequalityDrawable();
         binding.seekbar.comboSeekBar.invalidate();
 
-        binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
+        binding.seekbar.setResourceId(R.drawable.vertical_line);
         binding.seekbar.drawResourceOn(userAnswer);
 
         int answer = userAnswer + Constants.X_MAX;

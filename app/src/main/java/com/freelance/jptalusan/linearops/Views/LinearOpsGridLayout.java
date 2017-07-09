@@ -440,8 +440,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.cycle_interpolator));
         AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        //alphaAnimation.setDuration(500);
-        alphaAnimation.setDuration(100);
+        alphaAnimation.setDuration(500);
+//        alphaAnimation.setDuration(100);
         alphaAnimation.setRepeatCount(1);
         alphaAnimation.setRepeatMode(Animation.REVERSE);
         alphaAnimation.setStartOffset(0);

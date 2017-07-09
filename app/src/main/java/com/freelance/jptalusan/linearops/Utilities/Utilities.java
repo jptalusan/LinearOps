@@ -277,6 +277,6 @@ public class Utilities {
         }
         //Should now take into account the empty boxes as well
         Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
-        return xCount * Constants.RESET_FACTOR;
+        return xCount * Constants.RESET_FACTOR + 2000; //have to add 2000 for the left over balls
     }
 }

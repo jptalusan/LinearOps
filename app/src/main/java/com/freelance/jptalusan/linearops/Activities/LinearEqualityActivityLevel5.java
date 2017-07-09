@@ -70,6 +70,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             public void onSeekBarValueChanged(int val) {
                 Log.d(TAG, "Val: " + val);
                 Log.d(TAG, "Size: " + pointsVal.size());
+                Log.d(TAG, "Size: " + points.size());
                 if (val + Constants.SEEKBAR_CUSTOM_WIDTH > pointsVal.size()) {
                     Log.d(TAG, "Point if: " + pointsVal.get(pointsVal.size() - 1));
                     mCenterValue = pointsVal.get(pointsVal.size() - 1);
@@ -277,6 +278,13 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             temp += "[" + d + "]";
         }
         Log.d(TAG, "pointsValArr: " + temp);
+
+        String temp2 = "";
+        for (double d:
+                pointsVal) {
+            temp2 += "[" + d + "]";
+        }
+        Log.d(TAG, "pointsArr: " + temp2);
 
         binding.seekbar.getViewDimensions();
         binding.seekbar.setComboSeekBarAdapter(points);

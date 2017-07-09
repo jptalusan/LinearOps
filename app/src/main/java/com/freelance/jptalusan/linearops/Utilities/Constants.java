@@ -2,10 +2,6 @@ package com.freelance.jptalusan.linearops.Utilities;
 
 import com.freelance.jptalusan.linearops.R;
 
-/**
- * Created by JPTalusan on 01/05/2017.
- */
-
 public class Constants {
     public static final String POSITIVE_X = "Positive_X";
     public static final String NEGATIVE_X = "Negative_X";
@@ -25,7 +21,6 @@ public class Constants {
     public static int ONE_MAX = 9;
     public static int ONE_MIN = -9;
 
-    //TODO: use enum instead?
     public static final int LEVEL_1 = 1;
     public static final int LEVEL_2 = 2;
     public static final int LEVEL_3 = 3;

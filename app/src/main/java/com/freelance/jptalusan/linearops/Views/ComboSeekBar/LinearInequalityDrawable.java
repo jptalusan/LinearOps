@@ -119,7 +119,6 @@ public class LinearInequalityDrawable extends Drawable {
         return true;
     }
 
-    //TODO: do some math here to change colors of seekbar line
     //Use the text of dots. in after first if statement, can see values of dots and can also count dots, half of max is mid
     @Override
     public final void draw(Canvas canvas) {

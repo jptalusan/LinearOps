@@ -23,11 +23,6 @@ import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevel
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by JPTalusan on 21/05/2017.
- */
-
-//TODO: At start pointsval index is wrong?
 public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     private static String TAG = "Level5Activity";
     protected SharedPreferences prefs;
@@ -36,8 +31,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     private Equation eq;
     private boolean canUseButtons = true;
     private double userAnswer = 0;
-    private int numberOfAnimatedX = 0;
-    private boolean isDone = false;
     private double fractionCounter = 1;
     private double mCenterValue = 0;
     private List<String> points = null;
@@ -180,7 +173,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();
@@ -215,7 +207,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();
@@ -238,8 +229,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         });
     }
 
-    //TODO: Bind correctly to buttons
-    //TODO: get string value of node and convert to int so it will be new center value
     private void setupSeekbarValues() {
         Log.d(TAG, "setupseekbar center: " + mCenterValue + ", fraction: " + fractionCounter);
         int min;
@@ -299,8 +288,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-        numberOfAnimatedX = 0;
-        isDone = false;
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
@@ -425,15 +412,12 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.rightSideGrid.cancelOutOppositeViewTypes();
     }
 
-    private boolean isAnswerCorrect(double userAnswer) {
-        isDone = true;
+    private void isAnswerCorrect(double userAnswer) {
         Log.d(TAG, "isAnswerCorrect x==ans:" + eq.getX() + "==" + userAnswer);
         if (eq.getX() == userAnswer) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-            return true;
         } else {
             Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-            return false;
         }
     }
 }

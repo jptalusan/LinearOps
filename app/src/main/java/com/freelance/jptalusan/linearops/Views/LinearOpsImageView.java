@@ -13,11 +13,6 @@ import com.freelance.jptalusan.linearops.Utilities.Constants;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by JPTalusan on 07/05/2017.
- */
-
-//TODO: Add animations here?
 public class LinearOpsImageView extends AppCompatTextView {
     private String type = "";
     protected SharedPreferences prefs;

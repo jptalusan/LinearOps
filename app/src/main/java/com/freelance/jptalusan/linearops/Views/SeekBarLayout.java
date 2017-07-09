@@ -27,6 +27,7 @@ public class SeekBarLayout extends ConstraintLayout {
     private Dimensions dimensions = new Dimensions();
     private Dimensions iconDimension = new Dimensions();
     private double center = 0;
+    private int mSignedMax = 0;
 
     public SeekBarLayout(@NonNull Context context) {
         super(context);
@@ -50,8 +51,8 @@ public class SeekBarLayout extends ConstraintLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.seekbar_with_icons_and_text, this);
 
-        icons = (RelativeLayout)findViewById(R.id.icons);
-        comboSeekBar = (ComboSeekBar) findViewById(R.id.multislider);
+        icons = findViewById(R.id.icons);
+        comboSeekBar = findViewById(R.id.multislider);
 
         getViewDimensions();
         this.listener = null;
@@ -64,14 +65,16 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-//                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
-
+                Log.e(TAG, "---");
+                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
+                Log.d(TAG, "max: " + comboSeekBar.getMax());
+                Log.d(TAG, "val: " + (i - (comboSeekBar.getMax() / 2)));
 //                if (i == comboSeekBar.getMax()) {
 //                    i = comboSeekBar.getMax() - 1;
 //                }
-                addIcons(i - (comboSeekBar.getMax()) / 2);
+                addIcons(i - (comboSeekBar.getMax() / 2));
                 if (listener != null)
-                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax()) / 2);
+                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax() / 2));
             }
 
             @Override
@@ -184,6 +187,10 @@ public class SeekBarLayout extends ConstraintLayout {
 
     public void reset() {
         comboSeekBar.setProgress((comboSeekBar.getMax() - 1) / 2);
+    }
+
+    public void setComboSeekBarSignedMax(int signedMax) {
+        mSignedMax = signedMax;
     }
 
 }

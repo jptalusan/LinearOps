@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 import java.util.List;
@@ -107,13 +108,13 @@ public class CustomDrawable extends Drawable {
         selectedCirclePaint.setStrokeWidth(20);
 
         Rect textBounds = new Rect();
-        textSelected.setTextSize((int) (mTextSize * 2));
+        textSelected.setTextSize(mTextSize * 2);
         textSelected.getTextBounds("M", 0, 1, textBounds);
 
-        greenText.setTextSize((int) (mTextSize * 2));
+        greenText.setTextSize(mTextSize * 2);
         greenText.getTextBounds("M", 0, 1, textBounds);
 
-        redText.setTextSize((int) (mTextSize * 2));
+        redText.setTextSize(mTextSize * 2);
         redText.getTextBounds("M", 0, 1, textBounds);
 
         textUnselected.setTextSize(mTextSize);
@@ -147,10 +148,9 @@ public class CustomDrawable extends Drawable {
         return true;
     }
 
-    //TODO: do some math here to change colors of seekbar line
     //Use the text of dots. in after first if statement, can see values of dots and can also count dots, half of max is mid
     @Override
-    public final void draw(Canvas canvas) {
+    public final void draw(@NonNull Canvas canvas) {
         int middleY = this.getIntrinsicHeight() / 2;
         if (mDots.size() == 0) {
             canvas.drawLine(0, middleY, getBounds().right, middleY, redPaint);
@@ -160,13 +160,16 @@ public class CustomDrawable extends Drawable {
         canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size / 2).mX, middleY, redPaint);
         canvas.drawLine(mDots.get(size / 2).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
 
-        for (int i = 0; i <= size / 2; ++i) {
-            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, false);
+        for (int i = 0; i < size / 2; ++i) {
+            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Negative");
             canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, redCircleLinePaint);
         }
 
-        for (int i = size / 2; i <= size; ++i) {
-            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, true);
+        drawText(canvas, mDots.get(size / 2), mDots.get(size / 2).mX, middleY, "Zero");
+        canvas.drawCircle(mDots.get(size / 2).mX, middleY, mDotRadius, circleLinePaint);
+
+        for (int i = (size / 2) + 1; i <= size; ++i) {
+            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Positive");
             canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, greenCircleLinePaint);
         }
         for (ComboSeekBar.Dot dot : mDots) {
@@ -182,7 +185,7 @@ public class CustomDrawable extends Drawable {
      * @param x      x cor.
      * @param y      y cor.
      */
-    private void drawText(Canvas canvas, ComboSeekBar.Dot dot, float x, float y, boolean b) {
+    private void drawText(Canvas canvas, ComboSeekBar.Dot dot, float x, float y, String sign) {
         final Rect textBounds = new Rect();
         textSelected.getTextBounds(dot.text, 0, dot.text.length(), textBounds);
         float xres;
@@ -196,11 +199,20 @@ public class CustomDrawable extends Drawable {
 
         float yres = y - mThumbRadius - mTextBottomPadding;
 
-        if (b) { //Positive
-            canvas.drawText(dot.text, xres, yres, dot.isSelected ? textSelected : greenText);
-        } else {
-            canvas.drawText(dot.text, xres, yres, dot.isSelected ? textSelected : redText);
+        Paint textPaint;
+        switch (sign) {
+            case "Positive":
+                textPaint = dot.isSelected ? textSelected : greenText;
+                break;
+            case "Negative":
+                textPaint = dot.isSelected ? textSelected : redText;
+                break;
+            default:
+                textPaint = dot.isSelected ? textSelected : textUnselected;
+                break;
         }
+        canvas.drawText(dot.text, xres, yres, textPaint);
+
     }
 
 

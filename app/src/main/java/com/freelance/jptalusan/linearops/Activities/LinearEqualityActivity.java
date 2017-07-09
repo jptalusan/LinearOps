@@ -56,6 +56,14 @@ public class LinearEqualityActivity extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
+        //debug
+        String temp = "";
+        for (String s:
+                points) {
+            temp += "[" + s + "]";
+        }
+        Log.d(TAG, "points: " + temp);
+
         binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
@@ -63,6 +71,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
             @Override
             public void onSeekBarValueChanged(int val) {
             //Should only be called when layout is in the for ax = b only
+                Log.d(TAG, "inLeveL: " + val);
                 userAnswer = val;
             }
         });
@@ -226,15 +235,13 @@ public class LinearEqualityActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isAnswerCorrect(int userAnswer) {
+    private void isAnswerCorrect(int userAnswer) {
         isDone = true;
         Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
         if (u.animateObjects(eq, userAnswer, true)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-            return true;
         } else {
             Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-            return false;
         }
     }
 }

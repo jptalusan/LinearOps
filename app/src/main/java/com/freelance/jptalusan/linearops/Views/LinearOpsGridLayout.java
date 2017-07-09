@@ -29,6 +29,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     private int[] drawables;
     public String side = "";
     private int objectCount = 0;
+    private String lastAddedViewType = "";
 
     public LinearOpsGridLayout(Context context) {
         super(context);
@@ -53,11 +54,33 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 //        Log.d(TAG, "LinearOpsGridLayout:addScaledImage");
 //        Log.d(TAG, "child/max" + getChildCount() + "/" + (super.rows * super.cols));
         if (getChildCount() < super.rows * super.cols) {
+            /*
+            Loop through all children first and see if any is set to INVISIBLE, and use them first
+            before creating new one and adding it to the view.
+
+            lastAddedViewType is updated everytime a view is "added" so that we can cancel out
+            the opposite views correctly.
+             */
+            for (int i = 0; i < getChildCount(); ++i) {
+                LinearOpsImageView tempIv = (LinearOpsImageView) getChildAt(i);
+                if (tempIv.getVisibility() == INVISIBLE) {
+                    tempIv.setBackgroundResource(imageResource);
+                    tempIv.setValueText(Utilities.getOneOrX(imageResource));
+                    tempIv.setType(Utilities.getTypeFromResource(imageResource));
+                    lastAddedViewType = Utilities.getTypeFromResource(imageResource);
+                    setImageViewType(imageResource);
+                    tempIv.setVisibility(VISIBLE);
+                    return true;
+                }
+            }
+
+            //If nothing is found then create a new one from scratch.
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());
             linearOpsImageView.setLayoutParams(super.generateParams());
             linearOpsImageView.setBackgroundResource(imageResource);
             linearOpsImageView.setValueText(Utilities.getOneOrX(imageResource));
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
+            lastAddedViewType = Utilities.getTypeFromResource(imageResource);
             linearOpsImageView.setPadding(1, 1, 1, 1);
 //            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
             addView(linearOpsImageView);
@@ -76,22 +99,20 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    private String setImageViewType(int imageResource) {
+    private void setImageViewType(int imageResource) {
         switch (imageResource) {
             case R.drawable.white_box:
                 positiveXCount++;
-                return Constants.POSITIVE_X;
+                break;
             case R.drawable.black_box:
                 negativeXCount++;
-                return Constants.NEGATIVE_X;
+                break;
             case R.drawable.white_circle:
                 positive1Count++;
-                return Constants.POSITIVE_1;
+                break;
             case R.drawable.black_circle:
                 negative1Count++;
-                return Constants.NEGATIVE_1;
-            default:
-                return "";
+                break;
         }
     }
 
@@ -124,12 +145,28 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     public void cancelOutOppositeViewTypes() {
         if (getChildCount() != 0) {
-            LinearOpsImageView lastAddedViewType = (LinearOpsImageView)getChildAt(getChildCount() - 1);
-            String opposite = Utilities.getOppositeType(lastAddedViewType.getType());
+            int indexOfLastAddedType = 0;
+            int indexOfOppositeOfLastAdedType = 0;
+//            int lastAddedChildIndex = getChildCount() - 1;
+//            LinearOpsImageView lastAddedViewType = (LinearOpsImageView)getChildAt(lastAddedChildIndex);
+//            String opposite = Utilities.getOppositeType(lastAddedViewType.getType());
+            //Loop through all children in reverse and see which has the same type as the last added type and is visible
+            String opposite = Utilities.getOppositeType(lastAddedViewType);
+            for (int i = getChildCount() - 1; i >= 0; --i) {
+                LinearOpsImageView tempIv = (LinearOpsImageView)getChildAt(i);
+                if (tempIv.getType().equals(lastAddedViewType)
+                        && tempIv.getVisibility() == VISIBLE) {
+                    indexOfLastAddedType = i;
+                    break;
+                }
+            }
+            //Loop through all children and check which are visible and only then cancel out.
             for (int i = 0; i < getChildCount(); ++i) {
-                if (((LinearOpsImageView)getChildAt(i)).getType().equals(opposite)) {
-
-                    cancelOutViews(getChildCount() - 1, i);
+                LinearOpsImageView possibleOppositeChild = (LinearOpsImageView)getChildAt(i);
+                if (possibleOppositeChild.getType().equals(opposite)
+                        && possibleOppositeChild.getVisibility() == VISIBLE) {
+                    indexOfOppositeOfLastAdedType = i;
+                    cancelOutViews(indexOfLastAddedType, indexOfOppositeOfLastAdedType);
                     return;
                 }
             }
@@ -195,7 +232,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     }
 
     public boolean isLayoutUniform() {
-        Log.d(TAG, "isLayoutUniform");
+//        Log.d(TAG, "isLayoutUniform");
         if (positiveXCount + negativeXCount + positive1Count == 0) {
             return true;
         }
@@ -344,15 +381,13 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         AnimationSet animSet = new AnimationSet(false);
         animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
                 android.R.anim.cycle_interpolator));
-        //TODO: fix for right
+
         ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
         scaleAnimation.setDuration(250);
         scaleAnimation.setRepeatCount(1);
         scaleAnimation.setRepeatMode(Animation.REVERSE);
         scaleAnimation.setStartOffset(delay);
 
-
-        //TODO: add color change
         animSet.addAnimation(scaleAnimation);
         temp.startAnimation(animSet);
 
@@ -461,15 +496,15 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 removeImageViewType(temp.getType());
-                temp.setVisibility(View.GONE);
+                temp.setVisibility(View.INVISIBLE);
 
                 removeImageViewType(temp2.getType());
-                temp2.setVisibility(View.GONE);
+                temp2.setVisibility(View.INVISIBLE);
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        redrawLayout();
+//                        redrawLayout();
                     }
                 });
 
@@ -521,7 +556,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    //TODO: How to use when in another file
     public interface LinearOpsGridLayoutListener {
         // These methods are the different events and
         // need to pass relevant arguments related to the event triggered

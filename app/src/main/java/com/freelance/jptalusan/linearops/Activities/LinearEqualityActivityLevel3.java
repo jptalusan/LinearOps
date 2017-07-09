@@ -23,10 +23,6 @@ import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevel
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by JPTalusan on 21/05/2017.
- */
-
 public class LinearEqualityActivityLevel3 extends AppCompatActivity {
     private static String TAG = "Level3Activity";
     protected SharedPreferences prefs;
@@ -143,7 +139,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();
@@ -176,7 +171,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();
@@ -323,15 +317,13 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
         binding.rightSideGrid.cancelOutOppositeViewTypes();
     }
 
-    private boolean isAnswerCorrect(int userAnswer) {
+    private void isAnswerCorrect(int userAnswer) {
         isDone = true;
         Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
         if (u.animateObjects(eq, userAnswer, true)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-            return true;
         } else {
             Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-            return false;
         }
     }
 }

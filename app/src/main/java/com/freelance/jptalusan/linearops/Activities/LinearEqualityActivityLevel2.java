@@ -138,7 +138,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.rightSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();
@@ -171,7 +170,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
             @Override
             public void onCancelOutEnd() {
-                Log.d(TAG, binding.leftSideGrid.toString());
                 if (areLayoutsReady()) {
                     Log.d(TAG, "can use seekbar.");
                     binding.seekbar.getViewDimensions();

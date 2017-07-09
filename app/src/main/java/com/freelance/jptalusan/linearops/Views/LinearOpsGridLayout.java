@@ -573,4 +573,15 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 //        Log.d(TAG, "onLinearOpsGridLayoutListener");
         this.listener = listener;
     }
+
+    public int getVisibleChildCount() {
+        int total = 0;
+        for (int i = 0; i < getChildCount(); ++i) {
+            LinearOpsImageView loIV = (LinearOpsImageView) getChildAt(i);
+            if (loIV.getVisibility() == VISIBLE) {
+                total++;
+            }
+        }
+        return total;
+    }
 }

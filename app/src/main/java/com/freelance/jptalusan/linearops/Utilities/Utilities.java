@@ -49,15 +49,15 @@ public class Utilities {
         boolean isCorrectSign = (userAnswer * -1) != correctAnswer;
         if (l.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
                 l.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
-            absAx = Math.abs(l.getChildCount());
-            absB  = Math.abs(r.getChildCount());
+            absAx = Math.abs(l.getVisibleChildCount());
+            absB  = Math.abs(r.getVisibleChildCount());
             l.setOneViewDrawables(l, r, isCorrectSign);
-
         } else {
-            absAx = Math.abs(r.getChildCount());
-            absB  = Math.abs(l.getChildCount());
+            absAx = Math.abs(r.getVisibleChildCount());
+            absB  = Math.abs(l.getVisibleChildCount());
             r.setOneViewDrawables(r, l, isCorrectSign);
         }
+        Log.d(TAG, "absAx: " + absAx + ", " + "absB: " + absB);
 
         if (absUserAnswer > absB) {
             return false;
@@ -79,9 +79,9 @@ public class Utilities {
             int attemptToSolve = absB / absUserAnswer;
             int remainingChildren;
             if (r.getValuesInside().equals(Constants.ONE)) {
-                remainingChildren = r.getChildCount();
+                remainingChildren = r.getVisibleChildCount();
             } else {
-                remainingChildren = l.getChildCount();
+                remainingChildren = l.getVisibleChildCount();
             }
             int numberOfCircles = remainingChildren;
             int currentChild = 0;
@@ -93,6 +93,7 @@ public class Utilities {
                 outerLoop = attemptToSolve;
             }
 
+            Log.d(TAG, "RemainingChildren: " + remainingChildren);
             Log.d(TAG, "outerLoop: " + outerLoop);
             if (outerLoop > absAx) {
                 //Compute for left over circles
@@ -150,10 +151,10 @@ public class Utilities {
             int boxCount;
             //Check which layout contains the boxes (X's)
             if (r.getValuesInside().equals(Constants.X)) {
-                boxCount = r.getChildCount();
+                boxCount = r.getVisibleChildCount();
                 startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
             } else {
-                boxCount = l.getChildCount() - 1;
+                boxCount = l.getVisibleChildCount() - 1;
                 startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
             }
 

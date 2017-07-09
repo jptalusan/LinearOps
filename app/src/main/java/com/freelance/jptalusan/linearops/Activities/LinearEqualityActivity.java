@@ -81,6 +81,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.leftSideGrid.redrawLayout();
+                binding.rightSideGrid.redrawLayout();
                 setViewAbility(false);
                 isAnswerCorrect(userAnswer);
                 int temp = Utilities.determineResetPeriodInMillis(

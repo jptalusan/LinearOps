@@ -39,6 +39,9 @@ public class Utilities {
         return out;
     }
 
+    //TODO: Must refactor how i check for the children, since they are not redrawn and are not in the
+    //places i expect them to be. right now it animates the invisible objects instead causing everything
+    //to look weird.
     public boolean animateObjects(Equation eq, int userAnswer, boolean willAnimate) {
         int absAx;
         int absB;
@@ -110,6 +113,7 @@ public class Utilities {
             /*
             * Outer loop will only reach valid circles, left over circles will be animated later.
              */
+
             for (int i = 0; i < outerLoop; ++i) {
                 //Group the circles (remaining circles together)
                 if (remainingChildren > absUserAnswer) {

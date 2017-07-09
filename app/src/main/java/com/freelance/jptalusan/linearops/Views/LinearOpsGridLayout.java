@@ -520,7 +520,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         });
     }
 
-    private void redrawLayout() {
+    public void redrawLayout() {
         removeAllViews();
         for (int i = 0; i < positiveXCount; ++i) {
             LinearOpsImageView linearOpsImageView = new LinearOpsImageView(getContext());

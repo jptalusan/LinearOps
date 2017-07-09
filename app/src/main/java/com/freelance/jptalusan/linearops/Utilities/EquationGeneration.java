@@ -49,7 +49,7 @@ public class EquationGeneration {
                 int temp = cx - b;
                 int absTemp = Math.abs(temp);
                 if (ax != 0) {
-                    double result = Math.abs(temp1 / ax);
+                    double result = Math.abs(temp / ax);
                     if (temp % ax != 0 || absTemp > Constants.X_MAX || Math.abs(ax) > absTemp || Math.abs(ax) == 1 || result == 1) {
                         generatedEquation = generateEqualityEquation(Constants.LEVEL_2);
                     } else {

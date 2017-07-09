@@ -95,14 +95,26 @@ public class Utilities {
                 outerLoop = absAx;
             }
 
+            /*
+            * outerLoop = number of times the circles will be grouped and animated
+            * into the boxes. So if outerLoop is less than absAx, then that is the number of boxes
+            * left over without any circles inside.
+            */
             for (int i = 0; i < outerLoop; ++i) {
+                //Group the circles (remaining circles together)
                 if (remainingChildren > absUserAnswer) {
                     remainingChildren -= absUserAnswer;
+                    //Delay is based on outer loop so the circles will be animated together.
                     for (int j = 0; j < absUserAnswer; ++j) {
                         chooseWhichOneToAnimate(currentChild, 1000 * i * delayFactor);
                         currentChild++;
                     }
+                    //Animate along with the current circles being animated
                     chooseWhichXToAnimate(i, 500 * i * delayFactor, absUserAnswer);
+                /*
+                * Animate the remaining circles (this means the user answer is wrong and not all
+                * boxes have the same number of circles
+                 */
                 } else {
                     for (int j = 0; j < remainingChildren; ++j) {
                         chooseWhichOneToAnimate(currentChild, 1000 * i * delayFactor);
@@ -110,6 +122,28 @@ public class Utilities {
                     }
                     chooseWhichXToAnimate(i, 500 * i * delayFactor, remainingChildren);
                 }
+            }
+
+            /*
+            * Animate remaining number of boxes that did not receive any circles at all.
+            * Use only if there are any remaining boxes (absAx > outerLoop).
+             */
+            int remainingEmptyBoxes = absAx > outerLoop ? absAx - outerLoop : 0;
+            Log.d(TAG, "Remaining empty boxes:" + remainingEmptyBoxes);
+            int startingChildForRemainingBoxes;
+            int boxCount;
+            //Check which layout contains the boxes (X's)
+            if (r.getValuesInside().equals(Constants.X)) {
+                boxCount = r.getChildCount();
+                startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
+            } else {
+                boxCount = l.getChildCount() - 1;
+                startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
+            }
+
+            for (int i = startingChildForRemainingBoxes + 1; i <= boxCount; ++i) {
+                //Dividend is zero because the box should be empty after animation
+                chooseWhichXToPulse(i, 500 * i, 0);
             }
         }
 
@@ -123,6 +157,7 @@ public class Utilities {
         }
     }
 
+    //Animate means to move one object from one layout to another layout
     private void chooseWhichOneToAnimate(int child, int delay) {
         if (r.getValuesInside().equals(Constants.ONE)) {
             r.animateOneView(child, delay);
@@ -136,6 +171,14 @@ public class Utilities {
             l.animateXView(child, delay, dividend);
         } else {
             r.animateXView(child, delay, dividend);
+        }
+    }
+
+    private void chooseWhichXToPulse(int child, int delay, int dividend) {
+        if (r.getValuesInside().equals(Constants.ONE)) {
+            l.pulseXView(child, delay, dividend);
+        } else {
+            r.pulseXView(child, delay, dividend);
         }
     }
 
@@ -208,15 +251,8 @@ public class Utilities {
             Log.d(TAG, "Default reset: Constants.DEFAULT_RESET ms");
             return Constants.DEFAULT_RESET;
         }
-        quotient = oneCount / mUserAnswer;
-        remainder = (oneCount % mUserAnswer) > 0 ? 1 : 0;
-        //Should not exceed number of X's
-        if (quotient + remainder >= xCount) {
-            Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
-            return xCount * Constants.RESET_FACTOR;
-        } else { //All other answers
-            Log.d(TAG, "Computed reset: " + ((quotient + remainder) * Constants.RESET_FACTOR) + " ms");
-            return (quotient + remainder) * Constants.RESET_FACTOR;
-        }
+        //Should now take into account the empty boxes as well
+        Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
+        return xCount * Constants.RESET_FACTOR;
     }
 }

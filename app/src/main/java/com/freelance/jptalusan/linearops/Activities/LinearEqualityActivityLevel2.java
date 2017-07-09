@@ -119,7 +119,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        startLinearOps();
+                        startLinearOps();
                     }
                 }, temp);
             }

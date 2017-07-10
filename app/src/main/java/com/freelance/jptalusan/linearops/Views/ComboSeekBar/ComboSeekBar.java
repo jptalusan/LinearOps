@@ -96,6 +96,10 @@ public class ComboSeekBar extends AppCompatSeekBar {
         invalidate();
     }
 
+    public List<Dot> getDots() {
+        return mDots;
+    }
+
     public void setAdapter(List<String> dots) {
         mDots.clear();
         int index = 0;

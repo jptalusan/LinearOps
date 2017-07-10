@@ -19,7 +19,7 @@ import java.util.List;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
 public class SeekBarLayout extends ConstraintLayout {
-    private RelativeLayout icons;
+    public RelativeLayout icons;
     public ComboSeekBar comboSeekBar;
     private static String TAG = "SeekBarLayout";
     private int resourceId = 0;
@@ -193,4 +193,7 @@ public class SeekBarLayout extends ConstraintLayout {
         mSignedMax = signedMax;
     }
 
+    public List<ComboSeekBar.Dot> getSeekBarDots() {
+        return comboSeekBar.getDots();
+    }
 }

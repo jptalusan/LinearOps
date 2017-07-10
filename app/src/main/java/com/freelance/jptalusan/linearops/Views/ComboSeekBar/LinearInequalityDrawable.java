@@ -3,6 +3,7 @@ package com.freelance.jptalusan.linearops.Views.ComboSeekBar;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -39,6 +40,7 @@ public class LinearInequalityDrawable extends Drawable {
     private float mTextMargin;
     private int mTextHeight;
     private float mTextBottomPadding;
+    private Paint rectPaint;
 
     public LinearInequalityDrawable(Drawable base, ComboSeekBar slider,
                                     float dotRadius, float thumbRadius, List<ComboSeekBar.Dot> dots,
@@ -86,8 +88,14 @@ public class LinearInequalityDrawable extends Drawable {
         selectedCirclePaint.setColor(Color.BLUE);
         selectedCirclePaint.setStrokeWidth(20);
 
+        rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        rectPaint.setColor(Color.BLACK);
+        rectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        rectPaint.setStrokeWidth(2);
+        rectPaint.setPathEffect(new DashPathEffect(new float[]{0.02f, 0.02f}, 0));
+
         Rect textBounds = new Rect();
-        textSelected.setTextSize((int) (mTextSize * 2));
+        textSelected.setTextSize(mTextSize * 2);
         textSelected.getTextBounds("M", 0, 1, textBounds);
 
         textUnselected.setTextSize(mTextSize);
@@ -142,6 +150,8 @@ public class LinearInequalityDrawable extends Drawable {
             drawText(canvas, dot, dot.mX, middleY);
             if (dot.isSelected) {
                 canvas.drawCircle(dot.mX,  middleY, 20, selectedCirclePaint);
+                canvas.drawLine(dot.mX, middleY - 40, dot.mX, middleY + 60, rectPaint);
+//                canvas.drawRect(50, 50, 250, 250, rectPaint);
             }
             canvas.drawCircle(dot.mX, middleY, mDotRadius, circleLinePaint);
         }

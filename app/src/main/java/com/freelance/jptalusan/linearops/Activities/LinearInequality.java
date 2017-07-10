@@ -18,6 +18,7 @@ import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
+import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearInequalityBinding;
 
@@ -67,7 +68,8 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-        binding.seekbar.setResourceId(0);
+//        binding.seekbar.setResourceId(0);
+        binding.seekbar.icons.setVisibility(View.GONE);
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
@@ -94,7 +96,7 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-                    int temp = Constants.DEFAULT_RESET;
+                    int temp = Constants.DEFAULT_RESET * 4;
                     Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
@@ -209,9 +211,10 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.comboSeekBar.setEnabled(false);
         binding.seekbar.comboSeekBar.setLinearInequalityDrawable();
         binding.seekbar.comboSeekBar.invalidate();
+        binding.seekbar.icons.setVisibility(View.GONE);
 
-        binding.seekbar.setResourceId(R.drawable.vertical_line);
-        binding.seekbar.drawResourceOn(userAnswer);
+//        binding.seekbar.setResourceId(R.drawable.vertical_line);
+//        binding.seekbar.drawResourceOn(userAnswer);
 
         int answer = userAnswer + Constants.X_MAX;
         int lessThan = answer / 2;
@@ -225,6 +228,11 @@ public class LinearInequality extends AppCompatActivity {
 
         Log.d(TAG, "answer: " + answer);
 
+        List<ComboSeekBar.Dot> dots = binding.seekbar.getSeekBarDots();
+        for (ComboSeekBar.Dot d:  dots) {
+            Log.d(TAG, "dot:" + d.isSelected);
+        }
+
         int states[][] = {{android.R.attr.state_checked}, {}};
         int colors[] = {Color.RED, Color.RED};
         lessThanCB = new AppCompatCheckBox(this);
@@ -237,7 +245,7 @@ public class LinearInequality extends AppCompatActivity {
         int states2[][] = {{android.R.attr.state_checked}, {}};
         int colors2[] = {Color.BLUE, Color.BLUE};
         answerCB = new AppCompatCheckBox(this);
-        answerCB.setLayoutParams(generateParamsAtIndex(answer));
+        answerCB.setLayoutParams(generateForSelected(dots));
         answerCB.setSupportButtonTintList(new ColorStateList(states2, colors2));
         answerCB.setId(answerId);
         answerCB.setOnClickListener(new CheckboxListener());
@@ -253,12 +261,27 @@ public class LinearInequality extends AppCompatActivity {
         binding.checkBoxesLayout.addView(greaterThanCB);
     }
 
-    private RelativeLayout.LayoutParams generateParamsAtIndex(int index) {
-        Log.d(TAG, "Generate: " + index);
-        int slice = (int) binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
+    private RelativeLayout.LayoutParams generateForSelected(List<ComboSeekBar.Dot> dots) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                (int) binding.checkBoxesLayout.getHeight());
+                binding.checkBoxesLayout.getHeight());
+
+        int width = dots.get(1).mX - dots.get(0).mX;
+        for (ComboSeekBar.Dot d : dots) {
+            if (d.isSelected) {
+                params.leftMargin = d.mX - (width / 2);
+                params.bottomMargin = 140;
+            }
+        }
+        return params;
+    }
+
+    private RelativeLayout.LayoutParams generateParamsAtIndex(int index) {
+        Log.d(TAG, "Generate: " + index);
+        int slice = binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                binding.checkBoxesLayout.getHeight());
 
         Log.d(TAG, "params: " + slice + " x " + params.height);
 
@@ -270,16 +293,16 @@ public class LinearInequality extends AppCompatActivity {
     //TODO: what if the checkboxes are close to each other?
     private RelativeLayout.LayoutParams generateParamsForTextAtIndex(int index, int someValue) {
         Log.d(TAG, "Generate: " + index);
-        int slice = (int) binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
+        int slice = binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                (int) binding.checkBoxesLayout.getHeight());
+                binding.checkBoxesLayout.getHeight());
 
         Log.d(TAG, "params: " + slice + " x " + params.height);
 
         params.leftMargin = (slice * index) - (slice / 2);
-        params.topMargin = 50 + (20 * 0);
-        params.bottomMargin = 100;
+        params.topMargin = 20;
+//        params.bottomMargin = 100;
         return params;
     }
 
@@ -293,8 +316,9 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.comboSeekBar.setEnabled(true);
 
         binding.seekbar.comboSeekBar.setCustomDrawable();
+        binding.seekbar.icons.setVisibility(View.GONE);
         binding.seekbar.comboSeekBar.invalidate();
-        binding.seekbar.setResourceId(0);
+//        binding.seekbar.setResourceId(0);
 
         binding.checkBoxesLayout.removeAllViews();
 

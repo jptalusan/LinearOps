@@ -155,32 +155,58 @@ public class CustomDrawable extends Drawable {
     public final void draw(@NonNull Canvas canvas) {
         Log.d(TAG, "CustomDrawable draw()");
         String s = "";
-        for (ComboSeekBar.Dot d : mDots) {
-            s += d.text + ", ";
+        boolean hasBothSigns = false;
+        boolean allPositives = true;
+        int zeroIndex = 0;
+        for (int i = 0; i < mDots.size(); ++i) {
+            String dotText = mDots.get(i).text;
+            s += dotText + ", ";
+            if (dotText.equals("0")) {
+                hasBothSigns = true;
+                zeroIndex = i;
+            }
+            if (dotText.equals("-")) {
+                allPositives = false;
+            }
         }
+
+
         Log.d(TAG, s);
 
         int middleY = this.getIntrinsicHeight() / 2;
-        if (mDots.size() == 0) {
-            canvas.drawLine(0, middleY, getBounds().right, middleY, redPaint);
-            return;
-        }
         int size = mDots.size() - 1;
-        canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size / 2).mX, middleY, redPaint);
-        canvas.drawLine(mDots.get(size / 2).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
 
-        for (int i = 0; i < size / 2; ++i) {
-            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Negative");
-            canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, redCircleLinePaint);
+        if (allPositives && !hasBothSigns) {
+            drawText(canvas, mDots.get(0), mDots.get(size).mX, middleY, "Positive");
+            canvas.drawCircle(mDots.get(0).mX, middleY, mDotRadius, greenCircleLinePaint);
+            canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
+        } else if (!allPositives && !hasBothSigns) {
+            drawText(canvas, mDots.get(0), mDots.get(size).mX, middleY, "Negative");
+            canvas.drawCircle(mDots.get(0).mX, middleY, mDotRadius, redCircleLinePaint);
+            canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(size).mX, middleY, redPaint);
+        } else {
+            if (mDots.size() == 0) {
+                canvas.drawLine(0, middleY, getBounds().right, middleY, redPaint);
+                return;
+            }
+
+            canvas.drawLine(mDots.get(0).mX, middleY, mDots.get(zeroIndex).mX, middleY, redPaint);
+            canvas.drawLine(mDots.get(zeroIndex).mX, middleY, mDots.get(size).mX, middleY, greenPaint);
+
+            for (int i = 0; i < zeroIndex; ++i) {
+                drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Negative");
+                canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, redCircleLinePaint);
+            }
+
+            drawText(canvas, mDots.get(zeroIndex), mDots.get(zeroIndex).mX, middleY, "Zero");
+            canvas.drawCircle(mDots.get(zeroIndex).mX, middleY, mDotRadius, circleLinePaint);
+
+            for (int i = zeroIndex + 1; i <= size; ++i) {
+                drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Positive");
+                canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, greenCircleLinePaint);
+            }
         }
 
-        drawText(canvas, mDots.get(size / 2), mDots.get(size / 2).mX, middleY, "Zero");
-        canvas.drawCircle(mDots.get(size / 2).mX, middleY, mDotRadius, circleLinePaint);
-
-        for (int i = (size / 2) + 1; i <= size; ++i) {
-            drawText(canvas, mDots.get(i), mDots.get(i).mX, middleY, "Positive");
-            canvas.drawCircle(mDots.get(i).mX, middleY, mDotRadius, greenCircleLinePaint);
-        }
         for (ComboSeekBar.Dot dot : mDots) {
             if (dot.isSelected) {
                 canvas.drawCircle(dot.mX, middleY, 20, selectedCirclePaint);

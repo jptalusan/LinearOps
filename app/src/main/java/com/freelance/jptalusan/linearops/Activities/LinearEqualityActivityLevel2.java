@@ -21,7 +21,6 @@ import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevelFiveBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     private static String TAG = "Level2Activity";
@@ -47,18 +46,9 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
-        startLinearOps();
-
-        List<String> points = new ArrayList<>();
-        for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
-            points.add(Integer.toString(i));
-        }
-
         binding.increaseFractionButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
@@ -69,8 +59,6 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
                 userAnswer = val;
             }
         });
-
-        binding.seekbar.reset();
 
         binding.whiteBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +178,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
             public void onAllAnimationsEnd() {
             }
         });
+
+        startLinearOps();
     }
 
     private void startLinearOps() {
@@ -198,7 +188,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 //        eq = new Equation(2, 1, -11, 0, 2);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.reset();
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
         setViewAbility(true);

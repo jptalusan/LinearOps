@@ -48,8 +48,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_3).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
-        startLinearOps();
-
         List<String> points = new ArrayList<>();
         for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
             points.add(Integer.toString(i));
@@ -57,9 +55,7 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
         binding.increaseFractionButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
@@ -191,6 +187,8 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
             public void onAllAnimationsEnd() {
             }
         });
+
+        startLinearOps();
     }
 
     private void startLinearOps() {
@@ -198,7 +196,7 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.reset();
         isDone = false;
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);

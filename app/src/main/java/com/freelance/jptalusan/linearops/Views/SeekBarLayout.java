@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.freelance.jptalusan.linearops.R;
+import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
@@ -28,6 +31,7 @@ public class SeekBarLayout extends ConstraintLayout {
     private Dimensions iconDimension = new Dimensions();
     private double center = 0;
     private int mSignedMax = 0;
+    private List<String> points;
 
     public SeekBarLayout(@NonNull Context context) {
         super(context);
@@ -72,9 +76,18 @@ public class SeekBarLayout extends ConstraintLayout {
 //                if (i == comboSeekBar.getMax()) {
 //                    i = comboSeekBar.getMax() - 1;
 //                }
-                addIcons(i - (comboSeekBar.getMax() / 2));
+                int val = (i - (comboSeekBar.getMax() / 2));
+                if (val > Constants.X_MAX) {
+                    val = Constants.X_MAX;
+                    comboSeekBar.setProgress(34);
+                }
+                if (val < Constants.X_MIN) {
+                    val = Constants.X_MIN;
+                    comboSeekBar.setProgress(4);
+                }
+                addIcons(val);
                 if (listener != null)
-                    listener.onSeekBarValueChanged(i - (comboSeekBar.getMax() / 2));
+                    listener.onSeekBarValueChanged(val);
             }
 
             @Override
@@ -97,7 +110,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 dimensions.width  = icons.getMeasuredWidth();
                 dimensions.height = icons.getMeasuredHeight();
 
-                iconDimension.width  = dimensions.width / ((comboSeekBar.getMax()));
+                iconDimension.width  = dimensions.width / ((comboSeekBar.getMax() - 2));
                 iconDimension.height = dimensions.height;
 
                 Log.d(TAG, iconDimension.toString());
@@ -110,11 +123,11 @@ public class SeekBarLayout extends ConstraintLayout {
 
     //can extend this to modify what is added.
     private void addIcons(int val) {
-//        Log.d(TAG, "addIcons: " + val);
+        Log.d(TAG, "addIcons: " + val);
         icons.removeAllViews();
         if (val > 0) {
             for (int i = 1; i <= val; ++i) {
-                ImageView iv = new ImageView(getContext());
+                AppCompatImageView iv = new AppCompatImageView(getContext());
                 iv.setImageResource(R.drawable.white_circle);
                 iv.setLayoutParams(generateParams(i));
                 iv.setPadding(2, 0, 2, 0);
@@ -163,8 +176,21 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setMax(val);
     }
 
-    public void setComboSeekBarAdapter(List<String> values) {
-        comboSeekBar.setAdapter(values);
+    public void setComboSeekBarAdapter(int min, int max) {
+        //Includes 3 buffer points at both ends
+        points = new ArrayList<>();
+        points.add("-");
+        points.add("-");
+        points.add("-");
+        for (int i = min; i <= max; ++i) {
+            points.add(Integer.toString(i));
+        }
+        points.add("-");
+        points.add("-");
+        points.add("-");
+
+        comboSeekBar.setMax((max * 2) + 1 + 7);
+        comboSeekBar.setAdapter(points);
     }
 
     public void setComboSeekBarProgress(int value) {
@@ -186,7 +212,8 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void reset() {
-        comboSeekBar.setProgress((comboSeekBar.getMax() - 1) / 2);
+        Log.d(TAG, "Reset Progress: " + (((comboSeekBar.getMax() - 1) / 2) + 1));
+        comboSeekBar.setProgress(((comboSeekBar.getMax() - 1) / 2) + 1);
     }
 
     public void setComboSeekBarSignedMax(int signedMax) {

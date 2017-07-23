@@ -21,7 +21,6 @@ import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevelFiveBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinearEqualityActivityLevel4 extends AppCompatActivity {
     private static String TAG = "Level4Activity";
@@ -49,18 +48,9 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_4).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_4);
 
-        startLinearOps();
-
-        List<String> points = new ArrayList<>();
-        for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
-            points.add(Integer.toString(i));
-        }
-
         binding.increaseFractionButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
@@ -194,6 +184,8 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
             public void onAllAnimationsEnd() {
             }
         });
+
+        startLinearOps();
     }
 
     private void startLinearOps() {
@@ -203,7 +195,7 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
 //            eq = new Equation(1, 12, -3, 0, 4);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.reset();
         numberOfAnimatedX = 0;
         isDone = false;
         binding.seekbar.setVisibility(View.GONE);

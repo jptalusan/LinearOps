@@ -51,9 +51,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_5);
 
-        startLinearOps();
         setupSeekbarValues();
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
@@ -74,8 +72,6 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                 userAnswer = mCenterValue;
             }
         });
-
-        binding.seekbar.reset();
 
         binding.whiteBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +225,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             public void onAllAnimationsEnd() {
             }
         });
+
+        startLinearOps();
     }
 
     private void setupSeekbarValues() {
@@ -242,6 +240,9 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         min = tempCenter - Constants.SEEKBAR_CUSTOM_WIDTH;
         max = tempCenter + Constants.SEEKBAR_CUSTOM_WIDTH;
 
+        points.add("-");
+        points.add("-");
+        points.add("-");
         for (double i = min; i <= max; ++i) {
             double hatch = ((i - tempCenter) * (1.0/fractionCounter));
             double currNode = hatch + tempCenter;
@@ -255,11 +256,14 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             }
             pointsVal.add((double) Math.round(currNode * 100000) / 100000);
         }
+        points.add("-");
+        points.add("-");
+        points.add("-");
 
         //IF custom wwidth is small, remove +1
-        binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
+        binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1 + 7);
         Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
-        binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
+        binding.seekbar.setComboSeekBarProgress(((binding.seekbar.comboSeekBar.getMax() - 1) / 2) + 1);
         pointsVal.add(pointsVal.get(pointsVal.size() - 1)); //HACK
 
         //debug
@@ -278,7 +282,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         Log.d(TAG, "pointsArr: " + temp2);
 
         binding.seekbar.getViewDimensions();
-        binding.seekbar.setComboSeekBarAdapter(points);
+        binding.seekbar.comboSeekBar.setAdapter(points);
+//        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
         binding.seekbar.invalidate();
     }
 
@@ -289,7 +294,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 //            eq = new Equation(1, 2, -7, 0, 5);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.reset();
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);

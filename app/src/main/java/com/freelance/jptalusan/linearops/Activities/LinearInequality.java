@@ -58,16 +58,12 @@ public class LinearInequality extends AppCompatActivity {
         long seed = Calendar.getInstance().getTimeInMillis();
         rnd = new Random((int)seed);
 
-        startLinearOps();
-
         points = new ArrayList<>();
         for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
             points.add(Integer.toString(i));
         }
 
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
 //        binding.seekbar.setResourceId(0);
         binding.seekbar.icons.setVisibility(View.GONE);
 
@@ -88,6 +84,16 @@ public class LinearInequality extends AppCompatActivity {
                     if (isFirstAnswerCorrect(userAnswer)) {
                         hasFirstBeenAnswered = true;
                         setUpInequality();
+                    } else {
+                        int temp = Constants.DEFAULT_RESET * 4;
+                        Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+                        Handler h = new Handler();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startLinearOps();
+                            }
+                        }, temp);
                     }
                 } else {
                     if (isSecondAnswerCorrect()) {
@@ -108,6 +114,8 @@ public class LinearInequality extends AppCompatActivity {
                 }
             }
         });
+
+        startLinearOps();
     }
 
     private void setupIncorrectText() {
@@ -312,7 +320,7 @@ public class LinearInequality extends AppCompatActivity {
             eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_2);
             binding.equationTextView.setText(eq.printEquation());
         } while (eq.toString().equals("FAILED"));
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+        binding.seekbar.reset();
         binding.seekbar.comboSeekBar.setEnabled(true);
 
         binding.seekbar.comboSeekBar.setCustomDrawable();

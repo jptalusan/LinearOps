@@ -21,7 +21,6 @@ import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinearEqualityActivity extends AppCompatActivity {
     private static String TAG = "Level1Activity";
@@ -49,24 +48,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
-        startLinearOps();
+        binding.seekbar.setComboSeekBarAdapter(Constants.X_MIN, Constants.X_MAX);
 
-        List<String> points = new ArrayList<>();
-        for (int i = Constants.ONE_MIN; i <= Constants.ONE_MAX; ++i) {
-            points.add(Integer.toString(i));
-        }
-
-        //debug
-        String temp = "";
-        for (String s:
-                points) {
-            temp += "[" + s + "]";
-        }
-        Log.d(TAG, "points: " + temp);
-
-        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
@@ -75,8 +58,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 userAnswer = val;
             }
         });
-
-        binding.seekbar.reset();
 
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +121,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
             public void onAllAnimationsEnd() {
             }
         });
+
+        startLinearOps();
     }
 
     private void startLinearOps() {
@@ -148,7 +131,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
 //            eq = new Equation(3, 6, 0 ,0, 1);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
-        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
+        binding.seekbar.reset();
         numberOfAnimatedX = 0;
         isDone = false;
         setViewAbility(true);

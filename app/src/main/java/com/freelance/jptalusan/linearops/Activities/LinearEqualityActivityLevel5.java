@@ -240,9 +240,9 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         min = tempCenter - Constants.SEEKBAR_CUSTOM_WIDTH;
         max = tempCenter + Constants.SEEKBAR_CUSTOM_WIDTH;
 
-        points.add("-");
-        points.add("-");
-        points.add("-");
+        points.add(".");
+        points.add(".");
+        points.add(".");
         for (double i = min; i <= max; ++i) {
             double hatch = ((i - tempCenter) * (1.0/fractionCounter));
             double currNode = hatch + tempCenter;
@@ -256,9 +256,9 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
             }
             pointsVal.add((double) Math.round(currNode * 100000) / 100000);
         }
-        points.add("-");
-        points.add("-");
-        points.add("-");
+        points.add(".");
+        points.add(".");
+        points.add(".");
 
         //IF custom wwidth is small, remove +1
         binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1 + 7);

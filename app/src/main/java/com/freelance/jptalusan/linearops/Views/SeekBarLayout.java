@@ -179,15 +179,15 @@ public class SeekBarLayout extends ConstraintLayout {
     public void setComboSeekBarAdapter(int min, int max) {
         //Includes 3 buffer points at both ends
         points = new ArrayList<>();
-        points.add("-");
-        points.add("-");
-        points.add("-");
+        points.add(".");
+        points.add(".");
+        points.add(".");
         for (int i = min; i <= max; ++i) {
             points.add(Integer.toString(i));
         }
-        points.add("-");
-        points.add("-");
-        points.add("-");
+        points.add(".");
+        points.add(".");
+        points.add(".");
 
         comboSeekBar.setMax((max * 2) + 1 + 7);
         comboSeekBar.setAdapter(points);

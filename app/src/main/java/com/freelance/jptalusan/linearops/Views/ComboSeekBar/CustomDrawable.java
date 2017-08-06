@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.List;
@@ -153,7 +152,6 @@ public class CustomDrawable extends Drawable {
     //TODO: Fix for Level 5, must read text before coloring
     @Override
     public final void draw(@NonNull Canvas canvas) {
-        Log.d(TAG, "CustomDrawable draw()");
         String s = "";
         boolean hasBothSigns = false;
         boolean allPositives = true;
@@ -169,9 +167,6 @@ public class CustomDrawable extends Drawable {
                 allPositives = false;
             }
         }
-
-
-        Log.d(TAG, s);
 
         int middleY = this.getIntrinsicHeight() / 2;
         int size = mDots.size() - 1;

@@ -15,6 +15,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LinearOpsImageView extends AppCompatTextView {
     private String type = "";
+    private int numberOfContained = 0;
     protected SharedPreferences prefs;
 
     public LinearOpsImageView(Context context) {
@@ -47,6 +48,14 @@ public class LinearOpsImageView extends AppCompatTextView {
 
     public String getType() {
         return this.type;
+    }
+
+    public int getNumberOfContained() {
+        return numberOfContained;
+    }
+
+    public void setNumberOfContained(int numberOfContained) {
+        this.numberOfContained = numberOfContained;
     }
 
     public void setValueText(String text) {

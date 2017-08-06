@@ -2,8 +2,6 @@ package com.freelance.jptalusan.linearops.Utilities;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -15,7 +13,6 @@ public class EquationGeneration {
     private static final String TAG = "EquationGeneration";
 
     public static Equation generateEqualityEquation(int level) {
-        ArrayList<Integer> out = new ArrayList<>();
         long seed = Calendar.getInstance().getTimeInMillis();
         Random rnd = new Random((int)seed);
 
@@ -30,19 +27,13 @@ public class EquationGeneration {
         Log.d(TAG, "Level at generation: " + level);
         switch(level) {
             case Constants.LEVEL_1:
+                ax = pickRandom(rnd, 2, 9);
+                b = ax * pickRandom(rnd, 2, 9);
+                ax *= pickRandomSign(rnd);
+                b *= pickRandomSign(rnd);
                 cx = 0;
                 d  = 0;
-                int absAx = Math.abs(ax);
-                if (ax != 0) {
-                    int result = Math.abs(b / ax);
-                    if (b % ax != 0 || absAx > Constants.X_MAX || absAx == 1 || result == 1) {
-                        generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
-                    } else {
-                        generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_1);
-                    }
-                } else {
-                    generatedEquation = generateEqualityEquation(Constants.LEVEL_1);
-                }
+                generatedEquation = new Equation(ax, b, cx, d, Constants.LEVEL_1);
                 break;
             case Constants.LEVEL_2:
                 d = 0;
@@ -94,6 +85,7 @@ public class EquationGeneration {
                 generateEqualityEquation(level);
                 break;
         }
+        System.out.println(generatedEquation);
         return generatedEquation;
     }
 
@@ -106,31 +98,8 @@ public class EquationGeneration {
         else
             return pickRandom(rnd, min, max);
     }
-}
 
-class IntegerAndDecimal {
-    private static final String TAG = "EquationGeneration";
-    double mWhole = 0.0;
-    double mDecimal = 0.0;
-    ArrayList<Double> validDecimals = new ArrayList<>(Arrays.asList(
-            0.16667, 0.33333, 0.66667, 0.83333, //recurring, thirds, sixths
-            0.2, 0.4, 0.6, 0.8, //fourths
-            0.25, 0.5, 0.75)); //quarters/fifths/halves
-
-    IntegerAndDecimal(double divisor, double dividend) {
-        Log.d(TAG, "number: " + divisor + "/" + dividend);
-        double quotient = Math.abs(divisor / dividend);
-
-        mWhole = (int) quotient;
-        mDecimal = Math.round((quotient % 1) * 100000.0) / 100000.0;
-    }
-
-    public boolean isValid() {
-        return mWhole > 0 && validDecimals.contains(mDecimal);
-    }
-
-    @Override
-    public String toString() {
-        return "Whole: " + mWhole + ", decimal: " + mDecimal;
+    static int pickRandomSign(Random rnd) {
+        return (rnd.nextInt() % 2 == 0) ? -1 : 1;
     }
 }

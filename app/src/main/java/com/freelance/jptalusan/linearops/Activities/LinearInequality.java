@@ -96,7 +96,7 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-                    int temp = Constants.DEFAULT_RESET * 4;
+                    int temp = Constants.DEFAULT_RESET * 2;
                     Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
@@ -310,6 +310,7 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_2);
+//            eq = new Equation(-5, 4, -6, 0, 2);
             binding.equationTextView.setText(eq.printEquation());
         } while (eq.toString().equals("FAILED"));
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

@@ -5,7 +5,8 @@ import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -20,7 +21,15 @@ public class ExampleUnitTest {
 
     @Test
     public void generateEquation() {
-        System.out.println(EquationGeneration.generateEqualityEquation(Constants.LEVEL_1) + "");
+//        int n = 10;
+//        for(int i = 0; i < n; ++i) {
+//            EquationGeneration.generateEqualityEquation(Constants.LEVEL_1);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//
+//            }
+//        }
     }
 
     @Test
@@ -36,5 +45,12 @@ public class ExampleUnitTest {
     @Test
     public void generateLvl5Equation() {
         System.out.println(EquationGeneration.generateEqualityEquation(Constants.LEVEL_5) + "");
+    }
+
+    @Test
+    public void isIntegerValid() {
+        IntegerAndDecimalMock iAd = new IntegerAndDecimalMock(12, 8);
+        assertTrue(iAd.isValid());
+        System.out.println(iAd);
     }
 }

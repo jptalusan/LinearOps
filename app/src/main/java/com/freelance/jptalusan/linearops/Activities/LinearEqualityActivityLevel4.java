@@ -125,9 +125,17 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startLinearOps();
+                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid);
                     }
                 }, temp);
+
+                Handler h2 = new Handler();
+                h2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp + 2000);
             }
         });
 
@@ -337,7 +345,11 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
         if (u.animateObjects(eq, userAnswer, false)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            if ((userAnswer * -1) == eq.getX()) {
+                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

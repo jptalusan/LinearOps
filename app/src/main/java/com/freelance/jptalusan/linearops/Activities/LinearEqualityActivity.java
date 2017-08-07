@@ -56,14 +56,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
-        //debug
-//        String temp = "";
-//        for (String s:
-//                points) {
-//            temp += "[" + s + "]";
-//        }
-//        Log.d(TAG, "points: " + temp);
-
         binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
         binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
@@ -95,7 +87,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        performCleanup();
+                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid);
                     }
                 }, temp);
 
@@ -174,16 +166,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
         l.setCols(5);
         Log.d(TAG, "Setup grid:  5 x " + ((Math.abs(number) / 5) + 1));
         l.setRows((Math.abs(number) / 5) + 1);
-//        if (factors.size() == 1) {
-//            l.setRows(1);
-//            l.setCols(1);
-//        } else if (factors.size() % 2 != 0) {
-//            l.setRows(factors.get(factors.size() / 2));
-//            l.setCols(factors.get(factors.size() / 2));
-//        } else {
-//            l.setRows(factors.get(factors.size() / 2));
-//            l.setCols(factors.get(factors.size() / 2 - 1));
-//        }
     }
 
     public void setupLayoutForEquation(Equation equation) {
@@ -202,11 +184,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
         setupGrid(binding.leftSideGrid, (int)ax);
         setupGrid(binding.rightSideGrid, (int)b);
-//        binding.leftSideGrid.setRows(5);
-//        binding.leftSideGrid.setCols(4);
-//
-//        binding.rightSideGrid.setRows(5);
-//        binding.rightSideGrid.setCols(4);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -262,11 +239,5 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void performCleanup() {
-        //Perform clean up pulses of remaining objects
-        binding.leftSideGrid.performCleanup();
-        binding.rightSideGrid.performCleanup();
     }
 }

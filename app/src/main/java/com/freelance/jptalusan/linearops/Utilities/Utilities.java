@@ -285,4 +285,9 @@ public class Utilities {
         Log.d(TAG, "Exceed/match x reset: " + (xCount * Constants.RESET_FACTOR) + " ms");
         return xCount * Constants.RESET_FACTOR;// + 2000; //have to add 2000 for the left over balls
     }
+
+    public static void performCleanup(LinearOpsGridLayout left, LinearOpsGridLayout right) {
+        left.performCleanup();
+        right.performCleanup();
+    }
 }

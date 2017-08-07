@@ -85,7 +85,7 @@ public class LinearInequality extends AppCompatActivity {
                         hasFirstBeenAnswered = true;
                         setUpInequality();
                     } else {
-                        int temp = Constants.DEFAULT_RESET * 4;
+                        int temp = Constants.DEFAULT_RESET * 2;
                         Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                         Handler h = new Handler();
                         h.postDelayed(new Runnable() {
@@ -102,7 +102,7 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-                    int temp = Constants.DEFAULT_RESET * 4;
+                    int temp = Constants.DEFAULT_RESET * 2;
                     Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
@@ -237,9 +237,9 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "answer: " + answer);
 
         List<ComboSeekBar.Dot> dots = binding.seekbar.getSeekBarDots();
-        for (ComboSeekBar.Dot d:  dots) {
-            Log.d(TAG, "dot:" + d.isSelected);
-        }
+//        for (ComboSeekBar.Dot d:  dots) {
+//            Log.d(TAG, "dot:" + d.isSelected);
+//        }
 
         int states[][] = {{android.R.attr.state_checked}, {}};
         int colors[] = {Color.RED, Color.RED};
@@ -285,7 +285,7 @@ public class LinearInequality extends AppCompatActivity {
     }
 
     private RelativeLayout.LayoutParams generateParamsAtIndex(int index) {
-        Log.d(TAG, "Generate: " + index);
+//        Log.d(TAG, "Generate: " + index);
         int slice = binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -318,6 +318,7 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_2);
+//            eq = new Equation(-5, 4, -6, 0, 2);
             binding.equationTextView.setText(eq.printEquation());
         } while (eq.toString().equals("FAILED"));
         binding.seekbar.reset();
@@ -352,42 +353,33 @@ public class LinearInequality extends AppCompatActivity {
     }
 
     private boolean isSecondAnswerCorrect() {
+        boolean isLessAnswerCorrect;
+        boolean isEqualAnswerCorrect;
+        boolean isGreatAnswerCorrect;
+        lessThanSuppossedToBeChecked = checker(userAnswer - 1);
+        answerSuppossedToBeChecked = checker(userAnswer);
+        greaterThanSuppossedToBeChecked = checker(userAnswer + 1);
+
+        isLessAnswerCorrect = lessThanSuppossedToBeChecked == isLessThanChecked;
+        isEqualAnswerCorrect = answerSuppossedToBeChecked == isAnswerChecked;
+        isGreatAnswerCorrect = greaterThanSuppossedToBeChecked == isGreaterThanChecked;
+
+        return isLessAnswerCorrect && isEqualAnswerCorrect && isGreatAnswerCorrect;
+    }
+
+    //ax + b > c
+    public boolean checker(int userAnswer) {
         //String symbols[] = {"<", "≤", ">", "≥"};
-        switch (inequalityIndex) {
+        Log.d(TAG, "ax + b = c --> " + ((eq.getAx() * userAnswer) + eq.getB()) + " " + symbols[inequalityIndex] + " " + eq.getCx());
+        switch(inequalityIndex) {
             case 0:
-                lessThanSuppossedToBeChecked = true;
-                if (isLessThanChecked
-                        && !isAnswerChecked
-                        && !isGreaterThanChecked) {
-                    return true;
-                }
-                break;
+                return (((eq.getAx() * userAnswer) + eq.getB()) < eq.getCx());
             case 1:
-                lessThanSuppossedToBeChecked = true;
-                answerSuppossedToBeChecked = true;
-                if (isLessThanChecked
-                        && isAnswerChecked
-                        && !isGreaterThanChecked) {
-                    return true;
-                }
-                break;
+                return (((eq.getAx() * userAnswer) + eq.getB()) <= eq.getCx());
             case 2:
-                greaterThanSuppossedToBeChecked = true;
-                if (!isLessThanChecked
-                        && !isAnswerChecked
-                        && isGreaterThanChecked) {
-                    return true;
-                }
-                break;
+                return (((eq.getAx() * userAnswer) + eq.getB()) > eq.getCx());
             case 3:
-                answerSuppossedToBeChecked = true;
-                greaterThanSuppossedToBeChecked = true;
-                if (!isLessThanChecked
-                        && isAnswerChecked
-                        && isGreaterThanChecked) {
-                    return true;
-                }
-                break;
+                return (((eq.getAx() * userAnswer) + eq.getB()) >= eq.getCx());
         }
         return false;
     }

@@ -15,8 +15,8 @@ public class Constants {
     public static final String LEFT = "LEFT";
     public static final String RIGHT = "RIGHT";
 
-    public static int X_MAX = 15;
-    public static int X_MIN = -15;
+    public static int X_MAX = 9;
+    public static int X_MIN = -9;
 
     public static int ONE_MAX = 9;
     public static int ONE_MIN = -9;
@@ -33,7 +33,7 @@ public class Constants {
 
     public static final int ANIMATION_DURATION = 1000;
     public static final int DEFAULT_RESET = 3000;
-    public static final int RESET_FACTOR = 1500;
+    public static final int RESET_FACTOR = 1200;
 
     public static final int SEEKBAR_CUSTOM_WIDTH = 15;
 

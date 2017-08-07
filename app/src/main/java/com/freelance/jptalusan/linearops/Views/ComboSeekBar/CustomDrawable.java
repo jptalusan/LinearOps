@@ -153,7 +153,6 @@ public class CustomDrawable extends Drawable {
     //TODO: Fix for Level 5, must read text before coloring
     @Override
     public final void draw(@NonNull Canvas canvas) {
-        Log.d(TAG, "CustomDrawable draw()");
         String s = "";
         boolean hasBothSigns = false;
         boolean allPositives = true;
@@ -171,7 +170,6 @@ public class CustomDrawable extends Drawable {
         }
 
 
-        Log.d(TAG, s);
 
         int middleY = this.getIntrinsicHeight() / 2;
         int size = mDots.size() - 1;

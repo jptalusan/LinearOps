@@ -1,5 +1,7 @@
 package com.freelance.jptalusan.linearops.Views;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -67,6 +69,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                     tempIv.setBackgroundResource(imageResource);
                     tempIv.setValueText(Utilities.getOneOrX(imageResource));
                     tempIv.setType(Utilities.getTypeFromResource(imageResource));
+                    tempIv.setNumberOfContained(0);
                     lastAddedViewType = Utilities.getTypeFromResource(imageResource);
                     setImageViewType(imageResource);
                     tempIv.setVisibility(VISIBLE);
@@ -80,6 +83,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             linearOpsImageView.setBackgroundResource(imageResource);
             linearOpsImageView.setValueText(Utilities.getOneOrX(imageResource));
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
+            linearOpsImageView.setNumberOfContained(0);
             lastAddedViewType = Utilities.getTypeFromResource(imageResource);
             linearOpsImageView.setPadding(1, 1, 1, 1);
 //            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
@@ -187,8 +191,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     @Override
     public String toString() {
-        return "LinearOpsGridLayout{" +
-                "positiveXCount=" + positiveXCount +
+        return "LinearOpsGridLayout{" + getValuesInside() +
+                ": positiveXCount=" + positiveXCount +
                 ", negativeXCount=" + negativeXCount +
                 ", positive1Count=" + positive1Count +
                 ", negative1Count=" + negative1Count +
@@ -402,6 +406,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 temp.setBackgroundResource(drawables[dividend]);
+                temp.setNumberOfContained(dividend);
                 temp.setText("");
                 listener.onAllAnimationsEnd();
             }
@@ -583,5 +588,41 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             }
         }
         return total;
+    }
+    public void performCleanup() {
+        Log.d(TAG, "PerformCleanup()");
+        Log.d(TAG, this.toString());
+        if (getValuesInside().equals(Constants.X)) {
+            //Pulse x
+            for (int i = 0; i < getChildCount(); ++i) {
+                LinearOpsImageView linearOpsImageView = (LinearOpsImageView) getChildAt(i);
+                if (linearOpsImageView.getNumberOfContained() == 0 ||
+                        linearOpsImageView.getId() == 0) {
+                    Log.d(TAG, "animating X...");
+                    ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(linearOpsImageView,
+                            PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+                            PropertyValuesHolder.ofFloat("scaleY", 1.2f));
+                    scaleDown.setDuration(500);
+
+                    scaleDown.setRepeatCount(3);
+                    scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+
+                    scaleDown.start();
+                }
+            }
+        } else {
+            for (int i = 0; i < getChildCount(); ++i) { //everything left over
+                Log.d(TAG, "animating One...");
+                ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(getChildAt(i),
+                        PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+                        PropertyValuesHolder.ofFloat("scaleY", 1.2f));
+                scaleDown.setDuration(500);
+
+                scaleDown.setRepeatCount(3);
+                scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+
+                scaleDown.start();
+            }
+        }
     }
 }

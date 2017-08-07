@@ -76,9 +76,17 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startLinearOps();
+                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid);
                     }
                 }, temp);
+
+                Handler h2 = new Handler();
+                h2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startLinearOps();
+                    }
+                }, temp + 2000);
             }
         });
 
@@ -126,9 +134,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
     }
 
     private void startLinearOps() {
+        Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(3, 6, 0 ,0, 1);
+//            eq = new Equation(7, -49, 0 ,0, 1);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.reset();
@@ -144,16 +153,10 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
     private void setupGrid(LinearOpsGridLayout l, int number) {
         ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
-        if (factors.size() == 1) {
-            l.setRows(1);
-            l.setCols(1);
-        } else if (factors.size() % 2 != 0) {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2));
-        } else {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2 - 1));
-        }
+        //Given that we always want to have 5 columns
+        l.setCols(5);
+        Log.d(TAG, "Setup grid:  5 x " + ((Math.abs(number) / 5) + 1));
+        l.setRows((Math.abs(number) / 5) + 1);
     }
 
     public void setupLayoutForEquation(Equation equation) {
@@ -170,13 +173,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-//        setupGrid(binding.leftSideGrid, ax);
-//        setupGrid(binding.rightSideGrid, b);
-        binding.leftSideGrid.setRows(5);
-        binding.leftSideGrid.setCols(4);
-
-        binding.rightSideGrid.setRows(5);
-        binding.rightSideGrid.setCols(4);
+        setupGrid(binding.leftSideGrid, (int)ax);
+        setupGrid(binding.rightSideGrid, (int)b);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -226,7 +224,11 @@ public class LinearEqualityActivity extends AppCompatActivity {
         if (u.animateObjects(eq, userAnswer, true)) {
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            if ((userAnswer * -1) == eq.getX()) {
+                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

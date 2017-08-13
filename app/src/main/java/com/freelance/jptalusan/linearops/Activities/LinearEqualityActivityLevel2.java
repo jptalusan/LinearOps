@@ -21,7 +21,6 @@ import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevelFiveBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     private static String TAG = "Level2Activity";
@@ -49,16 +48,20 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
 
         startLinearOps();
 
-        List<String> points = new ArrayList<>();
+        ArrayList<String> points = new ArrayList<>();
         for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
             points.add(Integer.toString(i));
         }
 
         binding.increaseFractionButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+
+//        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
+//        binding.seekbar.setComboSeekBarAdapter(points);
+//        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
+
+        binding.seekbar.setValues(points);
+
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);
@@ -227,17 +230,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {
-        ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
-        if (factors.size() == 1) {
-            l.setRows(1);
-            l.setCols(1);
-        } else if (factors.size() % 2 != 0) {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2));
-        } else {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2 - 1));
-        }
+        l.setCols(10);
+        l.setRows((Math.abs(number) / 10) + 1);
     }
 
     public void setupLayoutForEquation(Equation equation) {
@@ -255,13 +249,13 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-//        setupGrid(binding.leftSideGrid, 25);
-        binding.leftSideGrid.setRows(6);
-        binding.leftSideGrid.setCols(5);
-
-        binding.rightSideGrid.setRows(6);
-        binding.rightSideGrid.setCols(5);
-//        setupGrid(binding.rightSideGrid, 25);
+        setupGrid(binding.leftSideGrid, (int) (ax + b));
+        setupGrid(binding.rightSideGrid, (int) cx);
+//        binding.leftSideGrid.setRows(6);
+//        binding.leftSideGrid.setCols(5);
+//
+//        binding.rightSideGrid.setRows(6);
+//        binding.rightSideGrid.setCols(5);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

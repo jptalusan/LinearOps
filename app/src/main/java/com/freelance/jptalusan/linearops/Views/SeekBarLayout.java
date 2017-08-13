@@ -161,16 +161,18 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) numbersDimension.width,
                 (int) numbersDimension.height);
 
+//        Log.d(TAG, "Thumb width: " + comboSeekBar.getThumb().getMinimumWidth());
+        int thumb = comboSeekBar.getThumb().getMinimumWidth();
+
         if (val > 0) {
-            params.leftMargin = (int)center + params.width / 2 + (params.width * (val - 1)) + 10;
+            params.leftMargin = (int)center + params.width + (params.width * (val - 1)) - (thumb / 2);
         } else if (val < 0) {
-            params.leftMargin = (int)center + params.width / 2 - (params.width * Math.abs(val - 1)) - 10;
+            params.leftMargin = (int)center + params.width - (params.width * Math.abs(val - 1)) - (thumb / 2);
         } else {
-            params.leftMargin = (int)center + 10;
+            params.leftMargin = (int)center - (thumb / 2);
         }
 
         params.topMargin = 20;
-//        Log.d(TAG, "Thumb width: " + comboSeekBar.getThumb().getMinimumWidth());
 
         return params;
     }

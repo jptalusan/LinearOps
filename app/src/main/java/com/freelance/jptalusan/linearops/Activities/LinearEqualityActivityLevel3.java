@@ -122,7 +122,7 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid);
+                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid, eq.getX());
                     }
                 }, temp);
 

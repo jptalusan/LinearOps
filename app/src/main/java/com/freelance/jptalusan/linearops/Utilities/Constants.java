@@ -15,8 +15,8 @@ public class Constants {
     public static final String LEFT = "LEFT";
     public static final String RIGHT = "RIGHT";
 
-    public static int X_MAX = 15;
-    public static int X_MIN = -15;
+    public static int X_MAX = 9;
+    public static int X_MIN = -9;
 
     public static int ONE_MAX = 9;
     public static int ONE_MIN = -9;

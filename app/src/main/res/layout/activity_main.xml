@@ -3,93 +3,98 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.freelance.jptalusan.linearops.Activities.MainActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.freelance.jptalusan.linearops.Views.AutoResizeTextView
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="LinearOps"
-        android:textAlignment="center"
-        android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:textAllCaps="true"
-        android:id="@+id/autoResizeTextView2"
-        app:layout_constraintBottom_toTopOf="@+id/linearEquality"
-        app:layout_constraintVertical_chainStyle="packed" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.freelance.jptalusan.linearops.Activities.MainActivity">
 
-    <Button
-        android:id="@+id/linearEquality"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Linear Equations"
-        app:layout_constraintTop_toBottomOf="@+id/autoResizeTextView2"
-        app:layout_constraintBottom_toTopOf="@+id/level2"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.5" />
+            <com.freelance.jptalusan.linearops.Views.AutoResizeTextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:text="LinearOps"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:textAllCaps="true"
+                android:id="@+id/autoResizeTextView2"
+                app:layout_constraintBottom_toTopOf="@+id/linearEquality"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-    <Button
-        android:id="@+id/level2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Level 2"
-        app:layout_constraintBottom_toTopOf="@+id/level3"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearEquality"
-        app:layout_constraintHorizontal_bias="0.5" />
+            <Button
+                android:id="@+id/linearEquality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Linear Equations"
+                app:layout_constraintTop_toBottomOf="@+id/autoResizeTextView2"
+                app:layout_constraintBottom_toTopOf="@+id/level2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" />
 
-    <Button
-        android:id="@+id/level3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Level 3"
-        app:layout_constraintBottom_toTopOf="@+id/level4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/level2"
-        app:layout_constraintHorizontal_bias="0.5" />
+            <Button
+                android:id="@+id/level2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level 2"
+                app:layout_constraintBottom_toTopOf="@+id/level3"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearEquality"
+                app:layout_constraintHorizontal_bias="0.5" />
 
-    <Button
-        android:id="@+id/level4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="level 4"
-        app:layout_constraintBottom_toTopOf="@+id/level5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/level3"
-        app:layout_constraintHorizontal_bias="0.5" />
+            <Button
+                android:id="@+id/level3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level 3"
+                app:layout_constraintBottom_toTopOf="@+id/level4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/level2"
+                app:layout_constraintHorizontal_bias="0.5" />
 
-    <Button
-        android:id="@+id/level5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="level 5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/level4"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearInequality"
-        app:layout_constraintHorizontal_bias="0.5" />
+            <Button
+                android:id="@+id/level4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="level 4"
+                app:layout_constraintBottom_toTopOf="@+id/level5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/level3"
+                app:layout_constraintHorizontal_bias="0.5" />
 
-    <Button
-        android:id="@+id/linearInequality"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Linear Inequality"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/level5"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp" />
+            <Button
+                android:id="@+id/level5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="level 5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/level4"
+                android:layout_marginBottom="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/linearInequality"
+                app:layout_constraintHorizontal_bias="0.5" />
 
-</android.support.constraint.ConstraintLayout>
+            <Button
+                android:id="@+id/linearInequality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Linear Inequality"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/level5"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </layout>

@@ -4,6 +4,10 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +37,10 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     private int objectCount = 0;
     private String lastAddedViewType = "";
 
+    private Paint mTextPaint;
+    private Paint mPiePaint;
+    private Paint mShadowPaint;
+
     public LinearOpsGridLayout(Context context) {
         super(context);
     }
@@ -48,6 +56,29 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             side = a.getString(R.styleable.LinearOpsGridLayoutOptions_side);
         } finally {
             a.recycle();
+        }
+        init();
+    }
+
+    private void init() {
+        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setColor(Color.BLACK);
+
+        mPiePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPiePaint.setStyle(Paint.Style.FILL);
+
+        mShadowPaint = new Paint(0);
+        mShadowPaint.setColor(0xff101010);
+        mShadowPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        // Draw the pointer
+        if (side.equals("RIGHT")) {
+            canvas.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight(), mTextPaint);
         }
     }
 
@@ -85,7 +116,14 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
             linearOpsImageView.setNumberOfContained(0);
             lastAddedViewType = Utilities.getTypeFromResource(imageResource);
+
             linearOpsImageView.setPadding(1, 1, 1, 1);
+//            if (getChildCount() % 5 == 0 &&
+//                    getChildCount() % 10 != 0) {
+//                RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) linearOpsImageView.getLayoutParams();
+//                p.leftMargin += 15;
+//                linearOpsImageView.setLayoutParams(p);
+//            }
 //            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
             addView(linearOpsImageView);
 
@@ -93,8 +131,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
             defaultDimensions.height = getChildAt(0).getHeight();
             defaultDimensions.width = getChildAt(0).getWidth();
-
-//            Log.d(TAG, "count: " + getChildCount());
 
             return true;
         } else {
@@ -590,16 +626,13 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         return total;
     }
 
-    public void performCleanup() {
-        Log.d(TAG, "PerformCleanup()");
-        Log.d(TAG, this.toString());
+    public void performCleanup(int correctAnswer) {
         if (getValuesInside().equals(Constants.X)) {
             //Pulse x
             for (int i = 0; i < getChildCount(); ++i) {
                 LinearOpsImageView linearOpsImageView = (LinearOpsImageView) getChildAt(i);
                 if (linearOpsImageView.getNumberOfContained() == 0 ||
-                        linearOpsImageView.getId() == 0) {
-                    Log.d(TAG, "animating X...");
+                        (i == (getChildCount() - 1) && linearOpsImageView.getNumberOfContained() != correctAnswer)) {
                     ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(linearOpsImageView,
                             PropertyValuesHolder.ofFloat("scaleX", 1.2f),
                             PropertyValuesHolder.ofFloat("scaleY", 1.2f));
@@ -613,7 +646,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             }
         } else {
             for (int i = 0; i < getChildCount(); ++i) { //everything left over
-                Log.d(TAG, "animating One...");
                 ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(getChildAt(i),
                         PropertyValuesHolder.ofFloat("scaleX", 1.2f),
                         PropertyValuesHolder.ofFloat("scaleY", 1.2f));

@@ -137,36 +137,6 @@ public class Utilities {
                     chooseWhichXToAnimate(i, 500 * i * delayFactor, remainingChildren);
                 }
             }
-
-//            Log.d(TAG, "LeftOverCircles: " + leftOverCircles);
-//            Log.d(TAG, "r.count:" + numberOfCircles);
-//            //Either there will be left over circles or empty boxes but not both
-//            for (int i = numberOfCircles - leftOverCircles; i < numberOfCircles; ++i) {
-//                Log.d(TAG, "leftover:" + i);
-//                chooseWhichOneToPulse(i, 1000 * outerLoop * delayFactor);
-//            }
-//
-//            /*
-//            * Animate remaining number of boxes that did not receive any circles at all.
-//            * Use only if there are any remaining boxes (absAx > outerLoop).
-//             */
-//            int remainingEmptyBoxes = absAx > outerLoop ? absAx - outerLoop : 0;
-//            Log.d(TAG, "Remaining empty boxes:" + remainingEmptyBoxes);
-//            int startingChildForRemainingBoxes;
-//            int boxCount;
-//            //Check which layout contains the boxes (X's)
-//            if (r.getValuesInside().equals(Constants.X)) {
-//                boxCount = r.getVisibleChildCount();
-//                startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
-//            } else {
-//                boxCount = l.getVisibleChildCount() - 1;
-//                startingChildForRemainingBoxes = boxCount - remainingEmptyBoxes;
-//            }
-//
-//            for (int i = startingChildForRemainingBoxes + 1; i <= boxCount; ++i) {
-//                //Dividend is zero because the box should be empty after animation
-//                chooseWhichXToPulse(i, 500 * i * delayFactor, 0);
-//            }
         }
 
         //TODO: add actions here after answer is checked
@@ -286,8 +256,8 @@ public class Utilities {
         return xCount * Constants.RESET_FACTOR;// + 2000; //have to add 2000 for the left over balls
     }
 
-    public static void performCleanup(LinearOpsGridLayout left, LinearOpsGridLayout right) {
-        left.performCleanup();
-        right.performCleanup();
+    public static void performCleanup(LinearOpsGridLayout left, LinearOpsGridLayout right, double correctAnswer) {
+        left.performCleanup(Math.abs((int) correctAnswer));
+        right.performCleanup(Math.abs((int) correctAnswer));
     }
 }

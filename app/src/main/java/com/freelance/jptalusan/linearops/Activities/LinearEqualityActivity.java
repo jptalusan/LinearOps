@@ -21,8 +21,8 @@ import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
+//TODO: Use this: https://stackoverflow.com/questions/34327745/create-vertical-lines-in-seekbar
 public class LinearEqualityActivity extends AppCompatActivity {
     private static String TAG = "Level1Activity";
     protected SharedPreferences prefs;
@@ -49,26 +49,28 @@ public class LinearEqualityActivity extends AppCompatActivity {
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
-        startLinearOps();
-
-        List<String> points = new ArrayList<>();
+        ArrayList<String> points = new ArrayList<>();
         for (int i = Constants.ONE_MIN; i <= Constants.ONE_MAX; ++i) {
             points.add(Integer.toString(i));
         }
 
-        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
+//        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
+//        binding.seekbar.setComboSeekBarAdapter(points);
+//        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
+
+        binding.seekbar.setValues(points);
+
+        startLinearOps();
+
+        binding.seekbar.reset();
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
             //Should only be called when layout is in the for ax = b only
-                Log.d(TAG, "inLeveL: " + val);
+//                Log.d(TAG, "inLeveL: " + val);
                 userAnswer = val;
             }
         });
-
-        binding.seekbar.reset();
 
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +89,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid);
+                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid, eq.getX());
                     }
                 }, temp);
 
@@ -163,9 +165,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
     private void setupGrid(LinearOpsGridLayout l, int number) {
         ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
         //Given that we always want to have 5 columns
-        l.setCols(5);
-        Log.d(TAG, "Setup grid:  5 x " + ((Math.abs(number) / 5) + 1));
-        l.setRows((Math.abs(number) / 5) + 1);
+        l.setCols(10);
+        Log.d(TAG, "Setup grid:  10 x " + ((Math.abs(number) / 10) + 1));
+        l.setRows((Math.abs(number) / 10) + 1);
     }
 
     public void setupLayoutForEquation(Equation equation) {
@@ -182,7 +184,11 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-        setupGrid(binding.leftSideGrid, (int)ax);
+        //since no transfer of objects, left side is always X
+        binding.leftSideGrid.setRows(5);
+        binding.leftSideGrid.setCols(2);
+        Log.d(TAG, "Test");
+        //setupGrid(binding.leftSideGrid, (int)ax);
         setupGrid(binding.rightSideGrid, (int)b);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

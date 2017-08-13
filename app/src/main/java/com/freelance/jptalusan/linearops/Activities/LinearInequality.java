@@ -219,7 +219,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.equationTextView.invalidate();
 
         binding.seekbar.comboSeekBar.setEnabled(false);
-        binding.seekbar.comboSeekBar.setLinearInequalityDrawable();
+        //binding.seekbar.comboSeekBar.setLinearInequalityDrawable();
         binding.seekbar.comboSeekBar.invalidate();
         binding.seekbar.icons.setVisibility(View.GONE);
 
@@ -326,7 +326,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
         binding.seekbar.comboSeekBar.setEnabled(true);
 
-        binding.seekbar.comboSeekBar.setCustomDrawable();
+        //binding.seekbar.comboSeekBar.setCustomDrawable();
         binding.seekbar.icons.setVisibility(View.GONE);
         binding.seekbar.comboSeekBar.invalidate();
 //        binding.seekbar.setResourceId(0);

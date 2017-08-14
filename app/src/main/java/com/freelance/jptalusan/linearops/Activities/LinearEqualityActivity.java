@@ -2,6 +2,7 @@ package com.freelance.jptalusan.linearops.Activities;
 
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -60,6 +61,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
 
         binding.seekbar.setValues(points);
 
+        //binding.seekbar.setIntervals(points);
         startLinearOps();
 
         binding.seekbar.reset();
@@ -68,6 +70,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
             public void onSeekBarValueChanged(int val) {
             //Should only be called when layout is in the for ax = b only
 //                Log.d(TAG, "inLeveL: " + val);
+                //TO GET The thumb location
+                Rect r = binding.seekbar.comboSeekBar.getThumb().getBounds();
+                Log.d(TAG, "thumb: " + r.toString());
                 userAnswer = val;
             }
         });
@@ -75,6 +80,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 binding.leftSideGrid.redrawLayout();
                 binding.rightSideGrid.redrawLayout();
                 setViewAbility(false);

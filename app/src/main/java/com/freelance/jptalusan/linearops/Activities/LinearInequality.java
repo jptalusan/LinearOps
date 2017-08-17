@@ -33,7 +33,6 @@ public class LinearInequality extends AppCompatActivity {
     private ActivityLinearInequalityBinding binding;
     private Equation eq = null;
     private int userAnswer = 0;
-    private ArrayList<String> points = null;
     private Random rnd = null;
     private AppCompatCheckBox lessThanCB = null;
     private AppCompatCheckBox answerCB = null;
@@ -61,18 +60,15 @@ public class LinearInequality extends AppCompatActivity {
 
         startLinearOps();
 
-        points = new ArrayList<>();
+        ArrayList<String> points = new ArrayList<>();
         for (int i = Constants.X_MIN; i <= Constants.X_MAX; ++i) {
             points.add(Integer.toString(i));
         }
 
-//        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-//        binding.seekbar.setComboSeekBarAdapter(points);
-//        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-//        binding.seekbar.setResourceId(0);
         binding.seekbar.setValues(points);
         binding.seekbar.getViewDimensions();
-        binding.seekbar.icons.setVisibility(View.GONE);
+        binding.seekbar.icons.setVisibility(View.INVISIBLE);
+        binding.seekbar.reset();
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
@@ -80,8 +76,6 @@ public class LinearInequality extends AppCompatActivity {
                 userAnswer = val;
             }
         });
-
-        binding.seekbar.reset();
 
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,15 +211,17 @@ public class LinearInequality extends AppCompatActivity {
     }
 
     private void setUpInequality() {
+        Rect r = binding.seekbar.comboSeekBar.getThumb().getBounds();
+        Log.d(TAG, "thumb: " + r.toString());
+
         String text = binding.equationTextView.getText().toString();
         binding.equationTextView.setText(text.replace("=", getRandomInequality()));
         binding.equationTextView.invalidate();
 
-        binding.seekbar.comboSeekBar.setEnabled(false);
-        binding.seekbar.icons.setVisibility(View.GONE);
+//        binding.seekbar.icons.setVisibility(View.GONE);
         binding.seekbar.setResourceId(R.drawable.vertical_line);
-        binding.seekbar.drawResourceOn(userAnswer);
-        binding.seekbar.comboSeekBar.invalidate();
+        binding.seekbar.drawResourceOn(r);
+        binding.seekbar.comboSeekBar.setEnabled(false);
 
         int answer = userAnswer + Constants.X_MAX;
         int lessThan = answer / 2;
@@ -237,10 +233,7 @@ public class LinearInequality extends AppCompatActivity {
         answer = lessThan == answer ? answer + 1 : answer;
         answer = greaterThan == answer ? answer - 1 : answer;
 
-        Log.d(TAG, "answer: " + answer);
-
-        Rect r = binding.seekbar.comboSeekBar.getThumb().getBounds();
-        Log.d(TAG, "thumb: " + r.toString());
+        Log.d(TAG, "lt answer gt : " + lessThan + " " + answer + " " + greaterThan);
 
         int states[][] = {{android.R.attr.state_checked}, {}};
         int colors[] = {Color.RED, Color.RED};
@@ -275,8 +268,8 @@ public class LinearInequality extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        params.leftMargin = r.right - r.left;
-        params.bottomMargin = 140;
+        params.leftMargin = r.right - (r.right - r.left) - 16;
+        params.bottomMargin = 0;
         return params;
     }
 
@@ -287,10 +280,10 @@ public class LinearInequality extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        Log.d(TAG, "params: " + slice + " x " + params.height);
+        Log.d(TAG, "index - params: " + index + " : " + slice + " x " + params.height);
 
         params.leftMargin = (slice * index) - (slice / 2);
-        params.bottomMargin = 140;
+        params.bottomMargin = 0;
         return params;
     }
 
@@ -317,13 +310,14 @@ public class LinearInequality extends AppCompatActivity {
 //            eq = new Equation(-5, 4, -6, 0, 2);
             binding.equationTextView.setText(eq.printEquation());
         } while (eq.toString().equals("FAILED"));
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
-        binding.seekbar.comboSeekBar.setEnabled(true);
 
-        //binding.seekbar.comboSeekBar.setCustomDrawable();
-        binding.seekbar.icons.setVisibility(View.GONE);
+//        binding.seekbar.icons.setVisibility(View.GONE);
+        binding.seekbar.comboSeekBar.setEnabled(true);
+        binding.seekbar.reset();
+        binding.seekbar.numbers.removeAllViews();
+        binding.seekbar.getViewDimensions();
+        binding.seekbar.setResourceId(0);
         binding.seekbar.comboSeekBar.invalidate();
-//        binding.seekbar.setResourceId(0);
 
         binding.checkBoxesLayout.removeAllViews();
 

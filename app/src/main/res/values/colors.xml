@@ -5,6 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="DARK_RED">#C62828</color>
     <color name="DARK_GREEN">#00695C</color>
-    <color name="LIGHT_RED">#FFCDD2</color>
+    <color name="LIGHT_RED">#ffcdd2</color>
     <color name="LIGHT_GREEN">#E0F2F1</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.freelance.jptalusan.linearops.Views;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -15,10 +16,8 @@ import android.widget.SeekBar;
 
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
-import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 //How to expose listener:http://stackoverflow.com/questions/10776764/what-is-the-right-way-to-communicate-from-a-custom-view-to-the-activity-in-which
 public class SeekBarLayout extends ConstraintLayout {
@@ -156,6 +155,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) numbersDimension.width,
                 (int) numbersDimension.height);
 
+        Log.d(TAG, "center offset val: " + center + "-" + tickOffset + "-" + val);
         if (val > 0) { //add some factor since it does not have the '-' symbol.
             params.leftMargin = (int)center + tickOffset + (tickOffset * (val - 1)) + 8;
         } else if (val < 0) {
@@ -181,25 +181,23 @@ public class SeekBarLayout extends ConstraintLayout {
         }
     }
 
-    public void drawResourceOn(int index) {
-        icons.removeAllViews();
+    public void drawResourceOn(Rect r) {
+        Log.d(TAG, "user answer2: " + r.toString());
+        Log.d(TAG, "w x h: " + getWidth() + " x " + getHeight());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                (int) numbersDimension.width, (int) numbersDimension.height);
+
+        params.setMargins(r.right - (r.right - r.left) - 16, 0, 0 , 0);
+
         ImageView iv = new ImageView(getContext());
         iv.setImageResource(resourceId);
-        iv.setLayoutParams(generateNumbersParams(index - Constants.ONE_MAX));
-        iv.setPadding(2, 0, 2, 0);
-        numbers.addView(iv);
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        iv.setTag("divider");
+        numbers.addView(iv, params);
     }
 
     public void setResourceId(int resourceId) {
         this.resourceId = resourceId;
-    }
-
-    public void setSeekBarMax(int val) {
-        comboSeekBar.setMax(val);
-    }
-
-    public void setComboSeekBarAdapter(List<String> values) {
-        //comboSeekBar.setAdapter(values);
     }
 
     public void setValues(ArrayList<String> values) {
@@ -227,9 +225,5 @@ public class SeekBarLayout extends ConstraintLayout {
 
     public void reset() {
         comboSeekBar.setProgress(Constants.X_MAX);
-    }
-
-    public List<ComboSeekBar.Dot> getSeekBarDots() {
-        return null;
     }
 }

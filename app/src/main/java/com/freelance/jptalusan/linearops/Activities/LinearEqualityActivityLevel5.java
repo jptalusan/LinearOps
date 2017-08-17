@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
+import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
 import com.freelance.jptalusan.linearops.Utilities.Utilities;
 import com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
@@ -291,8 +292,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     private void startLinearOps() {
         Log.d(TAG, "startLinearOps: " + currLevel);
         do {
-//            eq = EquationGeneration.generateEqualityEquation(currLevel);
-            eq = new Equation(1, 2, -7, 0, 5);
+            eq = EquationGeneration.generateEqualityEquation(currLevel);
+//            eq = new Equation(1, 2, -7, 0, 5);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

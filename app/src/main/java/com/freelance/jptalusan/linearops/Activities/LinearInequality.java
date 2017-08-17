@@ -3,6 +3,7 @@ package com.freelance.jptalusan.linearops.Activities;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +33,7 @@ public class LinearInequality extends AppCompatActivity {
     private ActivityLinearInequalityBinding binding;
     private Equation eq = null;
     private int userAnswer = 0;
-    private List<String> points = null;
+    private ArrayList<String> points = null;
     private Random rnd = null;
     private AppCompatCheckBox lessThanCB = null;
     private AppCompatCheckBox answerCB = null;
@@ -65,10 +66,12 @@ public class LinearInequality extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
-        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-        binding.seekbar.setComboSeekBarAdapter(points);
-        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+//        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
+//        binding.seekbar.setComboSeekBarAdapter(points);
+//        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
 //        binding.seekbar.setResourceId(0);
+        binding.seekbar.setValues(points);
+        binding.seekbar.getViewDimensions();
         binding.seekbar.icons.setVisibility(View.GONE);
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
@@ -219,12 +222,10 @@ public class LinearInequality extends AppCompatActivity {
         binding.equationTextView.invalidate();
 
         binding.seekbar.comboSeekBar.setEnabled(false);
-        //binding.seekbar.comboSeekBar.setLinearInequalityDrawable();
-        binding.seekbar.comboSeekBar.invalidate();
         binding.seekbar.icons.setVisibility(View.GONE);
-
-//        binding.seekbar.setResourceId(R.drawable.vertical_line);
-//        binding.seekbar.drawResourceOn(userAnswer);
+        binding.seekbar.setResourceId(R.drawable.vertical_line);
+        binding.seekbar.drawResourceOn(userAnswer);
+        binding.seekbar.comboSeekBar.invalidate();
 
         int answer = userAnswer + Constants.X_MAX;
         int lessThan = answer / 2;
@@ -238,10 +239,8 @@ public class LinearInequality extends AppCompatActivity {
 
         Log.d(TAG, "answer: " + answer);
 
-        List<ComboSeekBar.Dot> dots = binding.seekbar.getSeekBarDots();
-//        for (ComboSeekBar.Dot d:  dots) {
-//            Log.d(TAG, "dot:" + d.isSelected);
-//        }
+        Rect r = binding.seekbar.comboSeekBar.getThumb().getBounds();
+        Log.d(TAG, "thumb: " + r.toString());
 
         int states[][] = {{android.R.attr.state_checked}, {}};
         int colors[] = {Color.RED, Color.RED};
@@ -255,7 +254,7 @@ public class LinearInequality extends AppCompatActivity {
         int states2[][] = {{android.R.attr.state_checked}, {}};
         int colors2[] = {Color.BLUE, Color.BLUE};
         answerCB = new AppCompatCheckBox(this);
-        answerCB.setLayoutParams(generateForSelected(dots));
+        answerCB.setLayoutParams(generateForSelected(r));
         answerCB.setSupportButtonTintList(new ColorStateList(states2, colors2));
         answerCB.setId(answerId);
         answerCB.setOnClickListener(new CheckboxListener());
@@ -271,18 +270,13 @@ public class LinearInequality extends AppCompatActivity {
         binding.checkBoxesLayout.addView(greaterThanCB);
     }
 
-    private RelativeLayout.LayoutParams generateForSelected(List<ComboSeekBar.Dot> dots) {
+    private RelativeLayout.LayoutParams generateForSelected(Rect r) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        int width = dots.get(1).mX - dots.get(0).mX;
-        for (ComboSeekBar.Dot d : dots) {
-            if (d.isSelected) {
-                params.leftMargin = d.mX - (width / 2);
-                params.bottomMargin = 140;
-            }
-        }
+        params.leftMargin = r.right - r.left;
+        params.bottomMargin = 140;
         return params;
     }
 

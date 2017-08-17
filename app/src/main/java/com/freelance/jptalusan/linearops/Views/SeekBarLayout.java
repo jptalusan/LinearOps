@@ -32,7 +32,6 @@ public class SeekBarLayout extends ConstraintLayout {
     private Dimensions iconDimension = new Dimensions();
     private Dimensions numbersDimension = new Dimensions();
     private double center = 0;
-    private int mSignedMax = 0;
     private ArrayList<String> mValues = new ArrayList<>();
     private int tickOffset = 0;
 
@@ -74,9 +73,9 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.e(TAG, "---");
-                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
-                Log.d(TAG, "max: " + comboSeekBar.getMax());
+//                Log.e(TAG, "---");
+//                Log.d(TAG, "i: " + i + ", progress: " + seekBar.getProgress());
+//                Log.d(TAG, "max: " + comboSeekBar.getMax());
                 Log.d(TAG, "val: " + (i - (comboSeekBar.getMax() / 2)));
                 addIcons(i - (comboSeekBar.getMax() / 2));
                 if (listener != null)
@@ -109,17 +108,12 @@ public class SeekBarLayout extends ConstraintLayout {
                 iconDimension.width  = dimensions.width / ((comboSeekBar.getMax()));
                 iconDimension.height = dimensions.height;
 
-                Log.d(TAG, iconDimension.toString());
-                Log.d(TAG, dimensions.toString());
-                Log.d(TAG, "Numbers: " + numbersDimension.toString());
-
                 tickOffset = icons.getMeasuredWidth() / comboSeekBar.getMax();
-                drawNumbers();
-                //Log.d(TAG, "max: "  + comboSeekBar.getMax());
-                //Log.d(TAG, "width: " + comboSeekBar.getMeasuredWidth());
-                //Log.d(TAG, "offset: " + comboSeekBar.getThumbOffset());
-
                 center = dimensions.width / 2;
+
+                numbers.removeAllViews();
+                drawNumbers();
+
             }
         });
     }
@@ -154,14 +148,6 @@ public class SeekBarLayout extends ConstraintLayout {
 
         int originalValue = val + Constants.ONE_MAX;
         params.leftMargin = (tickOffset * originalValue) - (params.width / 2);
-
-//        if (val > 0) {
-//            params.leftMargin = (int)center + params.width / 2 + (params.width * (val - 1));
-//        } else if (val < 0) {
-//            params.leftMargin = (int)center + params.width / 2 - (params.width * Math.abs(val - 1));
-//        } else {
-//            params.leftMargin = (int)center - params.width / 2;
-//        }
         return params;
     }
 
@@ -169,10 +155,6 @@ public class SeekBarLayout extends ConstraintLayout {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 (int) numbersDimension.width,
                 (int) numbersDimension.height);
-
-//        int thumb = comboSeekBar.getThumb().getMinimumWidth();
-//        int originalValue = val + Constants.ONE_MAX;
-//        params.leftMargin = (tickOffset * originalValue);
 
         if (val > 0) { //add some factor since it does not have the '-' symbol.
             params.leftMargin = (int)center + tickOffset + (tickOffset * (val - 1)) + 8;
@@ -191,17 +173,10 @@ public class SeekBarLayout extends ConstraintLayout {
         if (mValues == null) {
             return;
         }
-        Log.d(TAG, "drawNumbers(): " + mValues.size());
         for (int i = 0; i < mValues.size(); ++i) {
-            Log.d(TAG, "inside.");
             AutoResizeTextView tv = new AutoResizeTextView(getContext());
             tv.setText(mValues.get(i));
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-//                    (int) numbersDimension.width,
-//                    (int) numbersDimension.height);
-//            tv.setLayoutParams(params);
-            tv.setLayoutParams(generateNumbersParams(i));
-            Log.d(TAG, "value: " + mValues.get(i) + ", w x h: " + tv.getLayoutParams().width + " x " + tv.getLayoutParams().height);
+            tv.setLayoutParams(generateNumbersParams(i - Constants.ONE_MAX));
             numbers.addView(tv);
         }
     }
@@ -210,9 +185,9 @@ public class SeekBarLayout extends ConstraintLayout {
         icons.removeAllViews();
         ImageView iv = new ImageView(getContext());
         iv.setImageResource(resourceId);
-        iv.setLayoutParams(generateParams(index));
+        iv.setLayoutParams(generateNumbersParams(index - Constants.ONE_MAX));
         iv.setPadding(2, 0, 2, 0);
-        icons.addView(iv);
+        numbers.addView(iv);
     }
 
     public void setResourceId(int resourceId) {
@@ -228,6 +203,7 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void setValues(ArrayList<String> values) {
+        numbers.removeAllViews();
         mValues = values;
     }
 
@@ -253,139 +229,7 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar.setProgress(Constants.X_MAX);
     }
 
-    public void setComboSeekBarSignedMax(int signedMax) {
-        mSignedMax = signedMax;
-    }
-
     public List<ComboSeekBar.Dot> getSeekBarDots() {
         return null;
     }
-/*
-    public void setIntervals(ArrayList<String> intervals) {
-        mValues = intervals;
-        displayIntervals(intervals);
-        comboSeekBar.setMax(intervals.size() - 1);
-    }
-
-    private void displayIntervals(List<String> intervals) {
-        int idOfPreviousInterval = 0;
-
-        if (numbers.getChildCount() == 0) {
-            for (String interval : intervals) {
-                TextView textViewInterval = createInterval(interval);
-                alignTextViewToRightOfPreviousInterval(textViewInterval, idOfPreviousInterval);
-
-                idOfPreviousInterval = textViewInterval.getId();
-
-                numbers.addView(textViewInterval);
-            }
-        }
-    }
-
-    private TextView createInterval(String interval) {
-        View textBoxView = LayoutInflater.from(getContext())
-                .inflate(R.layout.seekbar_with_interval_labels, null);
-
-        TextView textView = textBoxView
-                .findViewById(R.id.textViewInterval);
-
-        textView.setId(View.generateViewId());
-        textView.setText(interval);
-
-        return textView;
-    }
-
-    private void alignTextViewToRightOfPreviousInterval(TextView textView, int idOfPreviousInterval) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        if (idOfPreviousInterval > 0) {
-            params.addRule(RelativeLayout.RIGHT_OF, idOfPreviousInterval);
-        }
-
-        textView.setLayoutParams(params);
-    }
-
-    private int WidthMeasureSpec = 0;
-    private int HeightMeasureSpec = 0;
-
-    @Override
-    protected synchronized void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)    {
-        WidthMeasureSpec = widthMeasureSpec;
-        HeightMeasureSpec = heightMeasureSpec;
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-
-        if (changed) {
-            alignIntervals();
-
-            // We've changed the intervals layout, we need to refresh.
-            numbers.measure(WidthMeasureSpec, HeightMeasureSpec);
-            numbers.layout(numbers.getLeft(), numbers.getTop(),
-                    numbers.getRight(), numbers.getBottom());
-        }
-    }
-
-    private void alignIntervals() {
-        int widthOfSeekbarThumb = getSeekbarThumbWidth();
-        int thumbOffset = comboSeekBar.getThumbOffset();//widthOfSeekbarThumb / 2;
-
-        //test
-        int jpoffset = comboSeekBar.getWidth() / comboSeekBar.getMax();
-
-
-        int widthOfSeekbar = comboSeekBar.getWidth();
-        Log.d(TAG, "width of seekbar: " + widthOfSeekbar);
-        int firstIntervalWidth = numbers.getChildAt(0).getWidth();
-        int remainingPaddableWidth = widthOfSeekbar - firstIntervalWidth - widthOfSeekbarThumb;
-
-        int numberOfIntervals = comboSeekBar.getMax();
-        int maximumWidthOfEachInterval = remainingPaddableWidth / numberOfIntervals;
-
-        alignFirstInterval(0);
-        alignIntervalsInBetween(jpoffset);
-        alignLastInterval(0, jpoffset);
-    }
-
-    private int getSeekbarThumbWidth() {
-        return comboSeekBar.getThumb().getMinimumWidth();
-//        return getResources().getDimensionPixelOffset(R.dimen.seekbar_thumb_width);
-    }
-
-    private void alignFirstInterval(int offset) {
-        TextView firstInterval = (TextView) numbers.getChildAt(0);
-        firstInterval.setPadding(offset, 0, 0, 0);
-    }
-
-    private void alignIntervalsInBetween(int maximumWidthOfEachInterval) {
-        int widthOfPreviousIntervalsText = 0;
-
-        // Don't align the first or last interval.
-        for (int index = 1; index < (numbers.getChildCount() - 1); index++) {
-            TextView textViewInterval = (TextView) numbers.getChildAt(index);
-            int widthOfText = textViewInterval.getWidth();
-
-            // This works out how much left padding is needed to center the current interval.
-            int leftPadding = Math.round(maximumWidthOfEachInterval - (widthOfText / 2) - (widthOfPreviousIntervalsText / 2));
-            textViewInterval.setPadding(leftPadding, 0, 0, 0);
-
-            widthOfPreviousIntervalsText = widthOfText;
-        }
-    }
-
-    private void alignLastInterval(int offset, int maximumWidthOfEachInterval) {
-        int lastIndex = numbers.getChildCount() - 1;
-
-        TextView lastInterval = (TextView) numbers.getChildAt(lastIndex);
-        int widthOfText = lastInterval.getWidth();
-
-        int leftPadding = Math.round(maximumWidthOfEachInterval - widthOfText - offset);
-        lastInterval.setPadding(leftPadding, 0, 0, 0);
-    }
-    */
 }

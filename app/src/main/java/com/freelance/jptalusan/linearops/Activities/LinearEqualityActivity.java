@@ -2,7 +2,6 @@ package com.freelance.jptalusan.linearops.Activities;
 
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -55,13 +54,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
             points.add(Integer.toString(i));
         }
 
-//        binding.seekbar.setSeekBarMax((Constants.ONE_MAX * 2) + 1);
-//        binding.seekbar.setComboSeekBarAdapter(points);
-//        binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
-
         binding.seekbar.setValues(points);
-
-        //binding.seekbar.setIntervals(points);
+        binding.seekbar.getViewDimensions();
         startLinearOps();
 
         binding.seekbar.reset();
@@ -71,8 +65,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
             //Should only be called when layout is in the for ax = b only
 //                Log.d(TAG, "inLeveL: " + val);
                 //TO GET The thumb location
-                Rect r = binding.seekbar.comboSeekBar.getThumb().getBounds();
-                Log.d(TAG, "thumb: " + r.toString());
                 userAnswer = val;
             }
         });
@@ -169,7 +161,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
     }
 
     private void setupGrid(LinearOpsGridLayout l, int number) {
-        ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
         //Given that we always want to have 5 columns
         l.setCols(10);
         Log.d(TAG, "Setup grid:  10 x " + ((Math.abs(number) / 10) + 1));

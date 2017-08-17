@@ -60,6 +60,7 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 //        binding.seekbar.setComboSeekBarAdapter(points);
 //        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
         binding.seekbar.setValues(points);
+        binding.seekbar.getViewDimensions();
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);

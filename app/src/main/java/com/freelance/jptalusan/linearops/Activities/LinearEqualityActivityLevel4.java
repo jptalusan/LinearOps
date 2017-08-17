@@ -57,10 +57,9 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
 
         binding.increaseFractionButton.setVisibility(View.GONE);
         binding.decreaseFractionButton.setVisibility(View.GONE);
-//        binding.seekbar.setSeekBarMax(Constants.X_MAX * 2 + 1);
-//        binding.seekbar.setComboSeekBarAdapter(points);
-//        binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
+
         binding.seekbar.setValues(points);
+        binding.seekbar.getViewDimensions();
         binding.seekbar.setResourceId(R.mipmap.ic_launcher_round);
         binding.seekbar.setVisibility(View.GONE);
         binding.checkButton.setVisibility(View.GONE);

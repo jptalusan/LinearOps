@@ -76,7 +76,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw the pointer
+        // Draw the line separator (only right for now)
         if (side.equals("RIGHT")) {
             canvas.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight(), mTextPaint);
         }

@@ -14,14 +14,12 @@ import android.widget.Toast;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
-import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
 import com.freelance.jptalusan.linearops.Utilities.Utilities;
 import com.freelance.jptalusan.linearops.Views.LinearOpsGridLayout;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearEqualityLevelFiveBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     private static String TAG = "Level5Activity";
@@ -33,8 +31,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
     private double userAnswer = 0;
     private double fractionCounter = 1;
     private double mCenterValue = 0;
-    private List<String> points = null;
-    private List<Double> pointsVal = null;
+    private ArrayList<String> points = null;
+    private ArrayList<Double> pointsVal = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,13 +121,13 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 //                        eq);
                 int temp = Constants.DEFAULT_RESET;
                 Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid, eq.getX());
-                    }
-                }, temp);
+//                Handler h = new Handler();
+//                h.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Utilities.performCleanup(binding.leftSideGrid, binding.rightSideGrid, eq.getX());
+//                    }
+//                }, temp);
 
                 Handler h2 = new Handler();
                 h2.postDelayed(new Runnable() {
@@ -137,7 +135,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
                     public void run() {
                         startLinearOps();
                     }
-                }, temp + 2000);
+                }, temp);
             }
         });
 
@@ -265,8 +263,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         }
 
         //IF custom wwidth is small, remove +1
-        binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
-        Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
+        //binding.seekbar.setSeekBarMax((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1);
+        //Log.d(TAG, "X setupSeekbarValues: " + max + "/" + min + "/" + ((Constants.SEEKBAR_CUSTOM_WIDTH * 2) + 1));
         binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
         pointsVal.add(pointsVal.get(pointsVal.size() - 1)); //HACK
 
@@ -279,22 +277,22 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         Log.d(TAG, "pointsValArr: " + temp);
 
         String temp2 = "";
-        for (double d:
-                pointsVal) {
+        for (String d:
+                points) {
             temp2 += "[" + d + "]";
         }
         Log.d(TAG, "pointsArr: " + temp2);
 
+        binding.seekbar.setValues(points);
         binding.seekbar.getViewDimensions();
-        binding.seekbar.setComboSeekBarAdapter(points);
         binding.seekbar.invalidate();
     }
 
     private void startLinearOps() {
         Log.d(TAG, "startLinearOps: " + currLevel);
         do {
-            eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(1, 2, -7, 0, 5);
+//            eq = EquationGeneration.generateEqualityEquation(currLevel);
+            eq = new Equation(1, 2, -7, 0, 5);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);
@@ -304,6 +302,8 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.increaseFractionButton.setVisibility(View.GONE);
         setViewAbility(true);
         fractionCounter = 1;
+        mCenterValue = 0;
+        setupSeekbarValues();
     }
 
     private void setViewAbility(boolean enabled) {
@@ -323,16 +323,10 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
 
     private void setupGrid(LinearOpsGridLayout l, int number) {
         ArrayList<Integer> factors = Utilities.getFactors(Math.abs(number));
-        if (factors.size() == 1) {
-            l.setRows(1);
-            l.setCols(1);
-        } else if (factors.size() % 2 != 0) {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2));
-        } else {
-            l.setRows(factors.get(factors.size() / 2));
-            l.setCols(factors.get(factors.size() / 2 - 1));
-        }
+        //Given that we always want to have 5 columns
+        l.setCols(10);
+        Log.d(TAG, "Setup grid:  10 x " + ((Math.abs(number) / 10) + 1));
+        l.setRows((Math.abs(number) / 10) + 1);
     }
 
     public void setupLayoutForEquation(Equation equation) {
@@ -351,13 +345,13 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-//        setupGrid(binding.leftSideGrid, 25);
-        binding.leftSideGrid.setRows(6);
-        binding.leftSideGrid.setCols(5);
-
-        binding.rightSideGrid.setRows(6);
-        binding.rightSideGrid.setCols(5);
-//        setupGrid(binding.rightSideGrid, 25);
+        setupGrid(binding.leftSideGrid, 20);
+        setupGrid(binding.rightSideGrid, 90);
+//        binding.leftSideGrid.setRows(6);
+//        binding.leftSideGrid.setCols(5);
+//
+//        binding.rightSideGrid.setRows(6);
+//        binding.rightSideGrid.setCols(5);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

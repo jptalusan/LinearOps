@@ -197,7 +197,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 }
             }
             //Loop through all children and check which are visible and only then cancel out.
-            for (int i = 0; i < getChildCount(); ++i) {
+            for (int i = getChildCount() - 1; i >= 0; --i) {
                 LinearOpsImageView possibleOppositeChild = (LinearOpsImageView)getChildAt(i);
                 if (possibleOppositeChild.getType().equals(opposite)
                         && possibleOppositeChild.getVisibility() == VISIBLE) {

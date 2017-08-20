@@ -250,8 +250,8 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-        setupGrid(binding.leftSideGrid, (int) (ax + b));
-        setupGrid(binding.rightSideGrid, (int) cx);
+        setupGrid(binding.leftSideGrid, 20);
+        setupGrid(binding.rightSideGrid, 90);
 //        binding.leftSideGrid.setRows(6);
 //        binding.leftSideGrid.setCols(5);
 //

@@ -86,10 +86,8 @@ public class Utilities {
             } else {
                 remainingChildren = l.getVisibleChildCount();
             }
-            int numberOfCircles = remainingChildren;
             int currentChild = 0;
             int outerLoop;
-            int leftOverCircles = 0;
             if (absB % absUserAnswer != 0) {
                 outerLoop = attemptToSolve + 1;
             } else {
@@ -100,7 +98,7 @@ public class Utilities {
             Log.d(TAG, "outerLoop: " + outerLoop);
             if (outerLoop > absAx) {
                 //Compute for left over circles
-                leftOverCircles = (outerLoop - absAx) * absUserAnswer;
+
                 outerLoop = absAx;
             }
 
@@ -163,22 +161,6 @@ public class Utilities {
             l.animateXView(child, delay, dividend);
         } else {
             r.animateXView(child, delay, dividend);
-        }
-    }
-
-    private void chooseWhichXToPulse(int child, int delay, int dividend) {
-        if (r.getValuesInside().equals(Constants.ONE)) {
-            l.pulseXView(child, delay, dividend);
-        } else {
-            r.pulseXView(child, delay, dividend);
-        }
-    }
-
-    private void chooseWhichOneToPulse(int child, int delay) {
-        if (r.getValuesInside().equals(Constants.ONE)) {
-            r.pulseOneView(child, delay);
-        } else {
-            l.pulseOneView(child, delay);
         }
     }
 

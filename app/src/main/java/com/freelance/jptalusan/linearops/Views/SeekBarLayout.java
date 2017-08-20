@@ -127,6 +127,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 iv.setImageResource(R.drawable.white_circle);
                 iv.setLayoutParams(generateParams(i));
                 iv.setPadding(2, 0, 2, 0);
+                iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 icons.addView(iv);
             }
         } else if (val < 0) {
@@ -135,6 +136,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 iv.setImageResource(R.drawable.black_circle);
                 iv.setLayoutParams(generateParams(i));
                 iv.setPadding(2, 0, 2, 0);
+                iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 icons.addView(iv);
             }
         }
@@ -142,8 +144,8 @@ public class SeekBarLayout extends ConstraintLayout {
 
     private RelativeLayout.LayoutParams generateParams(int val) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) iconDimension.width,
-                (int) iconDimension.height);
+                (int) (iconDimension.width * 0.90),
+                (int) (iconDimension.height * 0.90));
 
         int originalValue = val + Constants.ONE_MAX;
         params.leftMargin = (tickOffset * originalValue) - (params.width / 2);
@@ -155,7 +157,6 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) numbersDimension.width,
                 (int) numbersDimension.height);
 
-        Log.d(TAG, "center offset val: " + center + "-" + tickOffset + "-" + val);
         if (val > 0) { //add some factor since it does not have the '-' symbol.
             params.leftMargin = (int)center + tickOffset + (tickOffset * (val - 1)) + 8;
         } else if (val < 0) {
@@ -182,8 +183,6 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void drawResourceOn(Rect r) {
-        Log.d(TAG, "user answer2: " + r.toString());
-        Log.d(TAG, "w x h: " + getWidth() + " x " + getHeight());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 (int) numbersDimension.width, (int) numbersDimension.height);
 

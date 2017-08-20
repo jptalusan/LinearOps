@@ -1,5 +1,7 @@
 package com.freelance.jptalusan.linearops.Views;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
@@ -8,7 +10,6 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -24,6 +25,8 @@ import android.view.animation.TranslateAnimation;
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Utilities;
+
+import java.util.ArrayList;
 
 public class LinearOpsGridLayout extends CustomGridLayout {
     private static String TAG = "LinearOpsGridLayout";
@@ -118,13 +121,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             lastAddedViewType = Utilities.getTypeFromResource(imageResource);
 
             linearOpsImageView.setPadding(1, 1, 1, 1);
-//            if (getChildCount() % 5 == 0 &&
-//                    getChildCount() % 10 != 0) {
-//                RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) linearOpsImageView.getLayoutParams();
-//                p.leftMargin += 15;
-//                linearOpsImageView.setLayoutParams(p);
-//            }
-//            linearOpsImageView.setBackgroundResource(R.drawable.image_border);
             addView(linearOpsImageView);
 
             setImageViewType(imageResource);
@@ -330,87 +326,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 drawables = Constants.BLACK_BOX_WHITE_CIRLE;
             }
         }
-    }
-
-    public void pulseOneView(int child, int delay) {
-        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
-        final Drawable tempResource = temp.getBackground();
-        AnimationSet animSet = new AnimationSet(false);
-        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
-                android.R.anim.cycle_interpolator));
-        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation.setDuration(250);
-        alphaAnimation.setRepeatCount(1);
-        alphaAnimation.setRepeatMode(Animation.REVERSE);
-//        alphaAnimation.setStartOffset(delay);
-
-        animSet.addAnimation(alphaAnimation);
-        animSet.setDuration(250);
-        animSet.setStartOffset(delay);
-//        animSet.setStartTime(delay);
-        temp.startAnimation(animSet);
-
-        animSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null) {
-                    listener.onAnimationStart(temp.getId());
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                temp.setBackground(tempResource);
-                temp.setText("");
-                listener.onAllAnimationsEnd();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-    }
-
-    public void pulseXView(int child, int delay, final int dividend) {
-        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
-        AnimationSet animSet = new AnimationSet(false);
-        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
-                android.R.anim.cycle_interpolator));
-        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation.setDuration(250);
-        alphaAnimation.setRepeatCount(1);
-        alphaAnimation.setRepeatMode(Animation.REVERSE);
-        alphaAnimation.setStartOffset(delay);
-
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
-        scaleAnimation.setDuration(250);
-        scaleAnimation.setRepeatCount(1);
-        scaleAnimation.setRepeatMode(Animation.REVERSE);
-        scaleAnimation.setStartOffset(delay);
-
-        animSet.addAnimation(alphaAnimation);
-        animSet.addAnimation(scaleAnimation);
-        temp.startAnimation(animSet);
-
-        animSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null) {
-                    listener.onAnimationStart(temp.getId());
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                temp.setBackgroundResource(drawables[dividend]);
-                temp.setText("");
-                listener.onAllAnimationsEnd();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
     }
 
     public void animateXView(int child, int delay, final int dividend) {
@@ -632,7 +547,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             for (int i = 0; i < getChildCount(); ++i) {
                 LinearOpsImageView linearOpsImageView = (LinearOpsImageView) getChildAt(i);
                 if (linearOpsImageView.getNumberOfContained() == 0 ||
-                        (i == (getChildCount() - 1) && linearOpsImageView.getNumberOfContained() != correctAnswer)) {
+                        (i == (getChildCount() - 1) && linearOpsImageView.getNumberOfContained() > correctAnswer)) {
                     ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(linearOpsImageView,
                             PropertyValuesHolder.ofFloat("scaleX", 1.2f),
                             PropertyValuesHolder.ofFloat("scaleY", 1.2f));
@@ -655,6 +570,102 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
 
                 scaleDown.start();
+            }
+        }
+    }
+
+    //Animate 1 box - scale
+    public void animateStepOne(int numberOfAnimations, final ArrayList<Integer> containedInEach) {
+
+        for (int i = 0; i < numberOfAnimations; ++i) {
+            final int fI = i;
+            final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(i);
+            ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(temp,
+                    PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+                    PropertyValuesHolder.ofFloat("scaleY", 1.2f));
+            scaleDown.setDuration(500);
+
+            scaleDown.setRepeatCount(3);
+            scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+            scaleDown.setStartDelay(2000 * i);
+
+            scaleDown.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    Log.d(TAG, "contained in: " + fI + ", " + containedInEach.get(fI));
+                    temp.setBackgroundResource(drawables[containedInEach.get(fI)]);
+                    temp.setNumberOfContained(containedInEach.get(fI));
+                    temp.setText("");
+                    listener.onAllAnimationsEnd();
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    if (listener != null) {
+                        listener.onAnimationStart(temp.getId());
+                    }
+                }
+            });
+
+            scaleDown.start();
+        }
+    }
+
+    public void animateStepTwo(int startingChild, int numberOfBallsToAnimate, int delay) {
+        Log.d(TAG, "numberOfBallsToAnimate: " + numberOfBallsToAnimate + ", starting at: " + startingChild);
+        int animatedBalls = 0;
+        for (int i = startingChild; i < getChildCount(); ++i) {
+            if (getChildAt(i).getVisibility() == VISIBLE &&
+                    animatedBalls != numberOfBallsToAnimate) {
+                final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(i);
+                if (temp == null)
+                    return;
+                LayoutParams params = (LayoutParams) temp.getLayoutParams();
+                AnimationSet animSet = new AnimationSet(false);
+                animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
+                        android.R.anim.linear_interpolator));
+
+                //Translate animation coordinates are based on the current object. 0, 0 is the current position of the object
+                TranslateAnimation translateAnimation;
+                if (this.side.equals(Constants.RIGHT)) { //Right going to left
+                    translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + temp.getWidth()), 0, 0);
+                } else { //Left going to right
+                    translateAnimation = new TranslateAnimation(0, getWidth() + temp.getWidth(), 0, 0);
+                }
+
+                translateAnimation.setDuration(1000);
+                translateAnimation.setStartOffset(2000 * delay);
+                translateAnimation.setRepeatCount(0);
+
+                animatedBalls++;
+
+                animSet.addAnimation(translateAnimation);
+                temp.startAnimation(animSet);
+
+                animSet.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        if (listener != null) {
+                            listener.onAnimationStart(temp.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        removeImageViewType(temp.getType());
+                        temp.setVisibility(View.GONE);
+                        if (listener != null) {
+                            listener.onAnimationEnd(temp.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         }
     }

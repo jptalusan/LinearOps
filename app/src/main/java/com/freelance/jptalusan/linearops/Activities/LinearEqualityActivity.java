@@ -76,7 +76,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 binding.leftSideGrid.redrawLayout();
                 binding.rightSideGrid.redrawLayout();
                 setViewAbility(false);
-                isAnswerCorrect(userAnswer);
+//                isAnswerCorrect(userAnswer);
+                newAnimation(userAnswer);
                 int temp = Utilities.determineResetPeriodInMillis(
                         binding.leftSideGrid,
                         binding.rightSideGrid,
@@ -146,7 +147,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(7, -49, 0 ,0, 1);
+//            eq = new Equation(-7, -49, 0 ,0, 1);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
@@ -181,12 +182,13 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-        //since no transfer of objects, left side is always X
-        binding.leftSideGrid.setRows(5);
-        binding.leftSideGrid.setCols(2);
+        binding.leftSideGrid.setRows(4);
+        binding.leftSideGrid.setCols(5);
+
+        binding.rightSideGrid.setRows(9);
+        binding.rightSideGrid.setCols(10);
+
         Log.d(TAG, "Test");
-        //setupGrid(binding.leftSideGrid, (int)ax);
-        setupGrid(binding.rightSideGrid, (int)b);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -241,6 +243,84 @@ public class LinearEqualityActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void newAnimation(final int userAnswer) {
+        if (userAnswer == eq.getX()) {
+            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
+        } else {
+            if ((userAnswer * -1) == eq.getX()) {
+                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        final LinearOpsGridLayout boxContainer, ballContainer;
+        if (binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
+            boxContainer = binding.leftSideGrid;
+            ballContainer = binding.rightSideGrid;
+        } else {
+            ballContainer = binding.leftSideGrid;
+            boxContainer = binding.rightSideGrid;
+        }
+
+        boolean isCorrectSign = (userAnswer * -1) != eq.getX();
+        if (binding.leftSideGrid.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
+                binding.leftSideGrid.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
+            binding.leftSideGrid.setOneViewDrawables(binding.leftSideGrid, binding.rightSideGrid, isCorrectSign);
+        } else {
+            binding.rightSideGrid.setOneViewDrawables(binding.rightSideGrid, binding.leftSideGrid, isCorrectSign);
+        }
+
+        final int numberOfRemainingBalls = ballContainer.getChildCount();
+        ArrayList<Integer> containedInEach = new ArrayList<>();
+
+        int absUserAnswer = Math.abs(userAnswer);
+
+        int numberOfBoxesToAnimate, numberOfBallsPerBox;
+        if (userAnswer == eq.getX()) {
+            Log.d(TAG, "correct.");
+            numberOfBoxesToAnimate = boxContainer.getChildCount();
+            numberOfBallsPerBox = absUserAnswer;
+            for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
+                containedInEach.add(numberOfBallsPerBox);
+            }
+        } else {
+            Log.d(TAG, "incorrect.");
+            int dividend = numberOfRemainingBalls / absUserAnswer;
+            int remainder = numberOfRemainingBalls % absUserAnswer;
+
+            if (remainder != 0) {
+                numberOfBoxesToAnimate = dividend + 1;
+            } else {
+                numberOfBoxesToAnimate = dividend;
+            }
+
+            if (numberOfBoxesToAnimate > boxContainer.getChildCount()) {
+                numberOfBoxesToAnimate = boxContainer.getChildCount();
+            }
+
+            if (remainder != 0) {
+                for (int i = 0; i < numberOfBoxesToAnimate - 1; ++i) {
+                    containedInEach.add(absUserAnswer);
+                }
+                containedInEach.add(remainder);
+            } else {
+                for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
+                    containedInEach.add(absUserAnswer);
+                }
+            }
+        }
+
+        //j = delay (per group)
+        //k = starting child, moving
+        //i = remaining balls (TODO: add if there are enough boxes to support them)
+        boxContainer.animateStepOne(numberOfBoxesToAnimate, containedInEach);
+
+        for (int i = 0, startingChild = 0; i < numberOfBoxesToAnimate; ++i) {
+            ballContainer.animateStepTwo(startingChild, absUserAnswer, i);
+            startingChild += absUserAnswer;
         }
     }
 }

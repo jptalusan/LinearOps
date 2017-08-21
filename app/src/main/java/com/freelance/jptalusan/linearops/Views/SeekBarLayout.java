@@ -134,7 +134,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) iconDimension.width, ViewGroup.LayoutParams.MATCH_PARENT);
 
         Log.d(TAG, "params:" + params.width + "," + params.height);
-        params.setMargins(r.right - (r.right - r.left) + 8, 0, 0 , 0);
+        params.setMargins(r.right - (r.right - r.left), 0, 0 , 0);
 
         ImageView iv = new ImageView(getContext());
         iv.setImageResource(resourceId);

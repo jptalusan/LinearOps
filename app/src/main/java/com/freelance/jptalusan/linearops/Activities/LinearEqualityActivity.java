@@ -76,8 +76,8 @@ public class LinearEqualityActivity extends AppCompatActivity {
                 binding.leftSideGrid.redrawLayout();
                 binding.rightSideGrid.redrawLayout();
                 setViewAbility(false);
-//                isAnswerCorrect(userAnswer);
-                newAnimation(userAnswer);
+                isAnswerCorrect(userAnswer);
+//                newAnimation(userAnswer);
                 int temp = Utilities.determineResetPeriodInMillis(
                         binding.leftSideGrid,
                         binding.rightSideGrid,
@@ -161,13 +161,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
         binding.checkButton.setEnabled(enabled);
     }
 
-    private void setupGrid(LinearOpsGridLayout l, int number) {
-        //Given that we always want to have 5 columns
-        l.setCols(10);
-        Log.d(TAG, "Setup grid:  10 x " + ((Math.abs(number) / 10) + 1));
-        l.setRows((Math.abs(number) / 10) + 1);
-    }
-
     public void setupLayoutForEquation(Equation equation) {
         final double ax = equation.getAx();
         final double b  = equation.getB();
@@ -243,84 +236,6 @@ public class LinearEqualityActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void newAnimation(final int userAnswer) {
-        if (userAnswer == eq.getX()) {
-            Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
-        } else {
-            if ((userAnswer * -1) == eq.getX()) {
-                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
-        final LinearOpsGridLayout boxContainer, ballContainer;
-        if (binding.leftSideGrid.getValuesInside().equals(Constants.X)) {
-            boxContainer = binding.leftSideGrid;
-            ballContainer = binding.rightSideGrid;
-        } else {
-            ballContainer = binding.leftSideGrid;
-            boxContainer = binding.rightSideGrid;
-        }
-
-        boolean isCorrectSign = (userAnswer * -1) != eq.getX();
-        if (binding.leftSideGrid.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
-                binding.leftSideGrid.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
-            binding.leftSideGrid.setOneViewDrawables(binding.leftSideGrid, binding.rightSideGrid, isCorrectSign);
-        } else {
-            binding.rightSideGrid.setOneViewDrawables(binding.rightSideGrid, binding.leftSideGrid, isCorrectSign);
-        }
-
-        final int numberOfRemainingBalls = ballContainer.getChildCount();
-        ArrayList<Integer> containedInEach = new ArrayList<>();
-
-        int absUserAnswer = Math.abs(userAnswer);
-
-        int numberOfBoxesToAnimate, numberOfBallsPerBox;
-        if (userAnswer == eq.getX()) {
-            Log.d(TAG, "correct.");
-            numberOfBoxesToAnimate = boxContainer.getChildCount();
-            numberOfBallsPerBox = absUserAnswer;
-            for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
-                containedInEach.add(numberOfBallsPerBox);
-            }
-        } else {
-            Log.d(TAG, "incorrect.");
-            int dividend = numberOfRemainingBalls / absUserAnswer;
-            int remainder = numberOfRemainingBalls % absUserAnswer;
-
-            if (remainder != 0) {
-                numberOfBoxesToAnimate = dividend + 1;
-            } else {
-                numberOfBoxesToAnimate = dividend;
-            }
-
-            if (numberOfBoxesToAnimate > boxContainer.getChildCount()) {
-                numberOfBoxesToAnimate = boxContainer.getChildCount();
-            }
-
-            if (remainder != 0) {
-                for (int i = 0; i < numberOfBoxesToAnimate - 1; ++i) {
-                    containedInEach.add(absUserAnswer);
-                }
-                containedInEach.add(remainder);
-            } else {
-                for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
-                    containedInEach.add(absUserAnswer);
-                }
-            }
-        }
-
-        //j = delay (per group)
-        //k = starting child, moving
-        //i = remaining balls (TODO: add if there are enough boxes to support them)
-        boxContainer.animateStepOne(numberOfBoxesToAnimate, containedInEach);
-
-        for (int i = 0, startingChild = 0; i < numberOfBoxesToAnimate; ++i) {
-            ballContainer.animateStepTwo(startingChild, absUserAnswer, i);
-            startingChild += absUserAnswer;
         }
     }
 }

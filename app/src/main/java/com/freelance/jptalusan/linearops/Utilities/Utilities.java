@@ -39,131 +39,6 @@ public class Utilities {
         return out;
     }
 
-    //TODO: Must refactor how i check for the children, since they are not redrawn and are not in the
-    //places i expect them to be. right now it animates the invisible objects instead causing everything
-    //to look weird.
-    public boolean animateObjects(Equation eq, int userAnswer, boolean willAnimate) {
-        int absAx;
-        int absB;
-        int absUserAnswer = Math.abs(userAnswer);
-
-        double correctAnswer = eq.getX();
-
-        boolean isCorrectSign = (userAnswer * -1) != correctAnswer;
-        if (l.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
-                l.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
-            absAx = Math.abs(l.getVisibleChildCount());
-            absB  = Math.abs(r.getVisibleChildCount());
-            l.setOneViewDrawables(l, r, isCorrectSign);
-        } else {
-            absAx = Math.abs(r.getVisibleChildCount());
-            absB  = Math.abs(l.getVisibleChildCount());
-            r.setOneViewDrawables(r, l, isCorrectSign);
-        }
-        Log.d(TAG, "absAx: " + absAx + ", " + "absB: " + absB);
-
-        if (absUserAnswer > absB) {
-            return false;
-        }
-
-        int delayFactor = willAnimate ? 1: 0;
-
-        if (absAx == absB && absUserAnswer == 1) {
-            for (int i = 0; i < absAx; ++i) {
-                chooseWhichXToAnimate(i, 500 * i * delayFactor, absUserAnswer);
-                chooseWhichOneToAnimate(i, 1000 * i * delayFactor);
-            }
-        } else if (absAx == 1) {
-            for (int i = 0; i < absUserAnswer; ++i) {
-                chooseWhichOneToAnimate(i, 0);
-            }
-            chooseWhichXToAnimate(0, 0, absUserAnswer);
-        } else {
-            int attemptToSolve = absB / absUserAnswer;
-            int remainingChildren;
-            if (r.getValuesInside().equals(Constants.ONE)) {
-                remainingChildren = r.getVisibleChildCount();
-            } else {
-                remainingChildren = l.getVisibleChildCount();
-            }
-            int currentChild = 0;
-            int outerLoop;
-            if (absB % absUserAnswer != 0) {
-                outerLoop = attemptToSolve + 1;
-            } else {
-                outerLoop = attemptToSolve;
-            }
-
-            Log.d(TAG, "RemainingChildren: " + remainingChildren);
-            Log.d(TAG, "outerLoop: " + outerLoop);
-            if (outerLoop > absAx) {
-                //Compute for left over circles
-
-                outerLoop = absAx;
-            }
-
-            /*
-            * outerLoop = number of times the circles will be grouped and animated
-            * into the boxes. So if outerLoop is less than absAx, then that is the number of boxes
-            * left over without any circles inside.
-            */
-
-            /*
-            * Outer loop will only reach valid circles, left over circles will be animated later.
-             */
-
-            for (int i = 0; i < outerLoop; ++i) {
-                //Group the circles (remaining circles together)
-                if (remainingChildren > absUserAnswer) {
-                    remainingChildren -= absUserAnswer;
-                    //Delay is based on outer loop so the circles will be animated together.
-                    for (int j = 0; j < absUserAnswer; ++j) {
-                        chooseWhichOneToAnimate(currentChild, 1000 * i * delayFactor);
-                        currentChild++;
-                    }
-                    //Animate along with the current circles being animated
-                    chooseWhichXToAnimate(i, 500 * i * delayFactor, absUserAnswer);
-                /*
-                * Animate the remaining circles (this means the user answer is wrong and not all
-                * boxes have the same number of circles
-                 */
-                } else {
-                    for (int j = 0; j < remainingChildren; ++j) {
-                        chooseWhichOneToAnimate(currentChild, 1000 * i * delayFactor);
-                        currentChild++;
-                    }
-                    chooseWhichXToAnimate(i, 500 * i * delayFactor, remainingChildren);
-                }
-            }
-        }
-
-        //TODO: add actions here after answer is checked
-        if (correctAnswer == (double) userAnswer) {
-            Log.w(TAG, "correct!");
-            return true;
-        } else {
-            Log.w(TAG, "incorrect");
-            return false;
-        }
-    }
-
-    //Animate means to move one object from one layout to another layout
-    private void chooseWhichOneToAnimate(int child, int delay) {
-        if (r.getValuesInside().equals(Constants.ONE)) {
-            r.animateOneView(child, delay);
-        } else {
-            l.animateOneView(child, delay);
-        }
-    }
-
-    private void chooseWhichXToAnimate(int child, int delay, int dividend) {
-        if (r.getValuesInside().equals(Constants.ONE)) {
-            l.animateXView(child, delay, dividend);
-        } else {
-            r.animateXView(child, delay, dividend);
-        }
-    }
-
     public static String getTypeFromResource(int imageResource) {
         switch (imageResource) {
             case R.drawable.white_box:
@@ -210,8 +85,6 @@ public class Utilities {
     public static int determineResetPeriodInMillis(LinearOpsGridLayout l, LinearOpsGridLayout r, int userAnswer, Equation eq) {
         int xCount = 0;
         int oneCount = 0;
-        int quotient;
-        int remainder;
         int mUserAnswer = Math.abs(userAnswer);
         if (l.getValuesInside().equals(Constants.ONE)) {
             oneCount = Math.abs(l.getCountOfTypeContainedIn());
@@ -241,5 +114,79 @@ public class Utilities {
     public static void performCleanup(LinearOpsGridLayout left, LinearOpsGridLayout right, double correctAnswer) {
         left.performCleanup(Math.abs((int) correctAnswer));
         right.performCleanup(Math.abs((int) correctAnswer));
+    }
+
+    public boolean animateObjects(Equation eq, final int userAnswer, boolean willAnimate) {
+        boolean output = false;
+        final LinearOpsGridLayout boxContainer, ballContainer;
+        if (l.getValuesInside().equals(Constants.X)) {
+            boxContainer = l;
+            ballContainer = r;
+        } else {
+            ballContainer = l;
+            boxContainer = r;
+        }
+
+        boolean isCorrectSign = (userAnswer * -1) != eq.getX();
+        if (l.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
+                l.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
+            l.setOneViewDrawables(l, r, isCorrectSign);
+        } else {
+            r.setOneViewDrawables(r, l, isCorrectSign);
+        }
+
+        final int numberOfRemainingBalls = ballContainer.getChildCount();
+        ArrayList<Integer> containedInEach = new ArrayList<>();
+
+        int absUserAnswer = Math.abs(userAnswer);
+
+        if (absUserAnswer > ballContainer.getChildCount()) {
+            return false;
+        }
+
+        int numberOfBoxesToAnimate, numberOfBallsPerBox;
+        if (userAnswer == eq.getX()) {
+            Log.d(TAG, "correct.");
+            numberOfBoxesToAnimate = boxContainer.getChildCount();
+            numberOfBallsPerBox = absUserAnswer;
+            for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
+                containedInEach.add(numberOfBallsPerBox);
+            }
+            output = true;
+        } else {
+            Log.d(TAG, "incorrect.");
+            int dividend = numberOfRemainingBalls / absUserAnswer;
+            int remainder = numberOfRemainingBalls % absUserAnswer;
+
+            if (remainder != 0) {
+                numberOfBoxesToAnimate = dividend + 1;
+            } else {
+                numberOfBoxesToAnimate = dividend;
+            }
+
+            if (numberOfBoxesToAnimate > boxContainer.getChildCount()) {
+                numberOfBoxesToAnimate = boxContainer.getChildCount();
+            }
+
+            if (remainder != 0) {
+                for (int i = 0; i < numberOfBoxesToAnimate - 1; ++i) {
+                    containedInEach.add(absUserAnswer);
+                }
+                containedInEach.add(remainder);
+            } else {
+                for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
+                    containedInEach.add(absUserAnswer);
+                }
+            }
+        }
+
+        boxContainer.animateStepOne(numberOfBoxesToAnimate, containedInEach, willAnimate);
+
+        for (int i = 0, startingChild = 0; i < numberOfBoxesToAnimate; ++i) {
+            ballContainer.animateStepTwo(startingChild, absUserAnswer, i, willAnimate);
+            startingChild += absUserAnswer;
+        }
+
+        return output;
     }
 }

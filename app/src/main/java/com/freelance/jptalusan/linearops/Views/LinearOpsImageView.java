@@ -59,17 +59,17 @@ public class LinearOpsImageView extends AppCompatTextView {
     }
 
     public void setValueText(String text) {
+        setText("");
         prefs = getContext().getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
         if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) >= Constants.LEVEL_4) {
             setText(text);
             setTextColor(Color.BLACK);
             setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        } else {
-            if (text.equals("X")) {
-                setText("?");
-                setTextColor(Color.BLACK);
-                setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            }
+        } else if ((prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) == Constants.LEVEL_3) &&
+                    text.equals(Constants.X)) {
+            setText("?");
+            setTextColor(Color.BLACK);
+            setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         }
     }
 }

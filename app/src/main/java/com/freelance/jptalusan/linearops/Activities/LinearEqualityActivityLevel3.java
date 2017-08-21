@@ -228,11 +228,6 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
                 && binding.rightSideGrid.isLayoutUniform();
     }
 
-    private void setupGrid(LinearOpsGridLayout l, int number) {
-        l.setCols(10);
-        l.setRows((Math.abs(number) / 10) + 1);
-    }
-
     public void setupLayoutForEquation(Equation equation) {
         final double ax = equation.getAx();
         final double b  = equation.getB();
@@ -248,13 +243,11 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-        setupGrid(binding.leftSideGrid, 20);
-        setupGrid(binding.rightSideGrid, 90);
-//        binding.leftSideGrid.setRows(6);
-//        binding.leftSideGrid.setCols(5);
-//
-//        binding.rightSideGrid.setRows(6);
-//        binding.rightSideGrid.setCols(5);
+        binding.leftSideGrid.setRows(9);
+        binding.leftSideGrid.setCols(10);
+
+        binding.rightSideGrid.setRows(9);
+        binding.rightSideGrid.setCols(10);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

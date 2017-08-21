@@ -19,7 +19,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
 import com.freelance.jptalusan.linearops.R;
@@ -87,14 +86,12 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
     @Override
     public boolean addScaledImage(int imageResource) {
-//        Log.d(TAG, "LinearOpsGridLayout:addScaledImage");
-//        Log.d(TAG, "child/max" + getChildCount() + "/" + (super.rows * super.cols));
         if (getChildCount() < super.rows * super.cols) {
             /*
             Loop through all children first and see if any is set to INVISIBLE, and use them first
             before creating new one and adding it to the view.
 
-            lastAddedViewType is updated everytime a view is "added" so that we can cancel out
+            lastAddedViewType is updated every time a view is "added" so that we can cancel out
             the opposite views correctly.
              */
             for (int i = 0; i < getChildCount(); ++i) {
@@ -107,6 +104,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                     lastAddedViewType = Utilities.getTypeFromResource(imageResource);
                     setImageViewType(imageResource);
                     tempIv.setVisibility(VISIBLE);
+                    Log.d(TAG, "existing: " + Utilities.getOneOrX(imageResource));
                     return true;
                 }
             }
@@ -128,9 +126,10 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             defaultDimensions.height = getChildAt(0).getHeight();
             defaultDimensions.width = getChildAt(0).getWidth();
 
+            Log.d(TAG, "new: " + Utilities.getOneOrX(imageResource));
+
             return true;
         } else {
-//            Log.d(TAG, "Full");
             return false;
         }
     }
@@ -328,95 +327,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    public void animateXView(int child, int delay, final int dividend) {
-//        Log.d(TAG, "animateXView, div: " + dividend);
-        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
-        if (temp == null)
-            return;
-        AnimationSet animSet = new AnimationSet(false);
-        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
-                android.R.anim.cycle_interpolator));
-
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f);
-        scaleAnimation.setDuration(250);
-        scaleAnimation.setRepeatCount(1);
-        scaleAnimation.setRepeatMode(Animation.REVERSE);
-        scaleAnimation.setStartOffset(delay);
-
-        animSet.addAnimation(scaleAnimation);
-        temp.startAnimation(animSet);
-
-        animSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null) {
-                    listener.onAnimationStart(temp.getId());
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                temp.setBackgroundResource(drawables[dividend]);
-                temp.setNumberOfContained(dividend);
-                temp.setText("");
-                listener.onAllAnimationsEnd();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-    }
-
-    public void animateOneView(int child, int delay) {
-//        Log.d(TAG, "animateOneView");
-        final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(child);
-        if (temp == null)
-            return;
-        LayoutParams params = (LayoutParams) temp.getLayoutParams();
-        AnimationSet animSet = new AnimationSet(false);
-        animSet.setInterpolator(AnimationUtils.loadInterpolator(getContext(),
-                android.R.anim.linear_interpolator));
-
-        //Translate animation coordinates are based on the curresnt object. 0, 0 is the current position of the object
-        TranslateAnimation translateAnimation;
-//        Log.d(TAG, "Side of Layout: " + this.side);
-        if (this.side.equals(Constants.RIGHT)) { //Right going to left
-            translateAnimation = new TranslateAnimation(0, 0 - (params.leftMargin + temp.getWidth()), 0, 0);
-        } else { //Left going to right
-            translateAnimation = new TranslateAnimation(0, 0 + (getWidth() + temp.getWidth()), 0, 0);
-        }
-
-        translateAnimation.setDuration(Constants.ANIMATION_DURATION);
-        translateAnimation.setRepeatCount(0);
-        translateAnimation.setStartOffset(delay);
-        animSet.addAnimation(translateAnimation);
-        temp.startAnimation(animSet);
-
-        animSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (listener != null) {
-                    listener.onAnimationStart(temp.getId());
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                removeImageViewType(temp.getType());
-                temp.setVisibility(View.GONE);
-                if (listener != null) {
-                    listener.onAnimationEnd(temp.getId());
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
-
     private void cancelOutViews(int childOne, int childTwo) {
 //        Log.d(TAG, "cancelOutViews: " + childOne + "," + childTwo);
         final LinearOpsImageView temp = (LinearOpsImageView) getChildAt(childOne);
@@ -530,17 +440,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         this.listener = listener;
     }
 
-    public int getVisibleChildCount() {
-        int total = 0;
-        for (int i = 0; i < getChildCount(); ++i) {
-            LinearOpsImageView loIV = (LinearOpsImageView) getChildAt(i);
-            if (loIV.getVisibility() == VISIBLE) {
-                total++;
-            }
-        }
-        return total;
-    }
-
     public void performCleanup(int correctAnswer) {
         if (getValuesInside().equals(Constants.X)) {
             //Pulse x
@@ -575,7 +474,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     }
 
     //Animate 1 box - scale
-    public void animateStepOne(int numberOfAnimations, final ArrayList<Integer> containedInEach) {
+    public void animateStepOne(int numberOfAnimations, final ArrayList<Integer> containedInEach, boolean willAnimate) {
 
         for (int i = 0; i < numberOfAnimations; ++i) {
             final int fI = i;
@@ -585,9 +484,11 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                     PropertyValuesHolder.ofFloat("scaleY", 1.2f));
             scaleDown.setDuration(500);
 
+            int delayFactor = willAnimate ? 1: 0;
+
             scaleDown.setRepeatCount(3);
             scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
-            scaleDown.setStartDelay(2000 * i);
+            scaleDown.setStartDelay(2000 * i * delayFactor);
 
             scaleDown.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -613,7 +514,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         }
     }
 
-    public void animateStepTwo(int startingChild, int numberOfBallsToAnimate, int delay) {
+    public void animateStepTwo(int startingChild, int numberOfBallsToAnimate, int delay, boolean willAnimate) {
         Log.d(TAG, "numberOfBallsToAnimate: " + numberOfBallsToAnimate + ", starting at: " + startingChild);
         int animatedBalls = 0;
         for (int i = startingChild; i < getChildCount(); ++i) {
@@ -635,8 +536,10 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                     translateAnimation = new TranslateAnimation(0, getWidth() + temp.getWidth(), 0, 0);
                 }
 
+                int delayFactor = willAnimate ? 1: 0;
+
                 translateAnimation.setDuration(1000);
-                translateAnimation.setStartOffset(2000 * delay);
+                translateAnimation.setStartOffset((2000 * delay + 500) * delayFactor);
                 translateAnimation.setRepeatCount(0);
 
                 animatedBalls++;

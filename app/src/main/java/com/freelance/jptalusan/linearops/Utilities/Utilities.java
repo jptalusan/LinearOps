@@ -139,6 +139,7 @@ public class Utilities {
         ArrayList<Integer> containedInEach = new ArrayList<>();
 
         int absUserAnswer = Math.abs(userAnswer);
+        double absCorrectAnswer = Math.abs(eq.getX());
 
         if (absUserAnswer > ballContainer.getChildCount()) {
             return false;
@@ -169,10 +170,16 @@ public class Utilities {
             }
 
             if (remainder != 0) {
-                for (int i = 0; i < numberOfBoxesToAnimate - 1; ++i) {
-                    containedInEach.add(absUserAnswer);
+                if (absUserAnswer > absCorrectAnswer) {
+                    for (int i = 0; i < numberOfBoxesToAnimate - 1; ++i) {
+                        containedInEach.add(absUserAnswer);
+                    }
+                    containedInEach.add(remainder);
+                } else {
+                    for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
+                        containedInEach.add(absUserAnswer);
+                    }
                 }
-                containedInEach.add(remainder);
             } else {
                 for (int i = 0; i < numberOfBoxesToAnimate; ++i) {
                     containedInEach.add(absUserAnswer);

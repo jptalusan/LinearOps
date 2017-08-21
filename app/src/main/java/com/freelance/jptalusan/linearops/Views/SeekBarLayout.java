@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -37,6 +38,7 @@ public class SeekBarLayout extends ConstraintLayout {
     private ArrayList<String> mValues = new ArrayList<>();
     private int tickOffset = 0;
     private FrameLayout boundaryLayout, mainFrameLayout;
+    private View verticalLine;
 
     public SeekBarLayout(@NonNull Context context) {
         super(context);
@@ -66,6 +68,7 @@ public class SeekBarLayout extends ConstraintLayout {
         comboSeekBar = findViewById(R.id.multislider);
         boundaryLayout = findViewById(R.id.boundaryFrameLayout);
         mainFrameLayout = findViewById(R.id.mainFrameLayout);
+        verticalLine = findViewById(R.id.verticalLine);
 
         getViewDimensions();
         this.listener = null;
@@ -128,18 +131,24 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void drawOnBoundaryLayout(Rect r) {
-        boundaryLayout.removeAllViews();
-        boundaryLayout.setVisibility(VISIBLE);
+//        boundaryLayout.removeAllViews();
+//        boundaryLayout.setVisibility(VISIBLE);
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+//                (int) iconDimension.width, ViewGroup.LayoutParams.MATCH_PARENT);
+//
+//        Log.d(TAG, "params:" + params.width + "," + params.height);
+//        params.setMargins(r.right - (r.right - r.left), 0, 0 , 0);
+//
+//        ImageView iv = new ImageView(getContext());
+//        iv.setImageResource(resourceId);
+//        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+//        boundaryLayout.addView(iv, params);
+        verticalLine.setVisibility(VISIBLE);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                (int) iconDimension.width, ViewGroup.LayoutParams.MATCH_PARENT);
+                1, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        Log.d(TAG, "params:" + params.width + "," + params.height);
-        params.setMargins(r.right - (r.right - r.left), 0, 0 , 0);
-
-        ImageView iv = new ImageView(getContext());
-        iv.setImageResource(resourceId);
-        iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        boundaryLayout.addView(iv, params);
+        params.leftMargin = r.right - (r.right - r.left) + ((r.right - r.left) / 2) + 16;
+        verticalLine.setLayoutParams(params);
     }
 
     //can extend this to modify what is added.
@@ -249,6 +258,6 @@ public class SeekBarLayout extends ConstraintLayout {
 
     public void reset() {
         comboSeekBar.setProgress(Constants.X_MAX);
-        boundaryLayout.setVisibility(GONE);
+        verticalLine.setVisibility(GONE);
     }
 }

@@ -9,7 +9,9 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -28,11 +30,13 @@ public class SeekBarLayout extends ConstraintLayout {
     private int resourceId = 0;
     private int tempInt = 0;
     private Dimensions dimensions = new Dimensions();
+    private Dimensions mainFrameDimensions = new Dimensions();
     private Dimensions iconDimension = new Dimensions();
     private Dimensions numbersDimension = new Dimensions();
     private double center = 0;
     private ArrayList<String> mValues = new ArrayList<>();
     private int tickOffset = 0;
+    private FrameLayout boundaryLayout, mainFrameLayout;
 
     public SeekBarLayout(@NonNull Context context) {
         super(context);
@@ -60,6 +64,8 @@ public class SeekBarLayout extends ConstraintLayout {
         icons = findViewById(R.id.icons);
         numbers = findViewById(R.id.numbers);
         comboSeekBar = findViewById(R.id.multislider);
+        boundaryLayout = findViewById(R.id.boundaryFrameLayout);
+        mainFrameLayout = findViewById(R.id.mainFrameLayout);
 
         getViewDimensions();
         this.listener = null;
@@ -98,6 +104,11 @@ public class SeekBarLayout extends ConstraintLayout {
             @Override
             public void onGlobalLayout() {
                 icons.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mainFrameDimensions.width = mainFrameLayout.getMeasuredWidth();
+                mainFrameDimensions.height = mainFrameLayout.getMeasuredHeight();
+
+                Log.d(TAG, "main: " + mainFrameDimensions);
+
                 dimensions.width  = icons.getMeasuredWidth();
                 dimensions.height = icons.getMeasuredHeight();
 
@@ -112,9 +123,23 @@ public class SeekBarLayout extends ConstraintLayout {
 
                 numbers.removeAllViews();
                 drawNumbers();
-
             }
         });
+    }
+
+    public void drawOnBoundaryLayout(Rect r) {
+        boundaryLayout.removeAllViews();
+        boundaryLayout.setVisibility(VISIBLE);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                (int) iconDimension.width, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        Log.d(TAG, "params:" + params.width + "," + params.height);
+        params.setMargins(r.right - (r.right - r.left) + 8, 0, 0 , 0);
+
+        ImageView iv = new ImageView(getContext());
+        iv.setImageResource(resourceId);
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        boundaryLayout.addView(iv, params);
     }
 
     //can extend this to modify what is added.
@@ -224,5 +249,6 @@ public class SeekBarLayout extends ConstraintLayout {
 
     public void reset() {
         comboSeekBar.setProgress(Constants.X_MAX);
+        boundaryLayout.setVisibility(GONE);
     }
 }

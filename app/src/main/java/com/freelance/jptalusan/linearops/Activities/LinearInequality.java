@@ -220,7 +220,9 @@ public class LinearInequality extends AppCompatActivity {
 
 //        binding.seekbar.icons.setVisibility(View.GONE);
         binding.seekbar.setResourceId(R.drawable.vertical_line);
-        binding.seekbar.drawResourceOn(r);
+//        binding.seekbar.drawResourceOn(r);
+        binding.seekbar.drawOnBoundaryLayout(r);
+
         binding.seekbar.comboSeekBar.setEnabled(false);
 
         int answer = userAnswer + Constants.X_MAX;
@@ -268,7 +270,7 @@ public class LinearInequality extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        params.leftMargin = r.right - (r.right - r.left) - 16;
+        params.leftMargin = r.right - (r.right - r.left);
         params.bottomMargin = 0;
         return params;
     }

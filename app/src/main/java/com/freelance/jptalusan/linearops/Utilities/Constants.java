@@ -37,6 +37,8 @@ public class Constants {
 
     public static final int SEEKBAR_CUSTOM_WIDTH = 9;
 
+    public static final int RANDOMIZER = 10;
+
     //TODO: Add more drawables
     public static int[] BLACK_BOX_WHITE_CIRLE = {
             R.drawable.black_box,

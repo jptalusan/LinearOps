@@ -1,7 +1,5 @@
 package com.freelance.jptalusan.linearops.Utilities;
 
-import android.util.Log;
-
 /**
  * Created by JPTalusan on 01/05/2017.
  */
@@ -77,11 +75,11 @@ public class Equation {
             case Constants.LEVEL_3:
             case Constants.LEVEL_4: return (d - b) / (ax - cx);
             case Constants.LEVEL_5:
-                Log.d(TAG, "ax: " + ax);
-                Log.d(TAG, "b: " + b);
-                Log.d(TAG, "cx: " + cx);
-                Log.d(TAG, "d: " + d);
-                Log.d(TAG, "X: " + (-((b - d)/(ax - cx))));
+//                System.out.println("ax: " + ax);
+//                System.out.println("b: " + b);
+//                System.out.println("cx: " + cx);
+//                System.out.println("d: " + d);
+//                System.out.println("X: " + (-((b - d)/(ax - cx))));
                 return -((b - d)/(ax - cx));
             default:                return 0;
         }

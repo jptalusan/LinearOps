@@ -104,7 +104,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                     lastAddedViewType = Utilities.getTypeFromResource(imageResource);
                     setImageViewType(imageResource);
                     tempIv.setVisibility(VISIBLE);
-                    Log.d(TAG, "existing: " + Utilities.getOneOrX(imageResource));
                     return true;
                 }
             }
@@ -125,8 +124,6 @@ public class LinearOpsGridLayout extends CustomGridLayout {
 
             defaultDimensions.height = getChildAt(0).getHeight();
             defaultDimensions.width = getChildAt(0).getWidth();
-
-            Log.d(TAG, "new: " + Utilities.getOneOrX(imageResource));
 
             return true;
         } else {

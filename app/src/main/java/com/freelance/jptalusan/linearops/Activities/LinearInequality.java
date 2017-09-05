@@ -129,6 +129,8 @@ public class LinearInequality extends AppCompatActivity {
         greaterThan -= Constants.X_MAX;
         Log.d(TAG, "log: " + lessThan + "," + answer + "," + greaterThan);
 
+        //TODO: Refactor, since i can just change the string instead
+        final ArrayList<AppCompatTextView> textViewArrays = new ArrayList<>();
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
             AppCompatTextView tx1 = new AppCompatTextView(this);
             tx1.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
@@ -138,8 +140,9 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx1.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx1);
+            tx1.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx1);
+            textViewArrays.add(tx1);
         }
 
         if (!lessThanSuppossedToBeChecked && isLessThanChecked) {
@@ -151,8 +154,9 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx2.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx2);
+            tx2.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx2);
+            textViewArrays.add(tx2);
         }
 
         if (answerSuppossedToBeChecked && !isAnswerChecked) {
@@ -164,8 +168,9 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx3.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx3);
+            tx3.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx3);
+            textViewArrays.add(tx3);
         }
 
         if (!answerSuppossedToBeChecked && isAnswerChecked) {
@@ -177,8 +182,9 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx4.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx4);
+            tx4.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx4);
+            textViewArrays.add(tx4);
         }
 
         if (greaterThanSuppossedToBeChecked && !isGreaterThanChecked) {
@@ -190,8 +196,9 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx5.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx5);
+            tx5.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx5);
+            textViewArrays.add(tx5);
         }
 
         if (!greaterThanSuppossedToBeChecked && isGreaterThanChecked) {
@@ -203,9 +210,24 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx6.setPadding(0, 30, 0, 0);
-            binding.checkBoxesLayout.addView(tx6);
+            tx6.setPadding(0, 30, 0, 30);
+//            binding.checkBoxesLayout.addView(tx6);
+            textViewArrays.add(tx6);
         }
+
+        Handler handler = new Handler();
+
+        for(int i = 0; i < textViewArrays.size(); i++) {
+            final int index = i;
+            Runnable shuffle = new Runnable() {
+                public void run() {
+                    binding.checkBoxesLayout.addView(textViewArrays.get(index));
+                }
+            };
+            handler.postDelayed(shuffle, (i+1)*1000);
+        }
+
+        //TODO:Add another runnable to remove previous ones?
     }
 
     private void drawBoundaryOnLayout(Rect r) {

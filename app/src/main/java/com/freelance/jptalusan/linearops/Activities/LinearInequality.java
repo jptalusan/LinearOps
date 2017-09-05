@@ -19,13 +19,11 @@ import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
-import com.freelance.jptalusan.linearops.Views.ComboSeekBar.ComboSeekBar;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearInequalityBinding;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Random;
 
 public class LinearInequality extends AppCompatActivity {
@@ -134,7 +132,7 @@ public class LinearInequality extends AppCompatActivity {
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
             AppCompatTextView tx1 = new AppCompatTextView(this);
             tx1.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
-            tx1.setTextColor(Color.RED);
+            tx1.setTextColor(Color.BLACK);
             String temp = "(" + lessThan + ")";
             tx1.setText(eq.printEquation()
                     .replace("x", temp)
@@ -147,7 +145,7 @@ public class LinearInequality extends AppCompatActivity {
         if (!lessThanSuppossedToBeChecked && isLessThanChecked) {
             AppCompatTextView tx2 = new AppCompatTextView(this);
             tx2.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
-            tx2.setTextColor(Color.RED);
+            tx2.setTextColor(Color.BLACK);
             String temp = "(" + lessThan + ")";
             tx2.setText(eq.printEquation()
                     .replace("x", temp)
@@ -160,7 +158,7 @@ public class LinearInequality extends AppCompatActivity {
         if (answerSuppossedToBeChecked && !isAnswerChecked) {
             AppCompatTextView tx3 = new AppCompatTextView(this);
             tx3.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
-            tx3.setTextColor(Color.BLUE);
+            tx3.setTextColor(Color.BLACK);
             String temp = "(" + answer + ")";
             tx3.setText(eq.printEquation()
                     .replace("x", temp)
@@ -173,7 +171,7 @@ public class LinearInequality extends AppCompatActivity {
         if (!answerSuppossedToBeChecked && isAnswerChecked) {
             AppCompatTextView tx4 = new AppCompatTextView(this);
             tx4.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
-            tx4.setTextColor(Color.BLUE);
+            tx4.setTextColor(Color.BLACK);
             String temp = "(" + answer + ")";
             tx4.setText(eq.printEquation()
                     .replace("x", temp)
@@ -186,7 +184,7 @@ public class LinearInequality extends AppCompatActivity {
         if (greaterThanSuppossedToBeChecked && !isGreaterThanChecked) {
             AppCompatTextView tx5 = new AppCompatTextView(this);
             tx5.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
-            tx5.setTextColor(Color.GREEN);
+            tx5.setTextColor(Color.BLACK);
             String temp = "(" + greaterThan + ")";
             tx5.setText(eq.printEquation()
                     .replace("x", temp)
@@ -199,7 +197,7 @@ public class LinearInequality extends AppCompatActivity {
         if (!greaterThanSuppossedToBeChecked && isGreaterThanChecked) {
             AppCompatTextView tx6 = new AppCompatTextView(this);
             tx6.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
-            tx6.setTextColor(Color.GREEN);
+            tx6.setTextColor(Color.BLACK);
             String temp = "(" + greaterThan + ")";
             tx6.setText(eq.printEquation()
                     .replace("x", temp)
@@ -208,6 +206,16 @@ public class LinearInequality extends AppCompatActivity {
             tx6.setPadding(0, 30, 0, 0);
             binding.checkBoxesLayout.addView(tx6);
         }
+    }
+
+    private void drawBoundaryOnLayout(Rect r) {
+        View verticalLine = new View(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                5, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.leftMargin = r.right - ((r.right - r.left) / 2);
+        verticalLine.setLayoutParams(params);
+        verticalLine.setBackgroundColor(Color.BLACK);
+        binding.checkBoxesLayout.addView(verticalLine);
     }
 
     private void setUpInequality() {
@@ -222,6 +230,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.setResourceId(R.drawable.vertical_line);
 //        binding.seekbar.drawResourceOn(r);
         binding.seekbar.drawOnBoundaryLayout(r);
+        drawBoundaryOnLayout(r);
 
         binding.seekbar.comboSeekBar.setEnabled(false);
 
@@ -270,7 +279,7 @@ public class LinearInequality extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        params.leftMargin = r.right - (r.right - r.left);
+        params.leftMargin = r.left - ((r.right - r.left) / 2);
         params.bottomMargin = 0;
         return params;
     }

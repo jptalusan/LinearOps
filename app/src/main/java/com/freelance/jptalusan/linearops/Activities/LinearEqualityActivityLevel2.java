@@ -43,7 +43,7 @@ public class LinearEqualityActivityLevel2 extends AppCompatActivity {
         }
 
         //DEBUG
-        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).apply();
+        prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_2).commit();
         currLevel = prefs.getInt(Constants.LINEAR_EQ_LEVEL, 0);
 
         startLinearOps();

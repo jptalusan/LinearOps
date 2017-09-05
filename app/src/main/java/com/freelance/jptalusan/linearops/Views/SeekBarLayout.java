@@ -131,23 +131,11 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void drawOnBoundaryLayout(Rect r) {
-//        boundaryLayout.removeAllViews();
-//        boundaryLayout.setVisibility(VISIBLE);
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-//                (int) iconDimension.width, ViewGroup.LayoutParams.MATCH_PARENT);
-//
-//        Log.d(TAG, "params:" + params.width + "," + params.height);
-//        params.setMargins(r.right - (r.right - r.left), 0, 0 , 0);
-//
-//        ImageView iv = new ImageView(getContext());
-//        iv.setImageResource(resourceId);
-//        iv.setScaleType(ImageView.ScaleType.FIT_XY);
-//        boundaryLayout.addView(iv, params);
         verticalLine.setVisibility(VISIBLE);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                1, ViewGroup.LayoutParams.MATCH_PARENT);
+                5, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        params.leftMargin = r.right - (r.right - r.left) + ((r.right - r.left) / 2) + 16;
+        params.leftMargin = r.right - ((r.right - r.left) / 2);
         verticalLine.setLayoutParams(params);
     }
 

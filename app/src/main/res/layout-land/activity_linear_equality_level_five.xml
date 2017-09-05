@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/guideline2"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.44"
+        app:layout_constraintGuide_percent="0.45"
         tools:layout_editor_absoluteY="25dp"
         tools:layout_editor_absoluteX="261dp" />
 

@@ -115,15 +115,12 @@ public class LinearOpsGridLayout extends CustomGridLayout {
             linearOpsImageView.setValueText(Utilities.getOneOrX(imageResource));
             linearOpsImageView.setType(Utilities.getTypeFromResource(imageResource));
             linearOpsImageView.setNumberOfContained(0);
+
             lastAddedViewType = Utilities.getTypeFromResource(imageResource);
 
-            linearOpsImageView.setPadding(1, 1, 1, 1);
-            addView(linearOpsImageView);
-
+//            linearOpsImageView.setPadding(1, 1, 1, 1);
             setImageViewType(imageResource);
-
-            defaultDimensions.height = getChildAt(0).getHeight();
-            defaultDimensions.width = getChildAt(0).getWidth();
+            addView(linearOpsImageView);
 
             return true;
         } else {

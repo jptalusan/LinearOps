@@ -59,8 +59,12 @@ public class LinearOpsImageView extends AppCompatTextView {
     }
 
     public void setValueText(String text) {
-        setText("");
         prefs = getContext().getSharedPreferences(Constants.PREFS, MODE_PRIVATE);
+        if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) == Constants.LEVEL_3) {
+            String BLANK = "\u0020"; // space character
+            setText(BLANK);
+        }
+
         if (prefs.getInt(Constants.LINEAR_EQ_LEVEL, 1) >= Constants.LEVEL_4) {
             setText(text);
             setTextColor(Color.BLACK);

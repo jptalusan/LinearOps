@@ -90,7 +90,7 @@ public class CustomGridLayout extends RelativeLayout {
 //                (int) scaledDimensons.width,
 //                (int) scaledDimensons.height);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) size, (int) size);
+                (int) (size * 0.9), (int) (size * 0.9));
 
         int rowFactor = getChildCount() / cols;
         int colFactor = getChildCount() % cols;

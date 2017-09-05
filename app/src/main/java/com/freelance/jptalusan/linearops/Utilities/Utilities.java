@@ -156,6 +156,10 @@ public class Utilities {
             output = true;
         } else {
             Log.d(TAG, "incorrect.");
+            //TODO: Check when this becomes zero (absUserAnswer), i dont think it should ever be zero
+            if (absUserAnswer == 0) {
+                return false;
+            }
             int dividend = numberOfRemainingBalls / absUserAnswer;
             int remainder = numberOfRemainingBalls % absUserAnswer;
 

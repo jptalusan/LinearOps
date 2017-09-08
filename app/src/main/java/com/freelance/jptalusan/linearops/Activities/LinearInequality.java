@@ -65,13 +65,14 @@ public class LinearInequality extends AppCompatActivity {
 
         binding.seekbar.setValues(points);
         binding.seekbar.getViewDimensions();
-        binding.seekbar.icons.setVisibility(View.INVISIBLE);
+//        binding.seekbar.icons.setVisibility(View.INVISIBLE);
         binding.seekbar.reset();
 
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
                 userAnswer = val;
+                binding.seekbar.drawIconOnRect(userAnswer);
             }
         });
 
@@ -140,7 +141,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx1.setPadding(0, 30, 0, 30);
+            tx1.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx1);
             textViewArrays.add(tx1);
         }
@@ -154,7 +155,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx2.setPadding(0, 30, 0, 30);
+            tx2.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx2);
             textViewArrays.add(tx2);
         }
@@ -168,7 +169,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx3.setPadding(0, 30, 0, 30);
+            tx3.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx3);
             textViewArrays.add(tx3);
         }
@@ -182,7 +183,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx4.setPadding(0, 30, 0, 30);
+            tx4.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx4);
             textViewArrays.add(tx4);
         }
@@ -196,7 +197,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx5.setPadding(0, 30, 0, 30);
+            tx5.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx5);
             textViewArrays.add(tx5);
         }
@@ -210,7 +211,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx6.setPadding(0, 30, 0, 30);
+            tx6.setPadding(0, 0, 0, 30);
 //            binding.checkBoxesLayout.addView(tx6);
             textViewArrays.add(tx6);
         }
@@ -224,7 +225,7 @@ public class LinearInequality extends AppCompatActivity {
                     binding.checkBoxesLayout.addView(textViewArrays.get(index));
                 }
             };
-            handler.postDelayed(shuffle, (i+1)*1000);
+            handler.postDelayed(shuffle, (i+1)*1500);
         }
 
         //TODO:Add another runnable to remove previous ones?
@@ -248,9 +249,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.equationTextView.setText(text.replace("=", getRandomInequality()));
         binding.equationTextView.invalidate();
 
-//        binding.seekbar.icons.setVisibility(View.GONE);
         binding.seekbar.setResourceId(R.drawable.vertical_line);
-//        binding.seekbar.drawResourceOn(r);
         binding.seekbar.drawOnBoundaryLayout(r);
         drawBoundaryOnLayout(r);
 

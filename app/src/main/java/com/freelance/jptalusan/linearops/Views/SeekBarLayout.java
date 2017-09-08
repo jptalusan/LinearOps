@@ -139,6 +139,21 @@ public class SeekBarLayout extends ConstraintLayout {
         verticalLine.setLayoutParams(params);
     }
 
+    public void drawIconOnRect(int val) {
+        icons.removeAllViews();
+        Log.d(TAG, "drawIcon: " + val);
+        ImageView iv = new ImageView(getContext());
+        iv.setLayoutParams(generateParams(val));
+        iv.setPadding(2, 0, 2, 0);
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (val > 0) {
+            iv.setImageResource(R.drawable.white_circle);
+        } else if (val < 0) {
+            iv.setImageResource(R.drawable.black_circle);
+        }
+        icons.addView(iv);
+    }
+
     //can extend this to modify what is added.
     private void addIcons(int val) {
 //        Log.d(TAG, "addIcons: " + val);

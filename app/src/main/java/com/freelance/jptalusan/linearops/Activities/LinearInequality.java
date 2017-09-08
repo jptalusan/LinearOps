@@ -25,6 +25,7 @@ import com.freelance.jptalusan.linearops.databinding.ActivityLinearInequalityBin
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
+import java.util.Timer;
 
 public class LinearInequality extends AppCompatActivity {
     private static final String TAG = "LinearInequality";
@@ -47,6 +48,7 @@ public class LinearInequality extends AppCompatActivity {
     private boolean answerSuppossedToBeChecked = false;
     private boolean greaterThanSuppossedToBeChecked = false;
     private String symbols[] = {"<", "≤", ">", "≥"};
+    private final ArrayList<AppCompatTextView> textViewArrays = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +104,15 @@ public class LinearInequality extends AppCompatActivity {
                         Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
-                    int temp = Constants.DEFAULT_RESET * 2;
+                    int temp = Constants.DEFAULT_RESET * (textViewArrays.size() + 2);
                     Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            for (AppCompatTextView v : textViewArrays) {
+                                v.setVisibility(View.VISIBLE);
+                            }
                             startLinearOps();
                         }
                     }, temp);
@@ -131,7 +136,6 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "log: " + lessThan + "," + answer + "," + greaterThan);
 
         //TODO: Refactor, since i can just change the string instead
-        final ArrayList<AppCompatTextView> textViewArrays = new ArrayList<>();
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
             AppCompatTextView tx1 = new AppCompatTextView(this);
             tx1.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
@@ -223,10 +227,31 @@ public class LinearInequality extends AppCompatActivity {
             Runnable shuffle = new Runnable() {
                 public void run() {
                     binding.checkBoxesLayout.addView(textViewArrays.get(index));
+                    textViewArrays.get(index).postDelayed(new Runnable(){
+                        @Override
+                        public void run()
+                        {
+                            binding.checkBoxesLayout.removeView(textViewArrays.get(index));
+//                            textViewArrays.get(index).setVisibility(View.INVISIBLE);
+                        }
+                    }, 3000);
                 }
             };
-            handler.postDelayed(shuffle, (i+1)*1500);
+            handler.postDelayed(shuffle, i*3500);
         }
+
+        Runnable shuffle = new Runnable() {
+            public void run() {
+                for(int i = 0; i < textViewArrays.size(); i++) {
+                    final int index = i;
+                    binding.checkBoxesLayout.addView(textViewArrays.get(index));
+                }
+            }
+        };
+        handler.postDelayed(shuffle, textViewArrays.size() * 3500);
+
+//        binding.checkBoxesLayout.removeAllViews();
+
 
         //TODO:Add another runnable to remove previous ones?
     }
@@ -238,6 +263,7 @@ public class LinearInequality extends AppCompatActivity {
         params.leftMargin = r.right - ((r.right - r.left) / 2);
         verticalLine.setLayoutParams(params);
         verticalLine.setBackgroundColor(Color.BLACK);
+        verticalLine.setAlpha(0.5f);
         binding.checkBoxesLayout.addView(verticalLine);
     }
 
@@ -315,7 +341,7 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "index - params: " + index + " : " + slice + " x " + params.height);
 
         params.leftMargin = (slice * index) - (slice / 2);
-        params.bottomMargin = 0;
+        params.topMargin = 0;
         return params;
     }
 

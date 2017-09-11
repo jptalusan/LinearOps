@@ -90,7 +90,7 @@ public class CustomGridLayout extends RelativeLayout {
 //                (int) scaledDimensons.width,
 //                (int) scaledDimensons.height);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) (size * 0.9), (int) (size * 0.9));
+                (int) (size), (int) (size));
 
         int rowFactor = getChildCount() / cols;
         int colFactor = getChildCount() % cols;
@@ -109,6 +109,8 @@ public class CustomGridLayout extends RelativeLayout {
             ImageView imageView = new ImageView(context);
             imageView.setImageResource(imageResource);
             imageView.setLayoutParams(generateParams());
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setAdjustViewBounds(true);
             addView(imageView);
             return true;
         } else {

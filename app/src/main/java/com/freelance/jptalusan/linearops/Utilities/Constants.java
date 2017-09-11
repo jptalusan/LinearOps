@@ -39,6 +39,8 @@ public class Constants {
 
     public static final int RANDOMIZER = 10;
 
+    public static final float TEXT_SIZE = 30.0f;
+
     //TODO: Add more drawables
     public static int[] BLACK_BOX_WHITE_CIRLE = {
             R.drawable.black_box,
@@ -91,7 +93,6 @@ public class Constants {
             R.drawable.white_box_neg_one,
             R.drawable.white_box_neg_two,
             R.drawable.white_box_neg_three,
-            R.drawable.white_box_neg_four,
             R.drawable.white_box_neg_five,
             R.drawable.white_box_neg_six,
             R.drawable.white_box_neg_seven,

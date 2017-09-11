@@ -19,6 +19,7 @@ import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
+import com.freelance.jptalusan.linearops.Views.AutoResizeTextView;
 import com.freelance.jptalusan.linearops.Views.SeekBarLayout;
 import com.freelance.jptalusan.linearops.databinding.ActivityLinearInequalityBinding;
 
@@ -98,6 +99,7 @@ public class LinearInequality extends AppCompatActivity {
                         }, temp);
                     }
                 } else {
+                    setAbilityOfViews(false);
                     if (isSecondAnswerCorrect()) {
                         Toast.makeText(LinearInequality.this, "2: Correct", Toast.LENGTH_LONG).show();
                     } else {
@@ -137,120 +139,94 @@ public class LinearInequality extends AppCompatActivity {
 
         //TODO: Refactor, since i can just change the string instead
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
-            AppCompatTextView tx1 = new AppCompatTextView(this);
+            AutoResizeTextView tx1 = new AutoResizeTextView(this);
             tx1.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
             tx1.setTextColor(Color.BLACK);
             String temp = "(" + lessThan + ")";
-            tx1.setText(eq.printEquation()
+            tx1.setTextSize(Constants.TEXT_SIZE);
+            tx1.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx1.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx1);
+//            tx1.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx1);
             textViewArrays.add(tx1);
         }
 
         if (!lessThanSuppossedToBeChecked && isLessThanChecked) {
-            AppCompatTextView tx2 = new AppCompatTextView(this);
+            AutoResizeTextView tx2 = new AutoResizeTextView(this);
             tx2.setLayoutParams(generateParamsForTextAtIndex(tempLess, 0));
             tx2.setTextColor(Color.BLACK);
             String temp = "(" + lessThan + ")";
-            tx2.setText(eq.printEquation()
+            tx2.setTextSize(Constants.TEXT_SIZE);
+            tx2.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx2.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx2);
+//            tx2.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx2);
             textViewArrays.add(tx2);
         }
 
         if (answerSuppossedToBeChecked && !isAnswerChecked) {
-            AppCompatTextView tx3 = new AppCompatTextView(this);
+            AutoResizeTextView tx3 = new AutoResizeTextView(this);
             tx3.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
             tx3.setTextColor(Color.BLACK);
             String temp = "(" + answer + ")";
-            tx3.setText(eq.printEquation()
+            tx3.setTextSize(Constants.TEXT_SIZE);
+            tx3.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx3.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx3);
+//            tx3.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx3);
             textViewArrays.add(tx3);
         }
 
         if (!answerSuppossedToBeChecked && isAnswerChecked) {
-            AppCompatTextView tx4 = new AppCompatTextView(this);
+            AutoResizeTextView tx4 = new AutoResizeTextView(this);
             tx4.setLayoutParams(generateParamsForTextAtIndex(tempAnswer, 1));
             tx4.setTextColor(Color.BLACK);
             String temp = "(" + answer + ")";
-            tx4.setText(eq.printEquation()
+            tx4.setTextSize(Constants.TEXT_SIZE);
+            tx4.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx4.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx4);
+//            tx4.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx4);
             textViewArrays.add(tx4);
         }
 
         if (greaterThanSuppossedToBeChecked && !isGreaterThanChecked) {
-            AppCompatTextView tx5 = new AppCompatTextView(this);
+            AutoResizeTextView tx5 = new AutoResizeTextView(this);
             tx5.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
             tx5.setTextColor(Color.BLACK);
             String temp = "(" + greaterThan + ")";
-            tx5.setText(eq.printEquation()
+            tx5.setTextSize(Constants.TEXT_SIZE);
+            tx5.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
-            tx5.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx5);
+//            tx5.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx5);
             textViewArrays.add(tx5);
         }
 
         if (!greaterThanSuppossedToBeChecked && isGreaterThanChecked) {
-            AppCompatTextView tx6 = new AppCompatTextView(this);
+            AutoResizeTextView tx6 = new AutoResizeTextView(this);
             tx6.setLayoutParams(generateParamsForTextAtIndex(tempGreat, 2));
             tx6.setTextColor(Color.BLACK);
             String temp = "(" + greaterThan + ")";
-            tx6.setText(eq.printEquation()
+            tx6.setTextSize(Constants.TEXT_SIZE);
+            tx6.setText(simplifyEquation(eq)
                     .replace("x", temp)
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
-            tx6.setPadding(0, 0, 0, 30);
-//            binding.checkBoxesLayout.addView(tx6);
+//            tx6.setPadding(0, 0, 0, 30);
+            binding.checkBoxesLayout.addView(tx6);
             textViewArrays.add(tx6);
         }
-
-        Handler handler = new Handler();
-
-        for(int i = 0; i < textViewArrays.size(); i++) {
-            final int index = i;
-            Runnable shuffle = new Runnable() {
-                public void run() {
-                    binding.checkBoxesLayout.addView(textViewArrays.get(index));
-                    textViewArrays.get(index).postDelayed(new Runnable(){
-                        @Override
-                        public void run()
-                        {
-                            binding.checkBoxesLayout.removeView(textViewArrays.get(index));
-//                            textViewArrays.get(index).setVisibility(View.INVISIBLE);
-                        }
-                    }, 3000);
-                }
-            };
-            handler.postDelayed(shuffle, i*3500);
-        }
-
-        Runnable shuffle = new Runnable() {
-            public void run() {
-                for(int i = 0; i < textViewArrays.size(); i++) {
-                    final int index = i;
-                    binding.checkBoxesLayout.addView(textViewArrays.get(index));
-                }
-            }
-        };
-        handler.postDelayed(shuffle, textViewArrays.size() * 3500);
-
-//        binding.checkBoxesLayout.removeAllViews();
 
 
         //TODO:Add another runnable to remove previous ones?
@@ -327,7 +303,8 @@ public class LinearInequality extends AppCompatActivity {
                 binding.checkBoxesLayout.getHeight());
 
         params.leftMargin = r.left - ((r.right - r.left) / 2);
-        params.bottomMargin = 0;
+//        params.bottomMargin = 0;
+        params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         return params;
     }
 
@@ -341,32 +318,80 @@ public class LinearInequality extends AppCompatActivity {
         Log.d(TAG, "index - params: " + index + " : " + slice + " x " + params.height);
 
         params.leftMargin = (slice * index) - (slice / 2);
-        params.topMargin = 0;
+//        params.topMargin = 0;
+        params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+
         return params;
     }
 
     //TODO: what if the checkboxes are close to each other?
+    //Somevalue: 0=lessthan, 1=index, 2=greaterthan
     private RelativeLayout.LayoutParams generateParamsForTextAtIndex(int index, int someValue) {
         Log.d(TAG, "Generate: " + index);
-        int slice = binding.checkBoxesLayout.getWidth() / (Constants.X_MAX * 2);
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)binding.checkBoxesLayout.getLayoutParams();
+//        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        Log.d(TAG, "params: " + slice + " x " + params.height);
+//        Log.d(TAG, "params: " + slice + " x " + params.height);
 
-        params.leftMargin = (slice * index) - (slice / 2);
-        params.topMargin = 20;
-//        params.bottomMargin = 100;
+//        params.leftMargin = (slice * index) - (slice / 2);
+//        params.topMargin = 20;
+
+
+//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_START);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        Log.d(TAG, "somevalue: " + someValue);
+        switch (someValue) {
+            case 0: //less than
+                params.addRule(RelativeLayout.ALIGN_LEFT, lessThanId);
+//                params.addRule(RelativeLayout.ALIGN_BOTTOM, lessThanId);
+                params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                break;
+            case 1: //equals
+                params.addRule(RelativeLayout.ALIGN_RIGHT, answerId);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                params.addRule(RelativeLayout.ALIGN_BOTTOM);
+                params.topMargin = params.height - 50;
+                params.leftMargin = 35;
+//                params.addRule(RelativeLayout.ABOVE, answerId);
+                break;
+            case 2: //greater than
+                params.addRule(RelativeLayout.ALIGN_RIGHT, greaterThanId);
+                params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                break;
+        }
         return params;
+    }
+
+    private String simplifyEquation(Equation eq) {
+        StringBuilder s = new StringBuilder();
+        s.append(eq.getAx() - eq.getCx());
+        s.append("x=");
+        s.append(eq.getD() - eq.getB());
+        return s.toString();
+    }
+
+    private void setAbilityOfViews(boolean enabled) {
+        binding.checkButton.setEnabled(enabled);
+        if (lessThanCB != null)
+            lessThanCB.setEnabled(enabled);
+        if (answerCB != null)
+            answerCB.setEnabled(enabled);
+        if (greaterThanCB != null)
+            greaterThanCB.setEnabled(enabled);
     }
 
     private void startLinearOps() {
         Log.d(TAG, "startLinearOps()");
         do {
-            eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_2);
+            eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_4);
 //            eq = new Equation(-5, 4, -6, 0, 2);
-            binding.equationTextView.setText(eq.printEquation());
+            binding.equationTextView.setText(simplifyEquation(eq));
         } while (eq.toString().equals("FAILED"));
 
 //        binding.seekbar.icons.setVisibility(View.GONE);
@@ -378,6 +403,8 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.comboSeekBar.invalidate();
 
         binding.checkBoxesLayout.removeAllViews();
+
+        setAbilityOfViews(true);
 
         isLessThanChecked = false;
         isAnswerChecked = false;
@@ -418,16 +445,16 @@ public class LinearInequality extends AppCompatActivity {
     //ax + b > c
     public boolean checker(int userAnswer) {
         //String symbols[] = {"<", "≤", ">", "≥"};
-        Log.d(TAG, "ax + b = c --> " + ((eq.getAx() * userAnswer) + eq.getB()) + " " + symbols[inequalityIndex] + " " + eq.getCx());
+        Log.d(TAG, userAnswer + ", " + simplifyEquation(eq) + ": ax + b = c --> " + ((eq.getAx() - eq.getCx()) * userAnswer) + " " + symbols[inequalityIndex] + " " + (eq.getD() - eq.getB()));
         switch(inequalityIndex) {
             case 0:
-                return (((eq.getAx() * userAnswer) + eq.getB()) < eq.getCx());
+                return (((eq.getAx() - eq.getCx()) * userAnswer) < (eq.getD() - eq.getB()));
             case 1:
-                return (((eq.getAx() * userAnswer) + eq.getB()) <= eq.getCx());
+                return (((eq.getAx() - eq.getCx()) * userAnswer) <= (eq.getD() - eq.getB()));
             case 2:
-                return (((eq.getAx() * userAnswer) + eq.getB()) > eq.getCx());
+                return (((eq.getAx() - eq.getCx()) * userAnswer) > (eq.getD() - eq.getB()));
             case 3:
-                return (((eq.getAx() * userAnswer) + eq.getB()) >= eq.getCx());
+                return (((eq.getAx() - eq.getCx()) * userAnswer) <= (eq.getD() - eq.getB()));
         }
         return false;
     }

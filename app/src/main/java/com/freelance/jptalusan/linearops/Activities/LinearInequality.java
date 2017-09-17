@@ -1,6 +1,5 @@
 package com.freelance.jptalusan.linearops.Activities;
 
-import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -26,7 +25,6 @@ import com.freelance.jptalusan.linearops.databinding.ActivityLinearInequalityBin
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
-import java.util.Timer;
 
 public class LinearInequality extends AppCompatActivity {
     private static final String TAG = "LinearInequality";
@@ -137,6 +135,14 @@ public class LinearInequality extends AppCompatActivity {
         greaterThan -= Constants.X_MAX;
         Log.d(TAG, "log: " + lessThan + "," + answer + "," + greaterThan);
 
+        if ((!lessThanSuppossedToBeChecked && isLessThanChecked)) {
+            lessThanCB.setButtonDrawable(R.drawable.custom_checkbox);
+        } else if ((!answerSuppossedToBeChecked && isAnswerChecked)) {
+            answerCB.setButtonDrawable(R.drawable.custom_checkbox);
+        } else if ((!greaterThanSuppossedToBeChecked && isGreaterThanChecked)) {
+            greaterThanCB.setButtonDrawable(R.drawable.custom_checkbox);
+        }
+
         //TODO: Refactor, since i can just change the string instead
         if (lessThanSuppossedToBeChecked && !isLessThanChecked) {
             AutoResizeTextView tx1 = new AutoResizeTextView(this);
@@ -149,6 +155,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
 //            tx1.setPadding(0, 0, 0, 30);
+            tx1.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx1);
             textViewArrays.add(tx1);
         }
@@ -164,6 +171,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
 //            tx2.setPadding(0, 0, 0, 30);
+            tx2.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx2);
             textViewArrays.add(tx2);
         }
@@ -179,6 +187,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
 //            tx3.setPadding(0, 0, 0, 30);
+            tx3.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx3);
             textViewArrays.add(tx3);
         }
@@ -194,6 +203,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
 //            tx4.setPadding(0, 0, 0, 30);
+            tx4.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx4);
             textViewArrays.add(tx4);
         }
@@ -209,6 +219,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✔");
 //            tx5.setPadding(0, 0, 0, 30);
+            tx5.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx5);
             textViewArrays.add(tx5);
         }
@@ -224,6 +235,7 @@ public class LinearInequality extends AppCompatActivity {
                     .replace("=", symbols[inequalityIndex])
                     + " ✖");
 //            tx6.setPadding(0, 0, 0, 30);
+            tx6.setSingleLine(true);
             binding.checkBoxesLayout.addView(tx6);
             textViewArrays.add(tx6);
         }
@@ -273,7 +285,7 @@ public class LinearInequality extends AppCompatActivity {
         int colors[] = {Color.RED, Color.RED};
         lessThanCB = new AppCompatCheckBox(this);
         lessThanCB.setLayoutParams(generateParamsAtIndex(lessThan));
-        lessThanCB.setSupportButtonTintList(new ColorStateList(states, colors));
+//        lessThanCB.setSupportButtonTintList(new ColorStateList(states, colors));
         lessThanCB.setId(lessThanId);
         lessThanCB.setOnClickListener(new CheckboxListener());
         binding.checkBoxesLayout.addView(lessThanCB);
@@ -282,7 +294,7 @@ public class LinearInequality extends AppCompatActivity {
         int colors2[] = {Color.BLUE, Color.BLUE};
         answerCB = new AppCompatCheckBox(this);
         answerCB.setLayoutParams(generateForSelected(r));
-        answerCB.setSupportButtonTintList(new ColorStateList(states2, colors2));
+//        answerCB.setSupportButtonTintList(new ColorStateList(states2, colors2));
         answerCB.setId(answerId);
         answerCB.setOnClickListener(new CheckboxListener());
         binding.checkBoxesLayout.addView(answerCB);
@@ -291,7 +303,7 @@ public class LinearInequality extends AppCompatActivity {
         int colors3[] = {Color.GREEN, Color.GREEN};
         greaterThanCB = new AppCompatCheckBox(this);
         greaterThanCB.setLayoutParams(generateParamsAtIndex(greaterThan));
-        greaterThanCB.setSupportButtonTintList(new ColorStateList(states3, colors3));
+//        greaterThanCB.setSupportButtonTintList(new ColorStateList(states3, colors3));
         greaterThanCB.setId(greaterThanId);
         greaterThanCB.setOnClickListener(new CheckboxListener());
         binding.checkBoxesLayout.addView(greaterThanCB);
@@ -371,9 +383,11 @@ public class LinearInequality extends AppCompatActivity {
     private String simplifyEquation(Equation eq) {
         StringBuilder s = new StringBuilder();
         s.append(eq.getAx() - eq.getCx());
-        s.append("x=");
-        s.append(eq.getD() - eq.getB());
-        return s.toString();
+        s.append("x + ");
+        s.append(eq.getB());
+        s.append(" = ");
+        s.append(eq.getD());
+        return s.toString().replace(".0", "").replace(" + -", " - ");
     }
 
     private void setAbilityOfViews(boolean enabled) {

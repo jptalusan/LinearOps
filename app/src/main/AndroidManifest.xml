@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.SplashActivity">
+            android:name=".Activities.SplashActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

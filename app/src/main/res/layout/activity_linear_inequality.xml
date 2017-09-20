@@ -95,7 +95,7 @@
         app:layout_constraintRight_toLeftOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        app:textAllCaps="true"
+        app:textAllCaps="false"
         android:textSize="40sp"
         android:gravity="center">
 

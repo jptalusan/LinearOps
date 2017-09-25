@@ -147,7 +147,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(-7, -49, 0 ,0, 1);
+//            eq = new Equation(9, 45, 0 ,0, 1);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);

@@ -346,13 +346,13 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.leftSideGrid.side = Constants.LEFT;
         binding.rightSideGrid.side = Constants.RIGHT;
 
-        setupGrid(binding.leftSideGrid, 20);
-        setupGrid(binding.rightSideGrid, 90);
-//        binding.leftSideGrid.setRows(6);
-//        binding.leftSideGrid.setCols(5);
-//
-//        binding.rightSideGrid.setRows(6);
-//        binding.rightSideGrid.setCols(5);
+//        setupGrid(binding.leftSideGrid, 20);
+//        setupGrid(binding.rightSideGrid, 90);
+        binding.leftSideGrid.setRows(9);
+        binding.leftSideGrid.setCols(10);
+
+        binding.rightSideGrid.setRows(9);
+        binding.rightSideGrid.setCols(10);
 
         binding.leftSideGrid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

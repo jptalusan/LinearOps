@@ -60,9 +60,9 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.seekbar.setSeekBarChangeValueListener(new SeekBarLayout.SeekbarChangeValueListener() {
             @Override
             public void onSeekBarValueChanged(int val) {
-                Log.d(TAG, "Val: " + val);
-                Log.d(TAG, "Size: " + pointsVal.size());
-                Log.d(TAG, "Size: " + points.size());
+//                Log.d(TAG, "Val: " + val);
+//                Log.d(TAG, "Size: " + pointsVal.size());
+//                Log.d(TAG, "Size: " + points.size());
                 if (val + Constants.SEEKBAR_CUSTOM_WIDTH > pointsVal.size()) {
                     Log.d(TAG, "Point if: " + pointsVal.get(pointsVal.size() - 1));
                     mCenterValue = pointsVal.get(pointsVal.size() - 1);
@@ -269,20 +269,20 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         binding.seekbar.setComboSeekBarProgress(Constants.SEEKBAR_CUSTOM_WIDTH);
         pointsVal.add(pointsVal.get(pointsVal.size() - 1)); //HACK
 
-        //debug
-        String temp = "";
-        for (double d:
-                pointsVal) {
-            temp += "[" + d + "]";
-        }
-        Log.d(TAG, "pointsValArr: " + temp);
-
-        String temp2 = "";
-        for (String d:
-                points) {
-            temp2 += "[" + d + "]";
-        }
-        Log.d(TAG, "pointsArr: " + temp2);
+//        //debug
+//        String temp = "";
+//        for (double d:
+//                pointsVal) {
+//            temp += "[" + d + "]";
+//        }
+//        Log.d(TAG, "pointsValArr: " + temp);
+//
+//        String temp2 = "";
+//        for (String d:
+//                points) {
+//            temp2 += "[" + d + "]";
+//        }
+//        Log.d(TAG, "pointsArr: " + temp2);
 
         binding.seekbar.setValues(points);
         binding.seekbar.getViewDimensions();
@@ -293,7 +293,7 @@ public class LinearEqualityActivityLevel5 extends AppCompatActivity {
         Log.d(TAG, "startLinearOps: " + currLevel);
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(1, 2, -7, 0, 5);
+//            eq = new Equation(1, 5, -5, 0, 5);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.X_MAX);

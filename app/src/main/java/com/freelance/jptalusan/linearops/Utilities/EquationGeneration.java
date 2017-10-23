@@ -143,7 +143,7 @@ public class EquationGeneration {
         Random rnd = new Random((int)seed);
         double a, b, c, d, cb, ac, db;
         switch (level) {
-            case 2:
+            case Constants.LEVEL_2:
                 a = pickRandom(rnd, 2, 9);
                 cb = a * (pickRandom(rnd, 2, 9));
                 System.out.println(a + ", " + cb);
@@ -156,8 +156,8 @@ public class EquationGeneration {
                 output = new Equation(a, b, c, 0, 2);
                 System.out.println(output.toString());
                 break;
-            case 3:
-            case 4:
+            case Constants.LEVEL_3:
+            case Constants.LEVEL_4:
                 a = pickRandom(rnd, 3, 9);
                 db = a * (pickRandom(rnd, 3, 9));
 
@@ -188,7 +188,7 @@ public class EquationGeneration {
                 output = new Equation(a, b, c, d, 3);
                 System.out.println(output.toString());
                 break;
-            case 5:
+            case Constants.LEVEL_5:
                 IntegerAndDecimal iAndD = new IntegerAndDecimal();
                 double dec = iAndD.validDecimals.get(pickRandom(rnd, 0, iAndD.validDecimals.size() - 1));
 

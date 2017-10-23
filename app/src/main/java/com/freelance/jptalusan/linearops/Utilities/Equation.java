@@ -80,7 +80,8 @@ public class Equation {
 //                System.out.println("cx: " + cx);
 //                System.out.println("d: " + d);
 //                System.out.println("X: " + (-((b - d)/(ax - cx))));
-                return -((b - d)/(ax - cx));
+                double quotient = -((b - d)/(ax - cx));
+                return Math.round((quotient) * 100000.0) / 100000.0;
             default:                return 0;
         }
     }

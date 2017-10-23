@@ -37,7 +37,7 @@ public class IntegerAndDecimal {
 
 
     public boolean isValid() {
-        return mWhole > 0 && validDecimals.contains(mDecimal);
+        return mWhole < 9 && mWhole > 0 && validDecimals.contains(mDecimal);
     }
 
     @Override

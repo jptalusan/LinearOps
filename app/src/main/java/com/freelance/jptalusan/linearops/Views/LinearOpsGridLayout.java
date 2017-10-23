@@ -300,23 +300,23 @@ public class LinearOpsGridLayout extends CustomGridLayout {
         String oneViewDrawables = one.getTypeContainedIn();
         if (isCorrectSign) {
             if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.WHITE_BOX_WHITE_CIRLE;
+                drawables = Constants.WHITE_BOX_WHITE_CIRCLE;
             } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
-                drawables = Constants.WHITE_BOX_BLACK_CIRLE;
+                drawables = Constants.WHITE_BOX_BLACK_CIRCLE;
             } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+                drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
             } else {
-                drawables = Constants.BLACK_BOX_BLACK_CIRLE;
+                drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
             }
         } else {
             if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.WHITE_BOX_BLACK_CIRLE;
+                drawables = Constants.WHITE_BOX_BLACK_CIRCLE;
             } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
-                drawables = Constants.WHITE_BOX_WHITE_CIRLE;
+                drawables = Constants.WHITE_BOX_WHITE_CIRCLE;
             } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.BLACK_BOX_BLACK_CIRLE;
+                drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
             } else {
-                drawables = Constants.BLACK_BOX_WHITE_CIRLE;
+                drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
             }
         }
     }

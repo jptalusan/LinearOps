@@ -15,7 +15,7 @@
             <com.freelance.jptalusan.linearops.Views.AutoResizeTextView
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:text="LinearOps"
+                android:text="LinearX"
                 android:textAlignment="center"
                 android:gravity="center_vertical"
                 app:layout_constraintLeft_toLeftOf="parent"

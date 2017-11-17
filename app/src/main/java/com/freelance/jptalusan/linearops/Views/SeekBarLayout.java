@@ -121,8 +121,9 @@ public class SeekBarLayout extends ConstraintLayout {
                 iconDimension.width  = dimensions.width / ((comboSeekBar.getMax()));
                 iconDimension.height = dimensions.height;
 
-                tickOffset = icons.getMeasuredWidth() / comboSeekBar.getMax();
-                center = dimensions.width / 2;
+                //TODO: chnge these?
+                tickOffset = (mainFrameLayout.getMeasuredWidth() - 40) / comboSeekBar.getMax();
+//                center = dimensions.width / 2;
 
                 numbers.removeAllViews();
                 drawNumbers();
@@ -181,8 +182,8 @@ public class SeekBarLayout extends ConstraintLayout {
 
     private RelativeLayout.LayoutParams generateParams(int val) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) (iconDimension.width * 0.90),
-                (int) (iconDimension.height * 0.90));
+                (int) (iconDimension.width * 1.0),
+                (int) (iconDimension.height * 1.0));
 
         int originalValue = val + Constants.ONE_MAX;
         params.leftMargin = (tickOffset * originalValue) - (params.width / 2);
@@ -191,15 +192,19 @@ public class SeekBarLayout extends ConstraintLayout {
 
     private RelativeLayout.LayoutParams generateNumbersParams(int val) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) numbersDimension.width,
-                (int) numbersDimension.height);
+                (int) mainFrameDimensions.width,
+                (int) mainFrameDimensions.height);
 
-        if (val > 0) { //add some factor since it does not have the '-' symbol.
-            params.leftMargin = (int)center + tickOffset + (tickOffset * (val - 1)) + 8;
+        ConstraintLayout.LayoutParams mainParams = (ConstraintLayout.LayoutParams) mainFrameLayout.getLayoutParams();
+
+        int center = (params.width - 40) / 2;
+        Log.d(TAG, "mainparams: " + ", " + mainParams.leftMargin + ", " + mainParams.rightMargin);
+        if (val == 0) {
+            params.leftMargin = center + 8;
+        } else if (val > 0) { //add some factor since it does not have the '-' symbol.
+            params.leftMargin = center + tickOffset + (tickOffset * (val - 1)) + 8;
         } else if (val < 0) {
-            params.leftMargin = (int)center + tickOffset - (tickOffset * Math.abs(val - 1));
-        } else {
-            params.leftMargin = (int)center + 8;
+            params.leftMargin = center + tickOffset - (tickOffset * Math.abs(val - 1)) - 10;
         }
 
         params.topMargin = 20;
@@ -213,6 +218,7 @@ public class SeekBarLayout extends ConstraintLayout {
         }
         for (int i = 0; i < mValues.size(); ++i) {
             AutoResizeTextView tv = new AutoResizeTextView(getContext());
+            tv.setEms(8);
             tv.setText(mValues.get(i));
             tv.setLayoutParams(generateNumbersParams(i - Constants.ONE_MAX));
             numbers.addView(tv);

@@ -35,11 +35,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:minHeight="100dp"
         android:maxHeight="100dp"
-        android:background="@drawable/background"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp">
+        android:background="@drawable/background">
 
         <RelativeLayout
             android:id="@+id/numbers"
@@ -50,7 +46,11 @@
             android:layout_gravity="bottom"
             android:clipToPadding="false"
             android:minHeight="40dp"
-            android:maxHeight="40dp"/>
+            android:maxHeight="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"/>
 
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/multislider"
@@ -62,7 +62,11 @@
             android:max="18"
             android:minHeight="40dp"
             android:maxHeight="40dp"
-            android:progressDrawable="@color/transparent"/>
+            android:progressDrawable="@color/transparent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"/>
         <View
             android:id="@+id/verticalLine"
             android:layout_width="5dp"

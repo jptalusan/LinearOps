@@ -36,7 +36,7 @@ public class SeekBarLayout extends ConstraintLayout {
     private Dimensions numbersDimension = new Dimensions();
     private double center = 0;
     private ArrayList<String> mValues = new ArrayList<>();
-    private int tickOffset = 0;
+
     private FrameLayout boundaryLayout, mainFrameLayout;
     private View verticalLine;
 
@@ -122,7 +122,7 @@ public class SeekBarLayout extends ConstraintLayout {
                 iconDimension.height = dimensions.height;
 
                 //TODO: chnge these?
-                tickOffset = (mainFrameLayout.getMeasuredWidth() - 40) / comboSeekBar.getMax();
+
 //                center = dimensions.width / 2;
 
                 numbers.removeAllViews();
@@ -185,8 +185,17 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) (iconDimension.width * 1.0),
                 (int) (iconDimension.height * 1.0));
 
+        int tickOffset = icons.getMeasuredWidth() / comboSeekBar.getMax();
+
+        int center = (int) (iconDimension.width / 2);
         int originalValue = val + Constants.ONE_MAX;
-        params.leftMargin = (tickOffset * originalValue) - (params.width / 2);
+
+        Log.d(TAG, "originalValue: " + originalValue);
+        if (originalValue < 9) {
+            params.leftMargin = (tickOffset * originalValue) - center + (int)iconDimension.width / 2;
+        } else {
+            params.leftMargin = (tickOffset * originalValue) - center - (int)iconDimension.width / 2;
+        }
         return params;
     }
 
@@ -195,16 +204,15 @@ public class SeekBarLayout extends ConstraintLayout {
                 (int) mainFrameDimensions.width,
                 (int) mainFrameDimensions.height);
 
-        ConstraintLayout.LayoutParams mainParams = (ConstraintLayout.LayoutParams) mainFrameLayout.getLayoutParams();
+        int tickOffset = (numbers.getMeasuredWidth() - 40) / comboSeekBar.getMax();
 
-        int center = (params.width - 40) / 2;
-        Log.d(TAG, "mainparams: " + ", " + mainParams.leftMargin + ", " + mainParams.rightMargin);
+        int center = (numbers.getMeasuredWidth() - 40) / 2;
         if (val == 0) {
             params.leftMargin = center + 8;
         } else if (val > 0) { //add some factor since it does not have the '-' symbol.
             params.leftMargin = center + tickOffset + (tickOffset * (val - 1)) + 8;
         } else if (val < 0) {
-            params.leftMargin = center + tickOffset - (tickOffset * Math.abs(val - 1)) - 10;
+            params.leftMargin = center + tickOffset - (tickOffset * Math.abs(val - 1)) - 8;
         }
 
         params.topMargin = 20;

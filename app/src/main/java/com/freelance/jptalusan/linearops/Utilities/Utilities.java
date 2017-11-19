@@ -1,5 +1,8 @@
 package com.freelance.jptalusan.linearops.Utilities;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.freelance.jptalusan.linearops.R;
@@ -127,12 +130,15 @@ public class Utilities {
             boxContainer = r;
         }
 
-        boolean isCorrectSign = (userAnswer * -1) != eq.getX();
+        //TODO: Related with request Change 2.
+        //Color of the ball in the box is related to sign of the user's answer instead
+        //boolean isCorrectSign = (userAnswer * -1) != eq.getX();
+
         if (l.getTypeContainedIn().equals(Constants.POSITIVE_X) ||
                 l.getTypeContainedIn().equals(Constants.NEGATIVE_X)) {
-            l.setOneViewDrawables(l, r, isCorrectSign);
+            l.setOneViewDrawables(l, r, userAnswer > 0);
         } else {
-            r.setOneViewDrawables(r, l, isCorrectSign);
+            r.setOneViewDrawables(r, l, userAnswer > 0);
         }
 
         final int numberOfRemainingBalls = ballContainer.getChildCount();
@@ -199,5 +205,18 @@ public class Utilities {
         }
 
         return output;
+    }
+
+    public static void popupDialog(Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Instructions");
+        alertDialog.setMessage("Distribute the balls equally among the boxes. Enter your answer by dragging along the number line");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }

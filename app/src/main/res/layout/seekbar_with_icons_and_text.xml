@@ -63,10 +63,10 @@
             android:minHeight="40dp"
             android:maxHeight="40dp"
             android:progressDrawable="@color/transparent"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"/>
         <View
             android:id="@+id/verticalLine"
             android:layout_width="5dp"
@@ -76,6 +76,14 @@
             /> <!--android:layout_marginLeft="90dp"-->
         <!--
             android:progressDrawable="@drawable/progress"/-->
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:paddingEnd="10dp"
+            android:text="Score:"/>
     </FrameLayout>
 
     <android.support.constraint.Guideline

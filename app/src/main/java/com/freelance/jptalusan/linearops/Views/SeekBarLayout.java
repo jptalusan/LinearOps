@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.freelance.jptalusan.linearops.R;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
@@ -27,6 +28,7 @@ public class SeekBarLayout extends ConstraintLayout {
     public RelativeLayout icons;
     public RelativeLayout numbers;
     public AppCompatSeekBar comboSeekBar;
+    private TextView score;
     private static String TAG = "SeekBarLayout";
     private int resourceId = 0;
     private int tempInt = 0;
@@ -69,6 +71,7 @@ public class SeekBarLayout extends ConstraintLayout {
         boundaryLayout = findViewById(R.id.boundaryFrameLayout);
         mainFrameLayout = findViewById(R.id.mainFrameLayout);
         verticalLine = findViewById(R.id.verticalLine);
+        score = findViewById(R.id.score);
 
         getViewDimensions();
         this.listener = null;
@@ -274,7 +277,12 @@ public class SeekBarLayout extends ConstraintLayout {
     }
 
     public void reset() {
+        score.setText("Score: 0/0");
         comboSeekBar.setProgress(Constants.X_MAX);
         verticalLine.setVisibility(GONE);
+    }
+
+    public void updateScore(int newScore, int total) {
+        score.setText("Score: " + newScore + "/" + total);
     }
 }

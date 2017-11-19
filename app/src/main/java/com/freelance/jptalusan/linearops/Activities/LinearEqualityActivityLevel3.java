@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.freelance.jptalusan.linearops.R;
+import com.freelance.jptalusan.linearops.Utilities.AudioPlayer;
 import com.freelance.jptalusan.linearops.Utilities.Constants;
 import com.freelance.jptalusan.linearops.Utilities.Equation;
 import com.freelance.jptalusan.linearops.Utilities.EquationGeneration;
@@ -31,6 +32,8 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
     private boolean canUseButtons = true;
     private int userAnswer = 0;
     private boolean isDone = false;
+    private int score = 0;
+    private int numberOfGamesPlayed = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
             prefs.edit().putBoolean(Constants.FIRST_TIME, false).apply();
             prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_1).apply();
         }
+
+        Utilities.popupDialog(this);
 
         //DEBUG
         prefs.edit().putInt(Constants.LINEAR_EQ_LEVEL, Constants.LEVEL_3).apply();
@@ -314,10 +319,15 @@ public class LinearEqualityActivityLevel3 extends AppCompatActivity {
 
     private void isAnswerCorrect(int userAnswer) {
         isDone = true;
+        AudioPlayer ap = new AudioPlayer();
         Utilities u = new Utilities(binding.leftSideGrid, binding.rightSideGrid);
         if (u.animateObjects(eq, userAnswer, true)) {
+            binding.seekbar.updateScore(++score, ++numberOfGamesPlayed);
+            ap.play(this, R.raw.correct);
             Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_SHORT).show();
         } else {
+            binding.seekbar.updateScore(score, ++numberOfGamesPlayed);
+            ap.play(this, R.raw.wrong);
             if ((userAnswer * -1) == eq.getX()) {
                 Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
             } else {

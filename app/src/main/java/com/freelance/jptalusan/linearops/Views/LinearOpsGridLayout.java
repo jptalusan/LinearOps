@@ -295,28 +295,20 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     }
 
     //Determine what array of drawables is going to be placed in X drawable after animations
-    public void setOneViewDrawables(LinearOpsGridLayout x, LinearOpsGridLayout one, boolean isCorrectSign) {
+    public void setOneViewDrawables(LinearOpsGridLayout x, LinearOpsGridLayout one, boolean isAnswerPositive) {
         String xViewDrawables = x.getTypeContainedIn();
         String oneViewDrawables = one.getTypeContainedIn();
-        if (isCorrectSign) {
-            if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+        if (isAnswerPositive) {
+            if (xViewDrawables.equals(Constants.POSITIVE_X)) {
                 drawables = Constants.WHITE_BOX_WHITE_CIRCLE;
-            } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
-                drawables = Constants.WHITE_BOX_BLACK_CIRCLE;
-            } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
             } else {
-                drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
+                drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
             }
         } else {
-            if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
+            if (xViewDrawables.equals(Constants.POSITIVE_X)) {
                 drawables = Constants.WHITE_BOX_BLACK_CIRCLE;
-            } else if (xViewDrawables.equals(Constants.POSITIVE_X) && oneViewDrawables.equals(Constants.NEGATIVE_1)) {
-                drawables = Constants.WHITE_BOX_WHITE_CIRCLE;
-            } else if (xViewDrawables.equals(Constants.NEGATIVE_X) && oneViewDrawables.equals(Constants.POSITIVE_1)) {
-                drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
             } else {
-                drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
+                drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
             }
         }
     }
@@ -489,7 +481,10 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     Log.d(TAG, "contained in: " + fI + ", " + containedInEach.get(fI));
+                    //TODO: clean this, im lazy so this is just a hack
+
                     temp.setBackgroundResource(drawables[containedInEach.get(fI)]);
+
                     temp.setNumberOfContained(containedInEach.get(fI));
                     temp.setText("");
                     listener.onAllAnimationsEnd();

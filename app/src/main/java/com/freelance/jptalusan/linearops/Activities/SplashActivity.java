@@ -43,8 +43,8 @@ public class SplashActivity extends AppCompatActivity {
         //forever <-- If equals true then after the last image it starts all over again with the first image resulting in an infinite loop. You have been warned.
 
         int fadeInDuration = 500; // Configure time values here
-        int timeBetween = 4000;
-        int fadeOutDuration = 1000;
+        int timeBetween = 700;
+        int fadeOutDuration = 800;
 
         imageView.setVisibility(View.INVISIBLE);    //Visible or invisible by default - this will apply when the animation ends
 

@@ -139,7 +139,7 @@ public class SeekBarLayout extends ConstraintLayout {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 5, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        params.leftMargin = r.right - ((r.right - r.left) / 2);
+        params.leftMargin = r.right + ((r.right - r.left) / 2);
         verticalLine.setLayoutParams(params);
     }
 

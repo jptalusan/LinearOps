@@ -54,7 +54,7 @@ public class LinearInequality extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_linear_inequality);
 
         long seed = Calendar.getInstance().getTimeInMillis();
-        rnd = new Random((int)seed);
+        rnd = new Random((int) seed);
 
         startLinearOps();
 
@@ -75,6 +75,60 @@ public class LinearInequality extends AppCompatActivity {
                 binding.seekbar.drawIconOnRect(userAnswer);
             }
         });
+
+        binding.proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startLinearOps();
+            }
+        });
+
+//        binding.relativeLayout.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+////                setViewAbility(false);
+//                        if (!hasFirstBeenAnswered) {
+//                            if (isFirstAnswerCorrect(userAnswer)) {
+//                                hasFirstBeenAnswered = true;
+//                                setUpInequality();
+//                            } else {
+//                                int temp = Constants.DEFAULT_RESET * 2;
+//                                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+//                                Handler h = new Handler();
+//                                h.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        startLinearOps();
+//                                    }
+//                                }, temp);
+//                            }
+//                        } else {
+//                            if (isSecondAnswerCorrect()) {
+//                                Toast.makeText(LinearInequality.this, "Correct", Toast.LENGTH_LONG).show();
+//                                //TODO: Adjust checkbox look
+//                            } else {
+//                                Toast.makeText(LinearInequality.this, "Incorrect", Toast.LENGTH_LONG).show();
+//                                setupIncorrectText();
+//                            }
+//                            int temp = Constants.DEFAULT_RESET * (textViewArrays.size() + 2);
+//                            Log.d(TAG, "Reset in: " + temp + " milliseconds.");
+//                            Handler h = new Handler();
+//                            h.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    for (AppCompatTextView v : textViewArrays) {
+//                                        v.setVisibility(View.VISIBLE);
+//                                    }
+////                            startLinearOps();
+//                                }
+//                            }, temp);
+//                            setAbilityOfViews(false);
+//                            binding.checkButton.setVisibility(View.GONE);
+//                            binding.proceed.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                });
 
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,11 +151,12 @@ public class LinearInequality extends AppCompatActivity {
                     }
                 } else {
                     if (isSecondAnswerCorrect()) {
-                        Toast.makeText(LinearInequality.this, "2: Correct", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LinearInequality.this, "Correct", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(LinearInequality.this, "2: Incorrect", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LinearInequality.this, "Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
+                    setupCorrectText();
                     int temp = Constants.DEFAULT_RESET * (textViewArrays.size() + 2);
                     Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                     Handler h = new Handler();
@@ -111,30 +166,56 @@ public class LinearInequality extends AppCompatActivity {
                             for (AppCompatTextView v : textViewArrays) {
                                 v.setVisibility(View.VISIBLE);
                             }
-                            startLinearOps();
+//                            startLinearOps();
                         }
                     }, temp);
                     setAbilityOfViews(false);
+                    binding.checkButton.setVisibility(View.GONE);
+                    binding.proceed.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
+    private void setupCorrectText() {
+        float scale = 0.7f;
+        if ((lessThanSuppossedToBeChecked && isLessThanChecked)) {
+            lessThanCB.setButtonDrawable(R.drawable.custom_checkbox_start);
+            lessThanCB.setScaleX(scale);
+            lessThanCB.setScaleY(scale);
+        }
+
+        if ((answerSuppossedToBeChecked && isAnswerChecked)) {
+            answerCB.setButtonDrawable(R.drawable.custom_checkbox_start);
+            answerCB.setScaleX(scale);
+            answerCB.setScaleY(scale);
+        }
+
+        if ((greaterThanSuppossedToBeChecked && isGreaterThanChecked)) {
+            greaterThanCB.setButtonDrawable(R.drawable.custom_checkbox_start);
+            greaterThanCB.setScaleX(scale);
+            greaterThanCB.setScaleY(scale);
+        }
+    }
+
     private void setupIncorrectText() {
         if ((lessThanSuppossedToBeChecked && !isLessThanChecked)) {
             lessThanCB.setChecked(true);
+            lessThanCB.setButtonDrawable(R.drawable.custom_checkbox_start);
         } else if ((!lessThanSuppossedToBeChecked && isLessThanChecked)) {
             lessThanCB.setButtonDrawable(R.drawable.custom_checkbox);
         }
 
         if ((answerSuppossedToBeChecked && !isAnswerChecked)) {
             answerCB.setChecked(true);
+            answerCB.setButtonDrawable(R.drawable.custom_checkbox_start);
         } else if ((!answerSuppossedToBeChecked && isAnswerChecked)) {
             answerCB.setButtonDrawable(R.drawable.custom_checkbox);
         }
 
         if ((greaterThanSuppossedToBeChecked && !isGreaterThanChecked)) {
             greaterThanCB.setChecked(true);
+            greaterThanCB.setButtonDrawable(R.drawable.custom_checkbox_start);
         } else if ((!greaterThanSuppossedToBeChecked && isGreaterThanChecked)) {
             greaterThanCB.setButtonDrawable(R.drawable.custom_checkbox);
         }
@@ -144,7 +225,7 @@ public class LinearInequality extends AppCompatActivity {
         View verticalLine = new View(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 5, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.leftMargin = r.right - ((r.right - r.left) / 2);
+        params.leftMargin = r.right + ((r.right - r.left) / 2);
         verticalLine.setLayoutParams(params);
         verticalLine.setBackgroundColor(Color.BLACK);
         verticalLine.setAlpha(0.5f);
@@ -210,7 +291,7 @@ public class LinearInequality extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 binding.checkBoxesLayout.getHeight());
 
-        params.leftMargin = r.left - ((r.right - r.left) / 2);
+        params.leftMargin = r.left + ((r.right - r.left) / 2);
 //        params.bottomMargin = 0;
         params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
         return params;
@@ -283,6 +364,8 @@ public class LinearInequality extends AppCompatActivity {
 
     private void startLinearOps() {
         Log.d(TAG, "startLinearOps()");
+        binding.checkButton.setVisibility(View.VISIBLE);
+        binding.proceed.setVisibility(View.GONE);
         do {
             eq = EquationGeneration.generateEqualityEquation(Constants.LEVEL_4);
 //            eq = new Equation(-5, 4, -6, 0, 2);
@@ -313,10 +396,10 @@ public class LinearInequality extends AppCompatActivity {
 
     private boolean isFirstAnswerCorrect(int userAnswer) {
         if (userAnswer == eq.getX()) {
-            Toast.makeText(this, "1: Correct", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
             return true;
         } else {
-            Toast.makeText(this, "1: Incorrect", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

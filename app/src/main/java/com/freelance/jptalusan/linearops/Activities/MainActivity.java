@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        binding.level5.setVisibility(View.GONE);
+
         binding.linearEquality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

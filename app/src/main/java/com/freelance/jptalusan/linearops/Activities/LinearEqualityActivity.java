@@ -152,7 +152,7 @@ public class LinearEqualityActivity extends AppCompatActivity {
         Log.d(TAG, "startLinearOps()");
         do {
             eq = EquationGeneration.generateEqualityEquation(currLevel);
-//            eq = new Equation(8, -56, 0 ,0, 1);
+//            eq = new Equation(-2, 4, 0 ,0, 1);
         } while (eq.toString().equals("FAILED"));
         setupLayoutForEquation(eq);
         binding.seekbar.setComboSeekBarProgress(Constants.ONE_MAX);
@@ -242,9 +242,9 @@ public class LinearEqualityActivity extends AppCompatActivity {
             binding.seekbar.updateScore(score, ++numberOfGamesPlayed);
             ap.play(this, R.raw.wrong);
             if ((userAnswer * -1) == eq.getX()) {
-                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Incorrect sign", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Incorrect", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -344,9 +344,9 @@ public class LinearEqualityActivityLevel4 extends AppCompatActivity {
             binding.seekbar.updateScore(score, ++numberOfGamesPlayed);
             ap.play(this, R.raw.wrong);
             if ((userAnswer * -1) == eq.getX()) {
-                Toast.makeText(getApplicationContext(), "Wrong sign", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Incorrect sign", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Incorrect", Toast.LENGTH_SHORT).show();
             }
         }
     }

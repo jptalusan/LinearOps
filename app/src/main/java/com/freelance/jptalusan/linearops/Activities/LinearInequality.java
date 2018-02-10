@@ -30,6 +30,8 @@ public class LinearInequality extends AppCompatActivity {
     private ActivityLinearInequalityBinding binding;
     private Equation eq = null;
     private int userAnswer = 0;
+    private int score = 0;
+    private int numberOfGamesPlayed = 0;
     private Random rnd = null;
     private AppCompatCheckBox lessThanCB = null;
     private AppCompatCheckBox answerCB = null;
@@ -83,53 +85,6 @@ public class LinearInequality extends AppCompatActivity {
             }
         });
 
-//        binding.relativeLayout.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-////                setViewAbility(false);
-//                        if (!hasFirstBeenAnswered) {
-//                            if (isFirstAnswerCorrect(userAnswer)) {
-//                                hasFirstBeenAnswered = true;
-//                                setUpInequality();
-//                            } else {
-//                                int temp = Constants.DEFAULT_RESET * 2;
-//                                Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-//                                Handler h = new Handler();
-//                                h.postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        startLinearOps();
-//                                    }
-//                                }, temp);
-//                            }
-//                        } else {
-//                            if (isSecondAnswerCorrect()) {
-//                                Toast.makeText(LinearInequality.this, "Correct", Toast.LENGTH_LONG).show();
-//                                //TODO: Adjust checkbox look
-//                            } else {
-//                                Toast.makeText(LinearInequality.this, "Incorrect", Toast.LENGTH_LONG).show();
-//                                setupIncorrectText();
-//                            }
-//                            int temp = Constants.DEFAULT_RESET * (textViewArrays.size() + 2);
-//                            Log.d(TAG, "Reset in: " + temp + " milliseconds.");
-//                            Handler h = new Handler();
-//                            h.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    for (AppCompatTextView v : textViewArrays) {
-//                                        v.setVisibility(View.VISIBLE);
-//                                    }
-////                            startLinearOps();
-//                                }
-//                            }, temp);
-//                            setAbilityOfViews(false);
-//                            binding.checkButton.setVisibility(View.GONE);
-//                            binding.proceed.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                });
-
         binding.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +94,7 @@ public class LinearInequality extends AppCompatActivity {
                         hasFirstBeenAnswered = true;
                         setUpInequality();
                     } else {
+                        binding.seekbar.updateScore(score, ++numberOfGamesPlayed);
                         int temp = Constants.DEFAULT_RESET * 2;
                         Log.d(TAG, "Reset in: " + temp + " milliseconds.");
                         Handler h = new Handler();
@@ -151,8 +107,10 @@ public class LinearInequality extends AppCompatActivity {
                     }
                 } else {
                     if (isSecondAnswerCorrect()) {
+                        binding.seekbar.updateScore(++score, ++numberOfGamesPlayed);
                         Toast.makeText(LinearInequality.this, "Correct", Toast.LENGTH_LONG).show();
                     } else {
+                        binding.seekbar.updateScore(score, ++numberOfGamesPlayed);
                         Toast.makeText(LinearInequality.this, "Incorrect", Toast.LENGTH_LONG).show();
                         setupIncorrectText();
                     }
@@ -378,6 +336,7 @@ public class LinearInequality extends AppCompatActivity {
         binding.seekbar.getViewDimensions();
         binding.seekbar.setResourceId(0);
         binding.seekbar.comboSeekBar.invalidate();
+        binding.seekbar.updateScore(score, numberOfGamesPlayed);
 
         binding.checkBoxesLayout.removeAllViews();
 

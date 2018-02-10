@@ -298,6 +298,7 @@ public class LinearOpsGridLayout extends CustomGridLayout {
     public void setOneViewDrawables(LinearOpsGridLayout x, LinearOpsGridLayout one, boolean isAnswerPositive) {
         String xViewDrawables = x.getTypeContainedIn();
         String oneViewDrawables = one.getTypeContainedIn();
+        Log.d(TAG, "setOneViewDrawables(" + xViewDrawables + "," + oneViewDrawables + ")");
 
         if (xViewDrawables.equals(Constants.POSITIVE_X) &&
                 oneViewDrawables.equals(Constants.POSITIVE_1)) {
@@ -309,8 +310,8 @@ public class LinearOpsGridLayout extends CustomGridLayout {
                 oneViewDrawables.equals(Constants.NEGATIVE_1)) {
             drawables = Constants.WHITE_BOX_BLACK_CIRCLE;
         } else if (xViewDrawables.equals(Constants.NEGATIVE_X) &&
-                oneViewDrawables.equals(Constants.POSITIVE_X)) {
-            drawables = Constants.BLACK_BOX_WHITE_CIRCLE;
+                oneViewDrawables.equals(Constants.POSITIVE_1)) {
+            drawables = Constants.BLACK_BOX_BLACK_CIRCLE;
         }
     }
 
